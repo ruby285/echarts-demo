@@ -1,20 +1,26 @@
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import graph from "./data.json";
-import imgData from './img.jpg'
+import imgData from "./img.jpg";
+import graphChart from "./graphChart.js";
 import "./style.css";
 
-// const imgUrl =
-//   "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201303%2F29%2F20130329205806_kTTnv.thumb.700_0.jpeg&refer=http%3A%2F%2Fcdn.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1631434123&t=10e9062e4ccd3bae84c279fcdd598f1d";
-
-
-const cartesianData = graph.nodes.map(node => ([node.x, node.y, 80, node]))
+const cartesianData = graph.nodes.map((node) => [node.x, node.y, 80, node]);
+const selectedList = new Set();
 
 export default function LigandGraph() {
-  console.log(graph);
   const ecRef = useRef();
+  const [state, setstate] = useState();
 
   useEffect(() => {
+    graphChart.init(ecRef.current);
+    graphChart.setDefaultData();
+
+    return () => graphChart.dispose();
+  }, []);
+
+  useEffect(() => {
+    if (!state) return;
     const myChart = echarts.init(ecRef.current);
     graph.nodes.forEach(function (node) {
       node.label = {
@@ -23,21 +29,14 @@ export default function LigandGraph() {
     });
     const option = {
       tooltip: {},
-      legend: [
-        {
-          data: graph.categories.map(function (a) {
-            return a.name;
-          }),
-        },
-      ],
       grid: {
         left: 0,
         bottom: 0,
         right: 0,
-        top: 0
+        top: 0,
       },
       xAxis: {
-        type: 'value',
+        type: "value",
         show: false,
         min: 0,
         max: 250,
@@ -52,7 +51,7 @@ export default function LigandGraph() {
         },
       },
       yAxis: {
-        type: 'value',
+        type: "value",
         show: false,
         min: 0,
         max: 200,
@@ -71,49 +70,51 @@ export default function LigandGraph() {
       // selectedMode: "multiple",
       series: [
         {
-          name: "Les Miserables",
           id: "graph",
           type: "graph",
           layout: "none",
           animation: false,
-          coordinateSystem: 'cartesian2d',
+          coordinateSystem: "cartesian2d",
           data: cartesianData,
-          // data: graph.nodes,
-
           symbolSize: 80,
           links: graph.links,
           categories: graph.categories,
           roam: true,
           label: {
-            position: "right",
-            formatter: "{b}",
+            show: false,
           },
           lineStyle: {
             color: "source",
-            curveness: 0.3,
+            curveness: 0.1,
           },
           emphasis: {
             focus: "adjacency",
             lineStyle: {
               width: 10,
             },
-          }
+          },
         },
       ],
     };
 
     myChart.setOption(option);
 
-    myChart.setOption({
-      graphic: echarts.util.map(graph.nodes, function (item, dataIndex) {
+    const graphicOption = {
+      graphic: echarts.util.map(cartesianData, function (data, dataIndex) {
+        const item = data[3];
+        const { x, y, symbolSize, id } = item;
+        const imgW = symbolSize,
+          imgH = symbolSize;
+        const [imgX, imgY] = myChart.convertToPixel({ seriesId: "graph" }, [
+          x,
+          y,
+        ]);
 
-        const { x, y, symbolSize } = item
-        const imgW = symbolSize, imgH = symbolSize
-        const [imgX, imgY] = myChart.convertToPixel({ seriesId: 'graph' }, [x, y]);
-        console.log(x, y, symbolSize, imgX, imgY)
-
-        return {
-          type: 'image',
+        const res = {
+          id,
+          type: "image",
+          originX: imgX,
+          originY: imgY,
           style: {
             image: imgData,
             width: imgW,
@@ -123,35 +124,167 @@ export default function LigandGraph() {
           },
           draggable: true,
           ondrag: echarts.util.curry(onPointDragging, dataIndex),
-          // onmousemove: echarts.util.curry(showTooltip, dataIndex),
-          // onmouseout: echarts.util.curry(hideTooltip, dataIndex),
-          z: 100
+          onclick: echarts.util.curry(onPointClick, { ...item, dataIndex }),
+          onmousemove: echarts.util.curry(onPointMouseMove, {
+            ...item,
+            dataIndex,
+          }),
+          onmouseout: echarts.util.curry(onPointMouseOut, {
+            ...item,
+            dataIndex,
+          }),
+          z: 100,
         };
-      })
-    });
 
-    function onPointDragging(dataIndex, dx, dy) {
-      const { x: transX, y: transY } = this
-      const { x: styleX, y: styleY } = this.style
-      const [resX, resY] = myChart.convertFromPixel({ seriesId: 'graph' }, [transX + styleX + 40, transY + styleY + 40])
-      console.log(dataIndex, dx, dy)
-      console.log(this)
-      console.log(transX + styleX, resX)
-      // data[dataIndex] = myChart.convertFromPixel('grid', this.position);
-      cartesianData[dataIndex][0] = resX
-      cartesianData[dataIndex][1] = resY
+        return res;
+      }),
+    };
+
+    myChart.setOption(graphicOption);
+
+    function onPointDragging(dataIndex) {
+      const { x: transX, y: transY } = this;
+      const { x: styleX, y: styleY } = this.style;
+      const [resX, resY] = myChart.convertFromPixel({ seriesId: "graph" }, [
+        transX + styleX + 40,
+        transY + styleY + 40,
+      ]);
+      cartesianData[dataIndex][0] = resX;
+      cartesianData[dataIndex][1] = resY;
       myChart.setOption({
-        series: [{
-          id: 'graph',
-          data: cartesianData
-        }]
+        series: [
+          {
+            id: "graph",
+            data: cartesianData,
+          },
+        ],
       });
     }
+
+    function onPointClick(item, ev) {
+      const updateList = [];
+      const { id } = item;
+      if (selectedList.has(id)) {
+        selectedList.delete(id);
+        myChart.setOption({
+          graphic: [
+            {
+              id,
+              type: "image",
+              style: {
+                shadowBlur: 0,
+              },
+              z: 100,
+            },
+          ],
+        });
+        return;
+      }
+      selectedList.add(id);
+      myChart.setOption({
+        graphic: [
+          {
+            id,
+            type: "image",
+            style: {
+              shadowBlur: 10,
+              shadowColor: "#333",
+            },
+          },
+        ],
+      });
+    }
+
+    function onPointMouseMove(item) {
+      const { id, dataIndex } = item;
+      myChart.setOption({
+        graphic: [
+          {
+            id,
+            type: "image",
+            scaleX: 1.4,
+            scaleY: 1.4,
+          },
+        ],
+      });
+      myChart.dispatchAction({
+        type: "highlight",
+        seriesId: "graph",
+        dataIndex: dataIndex,
+      });
+    }
+    function onPointMouseOut(item) {
+      const { id, dataIndex } = item;
+      myChart.dispatchAction({
+        type: "downplay",
+        seriesId: "graph",
+        dataIndex: dataIndex,
+      });
+      myChart.setOption({
+        graphic: [
+          {
+            id,
+            type: "image",
+            scaleX: 1,
+            scaleY: 1,
+          },
+        ],
+      });
+    }
+
+    function onLineMouseOver(params) {
+      const { data, seriesId } = params;
+      if (seriesId !== "graph") return;
+      const { source, target } = data;
+
+      myChart.setOption({
+        graphic: [
+          {
+            id: source,
+            type: "image",
+            scaleX: 1.4,
+            scaleY: 1.4,
+          },
+          {
+            id: target,
+            type: "image",
+            scaleX: 1.4,
+            scaleY: 1.4,
+          },
+        ],
+      });
+    }
+
+    function onLineMouseOut(params) {
+      const { data, seriesId } = params;
+      if (seriesId !== "graph") return;
+      const { source, target } = data;
+
+      myChart.setOption({
+        graphic: [
+          {
+            id: source,
+            type: "image",
+            scaleX: 1.1,
+            scaleY: 1.1,
+          },
+          {
+            id: target,
+            type: "image",
+            scaleX: 1.1,
+            scaleY: 1.1,
+          },
+        ],
+      });
+    }
+
+    myChart.on("mouseover", onLineMouseOver);
+    myChart.on("mouseout", onLineMouseOut);
 
     return () => {
       myChart.dispose();
     };
-  }, []);
+  }, [state]);
 
   return (
     <div ref={ecRef} className="ligand-graph">
