@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import graph from "./data.json";
 import imgData from "./img.jpg";
-import graphChart from "./graphChart.js";
+import graphChart from "./fepChart";
 import "./style.css";
 
 const cartesianData = graph.nodes.map((node) => [node.x, node.y, 80, node]);

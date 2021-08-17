@@ -29,7 +29,7 @@ let lineLinks = links.map((link) => {
 
 let cusTomLines = lineLinks.map((link) => [...link.coords.flat(), 1]);
 
-console.log(cusTomLines);
+// console.log(cusTomLines);
 
 const imgUrl =
   "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fcdn.duitang.com%2Fuploads%2Fitem%2F201303%2F29%2F20130329205806_kTTnv.thumb.700_0.jpeg&refer=http%3A%2F%2Fcdn.duitang.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1631434123&t=10e9062e4ccd3bae84c279fcdd598f1d";

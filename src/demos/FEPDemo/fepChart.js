@@ -15,7 +15,9 @@ let myChart = null,
   visualLinks = originLinks,
   visualTexts = [];
 
+const nodesMap = new Map();
 originNodes.forEach((node) => {
+  nodesMap.set(node.id, node);
   node2Links.set(node.id, new Set());
   visualNodes.push([node.x, node.y, 100, 1]);
   visualTexts.push([node.x, node.y, node.name]);
@@ -27,6 +29,21 @@ originLinks.forEach((link) => {
   node2Links.get(sourceId).add(link.id);
   node2Links.get(targetId).add(link.id);
   link2Nodes.set(link.id, [sourceId, targetId]);
+});
+
+let lineLinks = originLinks.map((link) => {
+  const { x: x1, y: y1 } = nodesMap.get(link.source);
+  const { x: x2, y: y2 } = nodesMap.get(link.target);
+  return {
+    coords: [
+      [x1, y1],
+      [x2, y2],
+    ],
+    symbol: ["none", "arrow"],
+    lineStyle: {
+      width: 1,
+    },
+  };
 });
 
 const OriginScale = 1;
@@ -132,33 +149,25 @@ const defaultOption = {
   },
   series: [
     {
-      id: "graph",
-      type: "graph",
-      layout: "none",
-      animation: true,
+      id: "lines",
+      type: "lines",
       coordinateSystem: "cartesian2d",
-      data: visualNodes,
-      symbolSize: 100,
-      links: visualLinks,
-      categories: [],
-      roam: true,
-      itemStyle: {
-        opacity: 0,
-      },
-      label: {
-        show: false,
-      },
       lineStyle: {
-        color: "source",
         curveness: 0.1,
       },
       emphasis: {
         focus: "self",
-        blurScope: "global",
+        blurScope: "series",
         lineStyle: {
           width: 10,
         },
       },
+      blur: {
+        lineStyle: {
+          opacity: 0.1,
+        },
+      },
+      data: lineLinks,
     },
     {
       id: "images",
