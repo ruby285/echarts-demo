@@ -13,7 +13,7 @@ export default function LigandGraph() {
 
   useEffect(() => {
     graphChart.init(ecRef.current);
-    graphChart.setDefaultData();
+    // graphChart.setDefaultData();
 
     return () => graphChart.dispose();
   }, []);
