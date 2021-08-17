@@ -5,8 +5,8 @@ import CustomLigandGraph from "./demos/CustomLigandGraph";
 function App() {
   return (
     <div className="App">
-      <LigandGraph />
-      {/* <CustomLigandGraph /> */}
+      {/* <LigandGraph /> */}
+      <CustomLigandGraph />
     </div>
   );
 }
