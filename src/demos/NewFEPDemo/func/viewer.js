@@ -1,71 +1,51 @@
-import * as echarts from "echarts";
-import { renderImage, renderText } from "./viewerHelper";
+import { Group, Image as ZrImage, Rect, Line as ZrLine } from "zrender";
+import imgData from "./ligand.png";
 
-export function getDefaultOption(visualNodes, visualLinks, visualTexts) {
-  const tooltip = {
-    show: false,
-  };
-  const grid = {
-    left: 0,
-    bottom: 0,
-    right: 0,
-    top: 0,
-  };
-  const xAxis = {
-    type: "value",
-    show: false,
-    min: 0,
-    max: 250,
-    axisLine: {
-      show: false,
-    },
-    axisTick: {
-      show: false,
-    },
-    splitLine: {
-      show: false,
-    },
-  };
-  const yAxis = xAxis;
-  const imagesSeries = {
-    id: "images",
-    type: "custom",
-    renderItem: renderImage,
-    clip: true,
-    data: visualNodes,
-  };
-  const linesSeries = {
-    id: "lines",
-    type: "lines",
-    coordinateSystem: "cartesian2d",
-    lineStyle: {
-      curveness: 0.1,
-    },
-    emphasis: {
-      focus: "none",
-      blurScope: "series",
-      lineStyle: {
-        width: 10,
+const ligandWidth = 100;
+
+export class Line {
+  el = null;
+  constructor({ x1, y1, x2, y2 }) {
+    this.el = new ZrLine({
+      shape: {
+        x1,
+        y1,
+        x2,
+        y2,
       },
-    },
-    symbol: ["none", "arrow"],
+    });
+  }
+}
 
-    data: visualLinks,
-  };
-  const textsSeries = {
-    id: "text",
-    type: "custom",
-    renderItem: renderText,
-    clip: true,
-    data: visualTexts,
-  };
-  const defaultOption = {
-    tooltip,
-    grid,
-    xAxis,
-    yAxis,
-    series: [imagesSeries, linesSeries, textsSeries],
-  };
+export class Ligand {
+  el = null;
+  img = null;
+  rect = null;
+  constructor({ x, y, img = imgData }) {
+    this.el = new Group();
+    this.img = new ZrImage({
+      style: {
+        image: img,
+        x,
+        y,
+        width: ligandWidth,
+        height: ligandWidth,
+      },
+    });
+    this.rect = new Rect({
+      style: {
+        fill: null,
+        stroke: "#f00",
+      },
+      shape: {
+        x,
+        y,
+        width: ligandWidth,
+        height: ligandWidth,
+      },
+    });
 
-  return defaultOption;
+    this.el.add(this.img);
+    this.el.add(this.rect);
+  }
 }

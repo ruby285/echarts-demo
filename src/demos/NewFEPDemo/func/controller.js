@@ -1,89 +1,81 @@
-class Link {
-  id = "";
-  left = {};
-  right = {};
+import { Group } from "zrender";
+import { Ligand, Line } from "./viewer";
+import imgData from "./ligand.png";
 
-  get show() {
-    return this.left.show && this.right.show;
-  }
-  get symbol() {}
-}
+// TODO: 布局算法
+// TODO: ligand 中心校准
+// TODO: 线的位置计算
+// TODO: 文字及样式
+// TODO: 交互逻辑-hover
+// TODO: 交互逻辑-click
+// TODO: 线的优化: 曲线？箭头？
+export class NodeGroup {
+  group = null;
+  constructor(nodes) {
+    this.group = new Group();
+    const layout = getLayout(
+      document.documentElement.clientWidth,
+      document.documentElement.clientHeight,
+      nodes.length
+    );
 
-class Controller {
-  allLinks = new Map();
-
-  visualNodes = [];
-  visualLinks = [];
-  visualTexts = [];
-
-  init(originNodes, originLinks) {
-    const tempLinks = new Map();
-    originLinks.forEach((link) => {
-      let { source, target } = link;
-      let direction = "left";
-      if (source > target) {
-        [source, target] = [target, source];
-        direction = "right";
-      }
-      const id = `${source}=>${target}`;
-      const tempLink = tempLinks.get(id) || {};
-      tempLink[direction] = {
-        show: true,
-        info: link.info,
-      };
-      tempLinks.set(id, tempLink);
-    });
-    for (let i = 0; i < originNodes.length; i++) {
-      const node = originNodes[i];
-      this.visualNodes.push([node.x, node.y, node.id]);
-      this.visualTexts.push([node.x, node.y, node.name]);
-      for (let j = i + 1; j < originNodes.length; j++) {
-        if (i === j) return;
-        const sourceId = node.id;
-        const target = originNodes[j];
-        const linkId = `${sourceId}=>${target.id}`;
-        const tempLink = tempLinks.get(linkId) || {};
-        const { left, right } = tempLink;
-        this.allLinks.set(linkId, {
-          id: linkId,
-          left: {
-            show: false,
-            info: null,
-            x: node.x,
-            y: node.y,
-            nodeId: sourceId,
-            ...left,
-          },
-          right: {
-            show: false,
-            info: null,
-            x: target.x,
-            y: target.y,
-            nodeId: target.id,
-            ...right,
-          },
-          show: false,
-          info: null,
-        });
-      }
-    }
-
-    for (let [, link] of this.allLinks) {
-      const { left, right } = link;
-      const coords = [
-        [left.x, left.y],
-        [right.x, right.y],
-      ];
-      const show = left.show || right.show;
-
-      this.visualLinks.push({
-        coords,
-        lineStyle: {
-          opacity: show ? 1 : 0,
-        },
+    nodes.forEach((node, i) => {
+      const ligand = new Ligand({
+        x: layout[i].x,
+        y: layout[i].y,
+        img: imgData,
       });
-    }
+      this.group.add(ligand.el);
+    });
   }
 }
 
-export default new Controller();
+export class LineGroup {
+  group = null;
+
+  constructor(lines) {
+    this.group = new Group();
+    lines.forEach((node) => {
+      const { x1, y1, x2, y2 } = node;
+      const line = new Line({
+        x1,
+        y1,
+        x2,
+        y2,
+      });
+      this.group.add(line.el);
+    });
+  }
+}
+
+function getLayout(w, h, len) {
+  let boxW = w;
+  let boxH = h;
+  let lenW = 1;
+  let lenH = 1;
+  let volume = 1;
+  const res = [];
+
+  while (volume < len) {
+    if (boxW < boxH) {
+      volume = lenW * ++lenH;
+      boxH = h / lenH;
+    } else {
+      volume = ++lenW * lenH;
+      boxW = w / lenW;
+    }
+  }
+  for (let i = 0; i < lenH; i++) {
+    let lenJ = lenW;
+    let jW = boxW;
+    if (i === lenH - 1) {
+      lenJ = len - (lenH - 1) * lenW;
+      jW = w / lenJ;
+    }
+    for (let j = 0; j < lenJ; j++) {
+      res.push({ x: jW * j + jW / 2 - 50, y: boxH * i + boxH / 2 - 50 });
+    }
+  }
+
+  return res;
+}

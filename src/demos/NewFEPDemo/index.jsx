@@ -13,7 +13,7 @@ export default function LigandGraph() {
   }, []);
 
   return (
-    <div ref={ecRef} className="ligand-graph">
+    <div ref={ecRef} className="fep-demo">
       ligand-graph
     </div>
   );

@@ -4,7 +4,7 @@
       "id": "0",
       "name": "Myriel",
       "symbolSize": 80,
-      "x": 200,
+      "x": 400,
       "y": 150,
       "value": 80,
       "category": 0
@@ -23,36 +23,9 @@
       "name": "MlleBaptistine",
       "symbolSize": 80,
       "x": 100,
-      "y": 100,
+      "y": 400,
       "value": 80,
       "category": 1
-    },
-    {
-      "id": "3",
-      "name": "MmeMagloire",
-      "symbolSize": 80,
-      "x": 50,
-      "y": 100,
-      "value": 80,
-      "category": 1
-    },
-    {
-      "id": "4",
-      "name": "CountessDeLo",
-      "symbolSize": 80,
-      "x": 150,
-      "y": 50,
-      "value": 80,
-      "category": 0
-    },
-    {
-      "id": "5",
-      "name": "Geborand",
-      "symbolSize": 80,
-      "x": 150,
-      "y": 150,
-      "value": 80,
-      "category": 0
     }
   ],
   "links": [

@@ -1,23 +1,33 @@
-import { init, Circle } from "zrender";
+import { init } from "zrender";
+import { NodeGroup, LineGroup } from "./controller";
+import mockData from "./data.json";
 
-// console.log(zrender);
+const mockNodes = mockData.nodes;
+const mockLinks = [
+  {
+    x1: mockNodes[0].x,
+    y1: mockNodes[0].y,
+    x2: mockNodes[1].x,
+    y2: mockNodes[1].y,
+  },
+  {
+    x1: mockNodes[0].x,
+    y1: mockNodes[0].y,
+    x2: mockNodes[2].x,
+    y2: mockNodes[2].y,
+  },
+];
 class FEPGraphChart {
   zr = null;
 
   init(el) {
     this.zr = init(el);
-    var circle = new Circle({
-      shape: {
-        cx: 150,
-        cy: 50,
-        r: 40,
-      },
-      style: {
-        fill: "none",
-        stroke: "#F00",
-      },
-    });
-    this.zr.add(circle);
+
+    const nodeGroup = new NodeGroup(mockNodes);
+    const lineGroup = new LineGroup(mockLinks);
+
+    this.zr.add(nodeGroup.group);
+    this.zr.add(lineGroup.group);
   }
   dispose() {
     if (!this.zr) return;
