@@ -1,34 +1,27 @@
-import * as echarts from "echarts";
-import { getDefaultOption } from "./viewer";
-import controller from "./controller";
-import graph from "./data.json";
+import { init, Circle } from "zrender";
 
+// console.log(zrender);
 class FEPGraphChart {
-  chartIns = null;
-  initEvents() {
-    this.chartIns.on("mouseover", (params) => {
-      // console.log(params);
-    });
-    this.chartIns.on("click", (params) => {
-      // console.log(params);
-    });
-  }
+  zr = null;
 
   init(el) {
-    this.chartIns = echarts.init(el);
-    controller.init(graph.nodes, graph.links);
-    const { visualNodes, visualLinks, visualTexts } = controller;
-    const defaultOption = getDefaultOption(
-      visualNodes,
-      visualLinks,
-      visualTexts
-    );
-    this.chartIns.setOption(defaultOption);
-    this.initEvents();
+    this.zr = init(el);
+    var circle = new Circle({
+      shape: {
+        cx: 150,
+        cy: 50,
+        r: 40,
+      },
+      style: {
+        fill: "none",
+        stroke: "#F00",
+      },
+    });
+    this.zr.add(circle);
   }
   dispose() {
-    if (!this.chartIns) return;
-    this.chartIns.dispose();
+    if (!this.zr) return;
+    this.zr.dispose();
   }
 }
 

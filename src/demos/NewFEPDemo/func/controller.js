@@ -78,7 +78,6 @@ class Controller {
 
       this.visualLinks.push({
         coords,
-        symbol: ["arrow", "arrow"],
         lineStyle: {
           opacity: show ? 1 : 0,
         },

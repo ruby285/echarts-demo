@@ -1,4 +1,4 @@
-import imgData from "./img.jpg";
+import imgData from "./ligand.png";
 
 export const renderImage = (params, api) => {
   var cx = api.value(0);

@@ -48,11 +48,8 @@ export function getDefaultOption(visualNodes, visualLinks, visualTexts) {
         width: 10,
       },
     },
-    blur: {
-      lineStyle: {
-        opacity: 0.1,
-      },
-    },
+    symbol: ["none", "arrow"],
+
     data: visualLinks,
   };
   const textsSeries = {
