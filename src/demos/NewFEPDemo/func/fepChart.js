@@ -1,22 +1,38 @@
 import { init } from "zrender";
-import { NodeGroup, LineGroup } from "./controller";
-import mockData from "./data.json";
+import { NodeGroup, LineGroup, getLayout, getLinePoint } from "./controller";
 
-const mockNodes = mockData.nodes;
-const mockLinks = [
+const mockNum = 3;
+const layout = getLayout(
+  document.documentElement.clientWidth,
+  document.documentElement.clientHeight,
+  mockNum
+);
+const mockNodes = new Array(mockNum).fill("").map((node, i) => ({
+  x: layout[i].x,
+  y: layout[i].y,
+}));
+
+const originLines = [
   {
-    x1: mockNodes[0].x,
-    y1: mockNodes[0].y,
-    x2: mockNodes[1].x,
-    y2: mockNodes[1].y,
+    source: "0",
+    target: "1",
+    info: ["info1", "info2", "info3"],
   },
   {
-    x1: mockNodes[0].x,
-    y1: mockNodes[0].y,
-    x2: mockNodes[2].x,
-    y2: mockNodes[2].y,
+    source: "2",
+    target: "0",
+    info: ["info1", "info2", "info3"],
   },
 ];
+
+const mockLinks = originLines.map((link) => {
+  const { source, target, info } = link;
+  const sNode = mockNodes[source];
+  const tNode = mockNodes[target];
+  const { x1, y1, x2, y2 } = getLinePoint(sNode, tNode, 100);
+  return { x1, y1, x2, y2, info };
+});
+
 class FEPGraphChart {
   zr = null;
 

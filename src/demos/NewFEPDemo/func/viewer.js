@@ -1,4 +1,10 @@
-import { Group, Image as ZrImage, Rect, Line as ZrLine } from "zrender";
+import {
+  Group,
+  Image as ZrImage,
+  Rect,
+  Line as ZrLine,
+  Text as ZrText,
+} from "zrender";
 import imgData from "./ligand.png";
 
 const ligandWidth = 100;
@@ -34,7 +40,7 @@ export class Ligand {
     });
     this.rect = new Rect({
       style: {
-        fill: null,
+        fill: "none",
         stroke: "#f00",
       },
       shape: {
@@ -47,5 +53,22 @@ export class Ligand {
 
     this.el.add(this.img);
     this.el.add(this.rect);
+  }
+}
+
+export class Text {
+  el = null;
+  constructor({ x, y, rotation = 0, text }) {
+    this.el = new ZrText({
+      rotation: rotation,
+      x,
+      y,
+      style: {
+        text,
+        textAlign: "center",
+        textPosition: "inside",
+        textVerticalAlign: "middle",
+      },
+    });
   }
 }
