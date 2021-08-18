@@ -1,16 +1,22 @@
-import graph from "./data.json";
+class Link {
+  id = "";
+  left = {};
+  right = {};
 
-class DataController {
-  originNodes = graph.nodes;
-  originLinks = graph.links;
+  get show() {
+    return this.left.show && this.right.show;
+  }
+  get symbol() {}
+}
 
+class Controller {
   allLinks = new Map();
 
   visualNodes = [];
   visualLinks = [];
   visualTexts = [];
 
-  init(originNodes = this.originNodes, originLinks = this.originLinks) {
+  init(originNodes, originLinks) {
     const tempLinks = new Map();
     originLinks.forEach((link) => {
       let { source, target } = link;
@@ -29,10 +35,8 @@ class DataController {
     });
     for (let i = 0; i < originNodes.length; i++) {
       const node = originNodes[i];
-
       this.visualNodes.push([node.x, node.y, node.id]);
       this.visualTexts.push([node.x, node.y, node.name]);
-
       for (let j = i + 1; j < originNodes.length; j++) {
         if (i === j) return;
         const sourceId = node.id;
@@ -80,9 +84,7 @@ class DataController {
         },
       });
     }
-
-    console.log(this.visualLinks);
   }
 }
 
-export default new DataController();
+export default new Controller();
