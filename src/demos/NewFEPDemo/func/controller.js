@@ -1,7 +1,7 @@
 import { Group } from "zrender";
 import { Ligand, Line } from "./viewer";
 import imgData from "./ligand.png";
-import { ligandMap } from "./events";
+import { ligandMap, lineMap } from "./events";
 
 // TODO: 新的布局算法
 // TODO: 线的位置计算 with 新算法
@@ -41,6 +41,7 @@ export class LineGroup {
     this.group = new Group();
     lines.forEach((node) => {
       const line = new Line(node);
+      lineMap.set(node.id, line);
       this.group.add(line.el);
     });
   }
