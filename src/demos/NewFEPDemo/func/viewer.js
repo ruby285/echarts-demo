@@ -6,7 +6,7 @@ import {
   Text as ZrText,
 } from "zrender";
 import imgData from "./ligand.png";
-import { getTextPosition } from "./util";
+import { getTextPosition, getLinePoint } from "./util";
 import {
   mouseOverHandler,
   mouseOutHandler,
@@ -92,6 +92,7 @@ export class Line extends Element {
   el = null;
   line = null;
   textGroup = null;
+  info = [];
 
   style = {
     selected: {
@@ -166,14 +167,15 @@ export class Line extends Element {
     this.targetNode.addLine(this);
   }
 
-  constructor({ x1, y1, x2, y2, info, id, source, target }) {
-    super();
-    this.id = id;
-    this.source = source;
-    this.target = target;
-    this.sourceNode = ligandMap.get(source);
-    this.targetNode = ligandMap.get(target);
-    this.el = new Group();
+  onDelete() {}
+
+  init() {
+    const info = this.info;
+    const { x1, y1, x2, y2 } = getLinePoint(
+      this.sourceNode.position,
+      this.targetNode.position,
+      100
+    );
     this.textGroup = new Group();
     this.line = new ZrLine({
       shape: {
@@ -183,6 +185,7 @@ export class Line extends Element {
         y2,
       },
     });
+    console.log(this.line);
 
     const texts = getTextPosition(x1, y1, x2, y2, info.length);
     texts.forEach((item, i) => {
@@ -191,6 +194,20 @@ export class Line extends Element {
     });
     this.el.add(this.line);
     this.el.add(this.textGroup);
+  }
+
+  reDraw() {}
+
+  constructor({ source, target, info }) {
+    super();
+    this.id = `${source}=>${target}`;
+    this.info = info;
+    this.source = source;
+    this.target = target;
+    this.sourceNode = ligandMap.get(source);
+    this.targetNode = ligandMap.get(target);
+    this.el = new Group();
+
     this.onCreate();
 
     this.el.on("mouseover", (params) => mouseOverHandler("line", params, this));
@@ -206,6 +223,11 @@ export class Ligand extends Element {
   rect = null;
   lineMap = new Map();
   type = "ligand";
+
+  position = {
+    x: 0,
+    y: 0,
+  };
 
   style = {
     selected: {
@@ -327,10 +349,10 @@ export class Ligand extends Element {
     this.lineMap.set(line.id, line);
   }
 
-  constructor({ x, y, img = imgData, id }) {
-    super();
-    this.el = new Group();
-    this.id = id;
+  onDelete() {}
+
+  init({ x, y, img = imgData }) {
+    this.position = { x: x + 50, y: y + 50 };
     this.img = new ZrImage({
       origin: [x + 50, y + 50],
       style: {
@@ -359,6 +381,13 @@ export class Ligand extends Element {
 
     this.el.add(this.img);
     this.el.add(this.rect);
+  }
+
+  constructor({ id }) {
+    super();
+    this.el = new Group();
+    this.id = id;
+
     this.el.on("mouseover", (params) =>
       mouseOverHandler("ligand", params, this)
     );

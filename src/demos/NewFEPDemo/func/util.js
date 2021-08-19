@@ -25,11 +25,17 @@ export function getLayout(w, h, len) {
       jW = w / lenJ;
     }
     for (let j = 0; j < lenJ; j++) {
-      res.push({ x: jW * j + jW / 2, y: boxH * i + boxH / 2 });
+      const x = jW * j + jW / 2 + getRandomDis();
+      const y = boxH * i + boxH / 2 + getRandomDis();
+      res.push({ x, y });
     }
   }
 
   return res;
+}
+
+function getRandomDis() {
+  return Math.random() * 40 - 20;
 }
 
 export function getLinePoint(sNode, tNode, width) {

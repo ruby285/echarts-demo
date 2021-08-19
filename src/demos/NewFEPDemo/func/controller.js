@@ -16,6 +16,10 @@ import { ligandMap, lineMap } from "./events";
 // TODO: 线的优化: 曲线？箭头？
 export class NodeGroup {
   group = null;
+  list = [];
+  sort() {
+    this.list.sort((n1, n2) => n2.lineMap.size - n1.lineMap.size);
+  }
   constructor(nodes) {
     this.group = new Group();
 
@@ -26,6 +30,7 @@ export class NodeGroup {
         img: imgData,
         id: node.id,
       });
+      this.list.push(ligand);
       ligandMap.set(node.id, ligand);
       this.group.add(ligand.el);
     });
@@ -34,11 +39,13 @@ export class NodeGroup {
 
 export class LineGroup {
   group = null;
+  list = [];
 
   constructor(lines) {
     this.group = new Group();
     lines.forEach((node) => {
       const line = new Line(node);
+      this.list.push(line);
       lineMap.set(node.id, line);
       this.group.add(line.el);
     });
