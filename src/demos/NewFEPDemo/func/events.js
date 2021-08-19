@@ -1,7 +1,5 @@
 // import fepGraphChart from "./fepChart";
 
-const selectLigand = [];
-let selectLine = null;
 const hoverLigand = new Set();
 const hoverLine = new Set();
 const relatedHoverLigand = new Set();
@@ -11,6 +9,67 @@ const fadeoutLine = new Set();
 
 export const ligandMap = new Map();
 export const lineMap = new Map();
+
+let selectLine = null;
+const selectLigand = {
+  list: [],
+  deleteList: [],
+  add(n) {
+    if (this.list.length > 1) {
+      this.deleteList.push(this.list.shift());
+      if (selectLine) {
+        this.deleteList.push(selectLine);
+        selectLine = null;
+      }
+    }
+    this.list.push(n);
+    if (this.list.length === 2) {
+      this.selectALine(this.list[0], this.list[1]);
+    }
+    this.update();
+  },
+  delete(n) {
+    if (n.selectIdx) {
+      this.deleteList.push(this.list.pop());
+    } else {
+      this.deleteList.push(this.list.shift());
+    }
+    if (selectLine) {
+      this.deleteList.push(selectLine);
+      selectLine = null;
+    }
+    this.update();
+  },
+  replaceByLine(sourceNode, targetNode, id) {
+    this.deleteList = this.list;
+    this.list = [sourceNode, targetNode];
+    if (selectLine && selectLine.id !== id) {
+      this.deleteList.push(selectLine);
+      selectLine = null;
+    }
+    this.selectALine(sourceNode, targetNode);
+    this.update();
+  },
+  selectALine(sourceNode, targetNode) {
+    const lineId = `${sourceNode.id}=>${targetNode.id}`;
+    let line = lineMap.get(lineId);
+    if (line) {
+      selectLine = line;
+    } else {
+      // 创建一个新的虚线
+    }
+  },
+  update() {
+    this.deleteList.forEach((node) => {
+      node.onSelectedEnd();
+    });
+    this.list.forEach((node, idx) => {
+      node.onSelected(idx);
+    });
+    selectLine && selectLine.onSelected();
+    this.deleteList = [];
+  },
+};
 
 export const mouseOverHandler = (type, params, ins) => {
   if (type === "ligand") {
@@ -52,36 +111,9 @@ const ligandEventHandler = {
   },
   onclick(ins) {
     if (ins.state.selected) {
-      const idx = ins.onSelectedEnd();
-      if (idx) {
-        return selectLigand.pop();
-      }
-      return selectLigand.shift();
+      return selectLigand.delete(ins);
     }
-    if (selectLigand.length === 2) {
-      // 删除两者之间的连线
-      // 移除栈中的第一个选中元素
-      const ligand = selectLigand.shift();
-      ligand.onSelectedEnd();
-      selectLine.onSelectedEnd();
-    }
-    selectLigand.push(ins);
-    selectLigand.forEach((ligand, i) => {
-      ligand.onSelected(i);
-    });
-    if (selectLigand.length === 2) {
-      const sourceId = selectLigand[0].id;
-      const targetId = selectLigand[1].id;
-      const lineId = `${sourceId}=>${targetId}`;
-      let line = lineMap.get(lineId);
-      if (line) {
-        // 如果存在一条线，则高亮它
-        selectLine = line;
-        line.onSelected();
-      } else {
-        // 如果不存在线，就创建一个虚拟的线
-      }
-    }
+    return selectLigand.add(ins);
   },
 };
 
@@ -106,9 +138,8 @@ const lineEventHandler = {
     representationHandler.onmouseover();
   },
   onclick(ins) {
-    const { sourceNode, targetNode } = ins;
-    ligandEventHandler.onclick(sourceNode);
-    ligandEventHandler.onclick(targetNode);
+    const { sourceNode, targetNode, id } = ins;
+    selectLigand.replaceByLine(sourceNode, targetNode, id);
   },
 };
 

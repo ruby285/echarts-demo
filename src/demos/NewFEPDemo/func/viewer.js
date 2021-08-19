@@ -21,13 +21,6 @@ const animateConfig = {
   easing: "cubicOut",
 };
 
-// 元素的几种状态
-// 一般状态
-// focus状态（hover）
-// blur状态
-// select状态
-// add高亮状态
-
 class Element {
   state = {
     selected: false,
@@ -53,7 +46,8 @@ class Element {
     this.state.relatedHover = false;
     this.updateStyle();
   }
-  onSelected() {
+  onSelected(idx) {
+    this.selectIdx = idx;
     this.state.selected = true;
     this.updateStyle();
   }
@@ -94,10 +88,10 @@ export class Line extends Element {
   target = "";
   sourceNode = null;
   targetNode = null;
+  type = "line";
   el = null;
   line = null;
   textGroup = null;
-  selected = false;
 
   style = {
     selected: {
@@ -123,7 +117,6 @@ export class Line extends Element {
   };
 
   _updateStyle(style) {
-    // console.log(style);
     this.line.animateTo(
       {
         style: style.line,
@@ -212,6 +205,7 @@ export class Ligand extends Element {
   img = null;
   rect = null;
   lineMap = new Map();
+  type = "ligand";
 
   style = {
     selected: {
