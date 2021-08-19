@@ -1,7 +1,7 @@
-import { Group, vector } from "zrender";
-import { Ligand, Line, Text } from "./viewer";
+import { Group } from "zrender";
+import { Ligand, Line } from "./viewer";
 import imgData from "./ligand.png";
-import { getLayout, getTextPosition } from "./util";
+import { ligandMap } from "./events";
 
 // TODO: 新的布局算法
 // TODO: 线的位置计算 with 新算法
@@ -20,18 +20,15 @@ export class NodeGroup {
   group = null;
   constructor(nodes) {
     this.group = new Group();
-    const layout = getLayout(
-      document.documentElement.clientWidth,
-      document.documentElement.clientHeight,
-      nodes.length
-    );
 
-    nodes.forEach((node, i) => {
+    nodes.forEach((node) => {
       const ligand = new Ligand({
-        x: layout[i].x - 50,
-        y: layout[i].y - 50,
+        x: node.x - 50,
+        y: node.y - 50,
         img: imgData,
+        id: node.id,
       });
+      ligandMap.set(node.id, ligand);
       this.group.add(ligand.el);
     });
   }
@@ -43,14 +40,7 @@ export class LineGroup {
   constructor(lines) {
     this.group = new Group();
     lines.forEach((node) => {
-      const { x1, y1, x2, y2, info } = node;
-      const line = new Line({
-        x1,
-        y1,
-        x2,
-        y2,
-        info,
-      });
+      const line = new Line(node);
       this.group.add(line.el);
     });
   }

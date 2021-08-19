@@ -7,6 +7,12 @@ import {
 } from "zrender";
 import imgData from "./ligand.png";
 import { getTextPosition } from "./util";
+import {
+  mouseOverHandler,
+  mouseOutHandler,
+  clickHandler,
+  ligandMap,
+} from "./events";
 
 const ligandWidth = 100;
 const focusScale = 1.5;
@@ -21,20 +27,9 @@ const animateConfig = {
 // blur状态
 // select状态
 // add高亮状态
-const mouseOverHandler = (type, params, ins) => {
-  console.log("mouseOverHandler", type);
-  console.log("mouseOverHandler", params);
-  console.log("mouseOverHandler", ins);
-  ins.toFocus();
-};
-const mouseOutHandler = (type, params, ins) => {
-  ins.toNormal();
-};
-const clickHandler = (type, params, ins) => {
-  ins.toSelect();
-};
 
 export class Line {
+  id = "";
   el = null;
   line = null;
   textGroup = null;
@@ -88,7 +83,17 @@ export class Line {
       animateConfig
     );
   }
-  constructor({ x1, y1, x2, y2, info }) {
+
+  onCreate({ source, target }) {
+    const sourceNode = ligandMap.get(source);
+    const targetNode = ligandMap.get(target);
+    sourceNode.addLine(this);
+    targetNode.addLine(this);
+  }
+
+  constructor(params) {
+    const { x1, y1, x2, y2, info, id } = params;
+    this.id = id;
     this.el = new Group();
     this.textGroup = new Group();
     this.line = new ZrLine({
@@ -107,6 +112,7 @@ export class Line {
     });
     this.el.add(this.line);
     this.el.add(this.textGroup);
+    this.onCreate(params);
 
     this.el.on("mouseover", (params) => mouseOverHandler("line", params, this));
     this.el.on("mouseout", (params) => mouseOutHandler("line", params, this));
@@ -115,9 +121,11 @@ export class Line {
 }
 
 export class Ligand {
+  id = "";
   el = null;
   img = null;
   rect = null;
+  lineMap = new Map();
 
   style = {
     rect: {
@@ -267,8 +275,13 @@ export class Ligand {
     );
   }
 
-  constructor({ x, y, img = imgData }) {
+  addLine(line) {
+    this.lineMap.set(line.id, line);
+  }
+
+  constructor({ x, y, img = imgData, id }) {
     this.el = new Group();
+    this.id = id;
     this.img = new ZrImage({
       origin: [x + 50, y + 50],
       style: {

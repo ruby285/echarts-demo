@@ -9,7 +9,7 @@ const layout = getLayout(
   mockNum
 );
 const mockNodes = new Array(mockNum).fill("").map((node, i) => ({
-  id: i,
+  id: "" + i,
   x: layout[i].x,
   y: layout[i].y,
 }));
@@ -28,25 +28,27 @@ const originLines = [
 ];
 
 const mockLinks = originLines.map((link) => {
-  const { source, target, info } = link;
+  const { source, target } = link;
   const sNode = mockNodes[source];
   const tNode = mockNodes[target];
   const id = `${sNode.id}=>${tNode.id}`;
   const { x1, y1, x2, y2 } = getLinePoint(sNode, tNode, 100);
-  return { x1, y1, x2, y2, id, info };
+  return { x1, y1, x2, y2, id, ...link };
 });
 
 class FEPGraphChart {
   zr = null;
+  nodeGroup = null;
+  lineGroup = null;
 
   init(el) {
     this.zr = init(el);
 
-    const nodeGroup = new NodeGroup(mockNodes);
-    const lineGroup = new LineGroup(mockLinks);
+    this.nodeGroup = new NodeGroup(mockNodes);
+    this.lineGroup = new LineGroup(mockLinks);
 
-    this.zr.add(nodeGroup.group);
-    this.zr.add(lineGroup.group);
+    this.zr.add(this.nodeGroup.group);
+    this.zr.add(this.lineGroup.group);
   }
   dispose() {
     if (!this.zr) return;
