@@ -30,9 +30,14 @@ const animateConfig = {
 
 export class Line {
   id = "";
+  source = "";
+  target = "";
+  sourceNode = null;
+  targetNode = null;
   el = null;
   line = null;
   textGroup = null;
+  selected = false;
 
   style = {
     line: {
@@ -50,8 +55,36 @@ export class Line {
       },
     },
   };
-
-  toNormal() {
+  toScale1() {
+    this.img.animateTo(
+      {
+        scale: [1, 1],
+      },
+      animateConfig
+    );
+    this.rect.animateTo(
+      {
+        scale: [1, 1],
+      },
+      animateConfig
+    );
+  }
+  toScaleX() {
+    this.img.animateTo(
+      {
+        scale: [focusScale, focusScale],
+      },
+      animateConfig
+    );
+    this.rect.animateTo(
+      {
+        scale: [focusScale, focusScale],
+      },
+      animateConfig
+    );
+  }
+  toNormal(cancleSelect) {
+    if (cancleSelect) this.selected = false;
     this.line.animateTo(
       {
         style: this.style.line.normal,
@@ -76,6 +109,7 @@ export class Line {
     );
   }
   toSelect() {
+    this.selected = true;
     this.line.animateTo(
       {
         style: this.style.line.select,
@@ -84,16 +118,17 @@ export class Line {
     );
   }
 
-  onCreate({ source, target }) {
-    const sourceNode = ligandMap.get(source);
-    const targetNode = ligandMap.get(target);
-    sourceNode.addLine(this);
-    targetNode.addLine(this);
+  onCreate() {
+    this.sourceNode.addLine(this);
+    this.targetNode.addLine(this);
   }
 
-  constructor(params) {
-    const { x1, y1, x2, y2, info, id } = params;
+  constructor({ x1, y1, x2, y2, info, id, source, target }) {
     this.id = id;
+    this.source = source;
+    this.target = target;
+    this.sourceNode = ligandMap.get(source);
+    this.targetNode = ligandMap.get(target);
     this.el = new Group();
     this.textGroup = new Group();
     this.line = new ZrLine({
@@ -112,7 +147,7 @@ export class Line {
     });
     this.el.add(this.line);
     this.el.add(this.textGroup);
-    this.onCreate(params);
+    this.onCreate();
 
     this.el.on("mouseover", (params) => mouseOverHandler("line", params, this));
     this.el.on("mouseout", (params) => mouseOutHandler("line", params, this));
@@ -126,6 +161,7 @@ export class Ligand {
   img = null;
   rect = null;
   lineMap = new Map();
+  selected = false;
 
   style = {
     rect: {
@@ -159,53 +195,45 @@ export class Ligand {
     },
   };
 
-  opts = {
-    rect: {
-      normal: {
+  toScale1() {
+    this.img.animateTo(
+      {
         scale: [1, 1],
       },
-      focus: {
-        scale: [focusScale, focusScale],
-      },
-      blur: {
-        scale: [1, 1],
-        opacity: 0.1,
-      },
-      select: {
-        scale: [focusScale, focusScale],
-      },
-      add: {},
-    },
-    img: {
-      normal: {
-        scale: [1, 1],
-      },
-      focus: {
-        scale: [focusScale, focusScale],
-      },
-      blur: {
-        scale: [1, 1],
-        opacity: 0.1,
-      },
-      select: {
-        scale: [focusScale, focusScale],
-      },
-      add: {},
-    },
-  };
-
-  toNormal() {
+      animateConfig
+    );
     this.rect.animateTo(
       {
-        ...this.opts.rect.normal,
-        style: this.style.rect.normal,
+        scale: [1, 1],
+      },
+      animateConfig
+    );
+  }
+  toScaleX() {
+    this.img.animateTo(
+      {
+        scale: [focusScale, focusScale],
+      },
+      animateConfig
+    );
+    this.rect.animateTo(
+      {
+        scale: [focusScale, focusScale],
+      },
+      animateConfig
+    );
+  }
+  toNormal(cancleSelect) {
+    if (cancleSelect) this.selected = false;
+    this.rect.animateTo(
+      {
+        style: this.selected ? { opacity: 1 } : this.style.rect.normal,
       },
       animateConfig
     );
     this.img.animateTo(
       {
-        ...this.opts.img.normal,
-        style: this.style.img.normal,
+        style: this.selected ? { opacity: 1 } : this.style.img.normal,
       },
       animateConfig
     );
@@ -213,14 +241,12 @@ export class Ligand {
   toFocus() {
     this.rect.animateTo(
       {
-        ...this.opts.rect.focus,
         style: this.style.rect.focus,
       },
       animateConfig
     );
     this.img.animateTo(
       {
-        ...this.opts.img.focus,
         style: this.style.img.focus,
       },
       animateConfig
@@ -229,30 +255,27 @@ export class Ligand {
   toBlur() {
     this.rect.animateTo(
       {
-        ...this.opts.rect.blur,
         style: this.style.rect.blur,
       },
       animateConfig
     );
     this.img.animateTo(
       {
-        ...this.opts.img.blur,
         style: this.style.img.blur,
       },
       animateConfig
     );
   }
-  toSelect() {
+  toSelect(idx) {
+    this.selected = true;
     this.rect.animateTo(
       {
-        ...this.opts.rect.select,
         style: this.style.rect.select,
       },
       animateConfig
     );
     this.img.animateTo(
       {
-        ...this.opts.img.select,
         style: this.style.img.select,
       },
       animateConfig
@@ -261,14 +284,12 @@ export class Ligand {
   toAdd() {
     this.rect.animateTo(
       {
-        ...this.opts.rect.add,
         style: this.style.rect.add,
       },
       animateConfig
     );
     this.img.animateTo(
       {
-        ...this.opts.img.add,
         style: this.style.img.add,
       },
       animateConfig
