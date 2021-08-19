@@ -6,8 +6,6 @@ import { ligandMap, lineMap } from "./events";
 // TODO: 新的布局算法
 // TODO: 线的位置计算 with 新算法
 
-// TODO: 交互逻辑-hover
-// TODO: 交互逻辑-click
 // TODO: selection order
 // TODO: delete node button
 // TODO: add edge button

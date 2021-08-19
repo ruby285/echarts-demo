@@ -1,6 +1,7 @@
 import { init } from "zrender";
 import { NodeGroup, LineGroup } from "./controller";
 import { getLayout, getLinePoint } from "./util";
+import { bezierCurve } from "./arc";
 
 const mockNum = 3;
 const layout = getLayout(
@@ -49,6 +50,7 @@ class FEPGraphChart {
 
     this.zr.add(this.nodeGroup.group);
     this.zr.add(this.lineGroup.group);
+    // this.zr.add(bezierCurve);
   }
   dispose() {
     if (!this.zr) return;
