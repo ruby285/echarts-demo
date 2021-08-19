@@ -28,7 +28,67 @@ const animateConfig = {
 // select状态
 // add高亮状态
 
-export class Line {
+class Element {
+  state = {
+    selected: false,
+    hover: false,
+    relatedHover: false,
+    firstAdd: false,
+  };
+  onHover() {
+    this.toScaleX();
+    this.state.hover = true;
+    this.updateStyle();
+  }
+  onHoverEnd() {
+    this.toScale1();
+    this.state.hover = false;
+    this.updateStyle();
+  }
+  onRelatedHover() {
+    this.state.relatedHover = true;
+    this.updateStyle();
+  }
+  onRelatedHoverEnd() {
+    this.state.relatedHover = false;
+    this.updateStyle();
+  }
+  onSelected() {
+    this.state.selected = true;
+    this.updateStyle();
+  }
+  onSelectedEnd() {
+    this.state.selected = false;
+    this.updateStyle();
+  }
+  onFirstAdd() {
+    this.state.firstAdd = true;
+    this.updateStyle();
+  }
+  onFirstAddEnd() {
+    this.state.firstAdd = false;
+    this.updateStyle();
+  }
+
+  updateStyle() {
+    const { selected, hover, relatedHover, firstAdd } = this.state;
+    if (selected) {
+      return this._updateStyle(this.style.selected);
+    }
+    if (hover) {
+      return this._updateStyle(this.style.hover);
+    }
+    if (relatedHover) {
+      return this._updateStyle(this.style.relatedHover);
+    }
+    if (firstAdd) {
+      return this._updateStyle(this.style.firstAdd);
+    }
+    return this._updateStyle(this.style.default);
+  }
+}
+
+export class Line extends Element {
   id = "";
   source = "";
   target = "";
@@ -40,82 +100,72 @@ export class Line {
   selected = false;
 
   style = {
-    line: {
-      normal: { opacity: 1, lineWidth: 1, stroke: "#000" },
-      focus: {
-        stroke: "#ff0",
-        lineWidth: 10,
-      },
-      blur: {
-        opacity: 0.1,
-      },
-      select: {
+    selected: {
+      line: {
         stroke: "#f00",
-        lineWidth: 10,
+      },
+    },
+    hover: {
+      line: {
+        stroke: "#ff0",
+      },
+    },
+    relatedHover: {
+      line: {
+        stroke: "#000",
+      },
+    },
+    default: {
+      line: {
+        stroke: "#000",
       },
     },
   };
-  toScale1() {
-    this.img.animateTo(
+
+  _updateStyle(style) {
+    // console.log(style);
+    this.line.animateTo(
       {
-        scale: [1, 1],
+        style: style.line,
       },
       animateConfig
     );
-    this.rect.animateTo(
+  }
+
+  toScale1() {
+    this.line.animateTo(
       {
-        scale: [1, 1],
+        style: {
+          lineWidth: 1,
+        },
       },
       animateConfig
     );
   }
   toScaleX() {
-    this.img.animateTo(
+    this.line.animateTo(
       {
-        scale: [focusScale, focusScale],
-      },
-      animateConfig
-    );
-    this.rect.animateTo(
-      {
-        scale: [focusScale, focusScale],
+        style: {
+          lineWidth: 10,
+        },
       },
       animateConfig
     );
   }
-  toNormal(cancleSelect) {
-    if (cancleSelect) this.selected = false;
-    this.line.animateTo(
-      {
-        style: this.style.line.normal,
+
+  fadeout() {
+    this.line.animateTo({
+      style: {
+        opacity: 0.1,
       },
-      animateConfig
-    );
+    });
   }
-  toFocus() {
-    this.line.animateTo(
-      {
-        style: this.style.line.focus,
+  fadein() {
+    this.line.animateTo({
+      style: {
+        opacity: 1,
       },
-      animateConfig
-    );
-  }
-  toBlur() {
-    this.line.animateTo(
-      {
-        style: this.style.line.blur,
-      },
-      animateConfig
-    );
-  }
-  toSelect() {
-    this.selected = true;
-    this.line.animateTo(
-      {
-        style: this.style.line.select,
-      },
-      animateConfig
-    );
+    });
   }
 
   onCreate() {
@@ -124,6 +174,7 @@ export class Line {
   }
 
   constructor({ x1, y1, x2, y2, info, id, source, target }) {
+    super();
     this.id = id;
     this.source = source;
     this.target = target;
@@ -155,45 +206,73 @@ export class Line {
   }
 }
 
-export class Ligand {
+export class Ligand extends Element {
   id = "";
   el = null;
   img = null;
   rect = null;
   lineMap = new Map();
-  selected = false;
 
   style = {
-    rect: {
-      normal: { opacity: 1, stroke: "#000" },
-      focus: {
-        stroke: "#ff0",
-      },
-      blur: {
-        opacity: 0.1,
-      },
-      select: {
+    selected: {
+      rect: {
         stroke: "#f00",
       },
-      add: {},
-    },
-    img: {
-      normal: { shadowBlur: 0, opacity: 1 },
-      focus: {
+      img: {
+        shadowColor: "#f00",
         shadowBlur: 20,
-        shadowColor: "#ff0",
       },
-      blur: {
-        opacity: 0.1,
+    },
+    hover: {
+      rect: {
+        stroke: "#ff0",
+      },
+      img: {
+        shadowColor: "#ff0",
+        shadowBlur: 20,
+      },
+    },
+    relatedHover: {
+      rect: {
+        stroke: "#000",
+      },
+      img: {
         shadowBlur: 0,
       },
-      select: {
-        shadowBlur: 20,
-        shadowColor: "#f00",
+    },
+    firstAdd: {
+      rect: {
+        stroke: "#f0f",
       },
-      add: {},
+      img: {
+        shadowColor: "#f0f",
+        shadowBlur: 20,
+      },
+    },
+    default: {
+      rect: {
+        stroke: "#000",
+      },
+      img: {
+        shadowBlur: 0,
+      },
     },
   };
+
+  _updateStyle(style) {
+    this.rect.animateTo(
+      {
+        style: style.rect,
+      },
+      animateConfig
+    );
+    this.img.animateTo(
+      {
+        style: style.img,
+      },
+      animateConfig
+    );
+  }
 
   toScale1() {
     this.img.animateTo(
@@ -209,91 +288,45 @@ export class Ligand {
       animateConfig
     );
   }
+
   toScaleX() {
-    this.img.animateTo(
-      {
-        scale: [focusScale, focusScale],
-      },
-      animateConfig
-    );
     this.rect.animateTo(
       {
         scale: [focusScale, focusScale],
       },
       animateConfig
     );
-  }
-  toNormal(cancleSelect) {
-    if (cancleSelect) this.selected = false;
-    this.rect.animateTo(
-      {
-        style: this.selected ? { opacity: 1 } : this.style.rect.normal,
-      },
-      animateConfig
-    );
     this.img.animateTo(
       {
-        style: this.selected ? { opacity: 1 } : this.style.img.normal,
+        scale: [focusScale, focusScale],
       },
       animateConfig
     );
   }
-  toFocus() {
-    this.rect.animateTo(
-      {
-        style: this.style.rect.focus,
+
+  fadeout() {
+    this.rect.animateTo({
+      style: {
+        opacity: 0.1,
       },
-      animateConfig
-    );
-    this.img.animateTo(
-      {
-        style: this.style.img.focus,
+    });
+    this.img.animateTo({
+      style: {
+        opacity: 0.1,
       },
-      animateConfig
-    );
+    });
   }
-  toBlur() {
-    this.rect.animateTo(
-      {
-        style: this.style.rect.blur,
+  fadein() {
+    this.rect.animateTo({
+      style: {
+        opacity: 1,
       },
-      animateConfig
-    );
-    this.img.animateTo(
-      {
-        style: this.style.img.blur,
+    });
+    this.img.animateTo({
+      style: {
+        opacity: 1,
       },
-      animateConfig
-    );
-  }
-  toSelect(idx) {
-    this.selected = true;
-    this.rect.animateTo(
-      {
-        style: this.style.rect.select,
-      },
-      animateConfig
-    );
-    this.img.animateTo(
-      {
-        style: this.style.img.select,
-      },
-      animateConfig
-    );
-  }
-  toAdd() {
-    this.rect.animateTo(
-      {
-        style: this.style.rect.add,
-      },
-      animateConfig
-    );
-    this.img.animateTo(
-      {
-        style: this.style.img.add,
-      },
-      animateConfig
-    );
+    });
   }
 
   addLine(line) {
@@ -301,6 +334,7 @@ export class Ligand {
   }
 
   constructor({ x, y, img = imgData, id }) {
+    super();
     this.el = new Group();
     this.id = id;
     this.img = new ZrImage({
@@ -312,6 +346,7 @@ export class Ligand {
         width: ligandWidth,
         height: ligandWidth,
       },
+      z2: 100,
     });
     this.rect = new Rect({
       origin: [x + 50, y + 50],
@@ -325,6 +360,7 @@ export class Ligand {
         width: ligandWidth,
         height: ligandWidth,
       },
+      z2: 100,
     });
 
     this.el.add(this.img);
