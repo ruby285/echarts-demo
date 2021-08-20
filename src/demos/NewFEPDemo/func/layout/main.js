@@ -19,9 +19,11 @@ const vertices = [
   { id: 14 },
   { id: 15 },
 ];
+const edges = [
+  { from: 0, to: 1 },
+  { from: 1, to: 0 },
+];
 
-const graph = new Graph({ vertices });
+const graph = new Graph({ vertices, edges });
 
 export const layout = new Layout(graph);
-
-console.log(layout);

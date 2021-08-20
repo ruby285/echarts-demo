@@ -7,10 +7,11 @@ export default function LigandGraph() {
   const ecRef = useRef();
 
   useEffect(() => {
-    graphChart.init(ecRef.current);
+    layout.init(ecRef.current);
+    layout.run();
+    // graphChart.init(ecRef.current);
     // graphChart.setDefaultData();
-
-    return () => graphChart.dispose();
+    // return () => graphChart.dispose();
   }, []);
 
   return (

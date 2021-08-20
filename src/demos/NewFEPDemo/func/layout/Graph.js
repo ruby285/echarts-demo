@@ -1,5 +1,4 @@
 import Vertex from "./Vertex";
-
 function Graph(data) {
   var i, max;
 
@@ -14,6 +13,10 @@ function Graph(data) {
   for (i = 0, max = data.vertices.length; i < max; ++i) {
     this.addVertex(data.vertices[i].id, data.vertices[i].data);
   }
+
+  for (i = 0, max = data.edges.length; i < max; ++i) {
+    this.addEdge(data.edges[i].from, data.edges[i].to);
+  }
 }
 
 Graph.prototype = {
@@ -25,12 +28,23 @@ Graph.prototype = {
     return id;
   },
 
+  addEdge: function (u, v) {
+    this.adj[u] = this.adj[u] || [];
+    this.adj[u].push(v);
+    this.adj[v] = this.adj[v] || [];
+    this.adj[v].push(u);
+  },
+
   getVertex: function (id) {
     return this.vertices[id];
   },
 
   getSize: function () {
     return this.nVerts;
+  },
+
+  getDegree: function (v) {
+    return this.adj[v].length;
   },
 
   forEachVertex: function (callback, this_obj) {
@@ -42,6 +56,22 @@ Graph.prototype = {
           callback.call(this_obj, this.vertices[i], i);
         }
       }
+    }
+  },
+
+  forEachEdge: function (callback, this_obj) {
+    // Performs the "callback" function for each pair of vertices u and v such that u and v are connected by an edge.
+    var j;
+
+    if (typeof callback === "function") {
+      this.forEachVertex(function (v, i) {
+        if (!this.adj[i]) return;
+        j = this.adj[i].length;
+
+        while (j--) {
+          callback.call(this_obj, v, this.vertices[this.adj[i][j]]);
+        }
+      }, this);
     }
   },
 };
