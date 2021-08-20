@@ -1,9 +1,9 @@
 const mockNum = 20;
-export const mockNodes = new Array(mockNum).fill("").map((node, i) => ({
+export const mockLigands = new Array(mockNum).fill("").map((n, i) => ({
   id: "" + i,
 }));
 
-export const mockLinks = [
+export const mockEdges = [
   {
     id: "0=>1",
     source: "0",

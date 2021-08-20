@@ -1,27 +1,27 @@
-import { ligandMap, lineMap } from "./group";
+import { ligandMap, edgeMap } from "./group";
 
 const hoverLigand = new Set();
-const hoverLine = new Set();
+const hoverEdge = new Set();
 const relatedHoverLigand = new Set();
-const relatedHoverLine = new Set();
+const relatedHoverEdge = new Set();
 const fateoutLigand = new Set();
-const fadeoutLine = new Set();
+const fadeoutEdge = new Set();
 
-let selectLine = null;
+let selectEdge = null;
 const selectLigand = {
   list: [],
   deleteList: [],
   add(n) {
     if (this.list.length > 1) {
       this.deleteList.push(this.list.shift());
-      if (selectLine) {
-        this.deleteList.push(selectLine);
-        selectLine = null;
+      if (selectEdge) {
+        this.deleteList.push(selectEdge);
+        selectEdge = null;
       }
     }
     this.list.push(n);
     if (this.list.length === 2) {
-      this.selectALine(this.list[0], this.list[1]);
+      this.selectAEdge(this.list[0], this.list[1]);
     }
     this.update();
   },
@@ -31,39 +31,39 @@ const selectLigand = {
     } else {
       this.deleteList.push(this.list.shift());
     }
-    if (selectLine) {
-      this.deleteList.push(selectLine);
-      selectLine = null;
+    if (selectEdge) {
+      this.deleteList.push(selectEdge);
+      selectEdge = null;
     }
     this.update();
   },
-  replaceByLine(sourceNode, targetNode, id) {
+  replaceByEdge(sourceLigand, targetLigand, id) {
     this.deleteList = this.list;
-    this.list = [sourceNode, targetNode];
-    if (selectLine && selectLine.id !== id) {
-      this.deleteList.push(selectLine);
-      selectLine = null;
+    this.list = [sourceLigand, targetLigand];
+    if (selectEdge && selectEdge.id !== id) {
+      this.deleteList.push(selectEdge);
+      selectEdge = null;
     }
-    this.selectALine(sourceNode, targetNode);
+    this.selectAEdge(sourceLigand, targetLigand);
     this.update();
   },
-  selectALine(sourceNode, targetNode) {
-    const lineId = `${sourceNode.id}=>${targetNode.id}`;
-    let line = lineMap.get(lineId);
-    if (line) {
-      selectLine = line;
+  selectAEdge(sourceLigand, targetLigand) {
+    const edgeId = `${sourceLigand.id}=>${targetLigand.id}`;
+    let edge = edgeMap.get(edgeId);
+    if (edge) {
+      selectEdge = edge;
     } else {
       // 创建一个新的虚线
     }
   },
   update() {
-    this.deleteList.forEach((node) => {
-      node.onSelectedEnd();
+    this.deleteList.forEach((item) => {
+      item.onSelectedEnd();
     });
-    this.list.forEach((node, idx) => {
-      node.onSelected(idx);
+    this.list.forEach((item, idx) => {
+      item.onSelected(idx);
     });
-    selectLine && selectLine.onSelected();
+    selectEdge && selectEdge.onSelected();
     this.deleteList = [];
   },
 };
@@ -72,7 +72,7 @@ export const mouseOverHandler = (type, params, ins) => {
   if (type === "ligand") {
     return ligandEventHandler.onmouseover(ins);
   }
-  lineEventHandler.onmouseover(ins);
+  edgeEventHandler.onmouseover(ins);
 };
 export const mouseOutHandler = (type, params, ins) => {
   representationHandler.onmouseout();
@@ -81,7 +81,7 @@ export const clickHandler = (type, params, ins) => {
   if (type === "ligand") {
     return ligandEventHandler.onclick(ins);
   }
-  lineEventHandler.onclick(ins);
+  edgeEventHandler.onclick(ins);
 };
 
 const ligandEventHandler = {
@@ -92,16 +92,16 @@ const ligandEventHandler = {
       if (ligand === ins) continue;
       fateoutLigand.add(ligand);
     }
-    for (let [id, line] of lineMap) {
-      if (ins.lineMap.has(id)) {
-        fateoutLigand.delete(line.sourceNode);
-        fateoutLigand.delete(line.targetNode);
-        relatedHoverLigand.add(line.sourceNode);
-        relatedHoverLigand.add(line.targetNode);
-        relatedHoverLine.add(line);
+    for (let [id, edge] of edgeMap) {
+      if (ins.edgeMap.has(id)) {
+        fateoutLigand.delete(edge.sourceLigand);
+        fateoutLigand.delete(edge.targetLigand);
+        relatedHoverLigand.add(edge.sourceLigand);
+        relatedHoverLigand.add(edge.targetLigand);
+        relatedHoverEdge.add(edge);
         continue;
       }
-      fadeoutLine.add(line);
+      fadeoutEdge.add(edge);
     }
 
     representationHandler.onmouseover();
@@ -114,29 +114,29 @@ const ligandEventHandler = {
   },
 };
 
-const lineEventHandler = {
+const edgeEventHandler = {
   onmouseover(ins) {
     if (ins.selected) return;
-    hoverLine.add(ins);
+    hoverEdge.add(ins);
     for (let [, ligand] of ligandMap) {
-      if (ligand === ins.sourceNode || ligand === ins.targetNode) {
+      if (ligand === ins.sourceLigand || ligand === ins.targetLigand) {
         relatedHoverLigand.add(ligand);
         continue;
       }
       fateoutLigand.add(ligand);
     }
-    for (let [, line] of lineMap) {
-      if (line === ins) {
+    for (let [, edge] of edgeMap) {
+      if (edge === ins) {
         continue;
       }
-      fadeoutLine.add(line);
+      fadeoutEdge.add(edge);
     }
 
     representationHandler.onmouseover();
   },
   onclick(ins) {
-    const { sourceNode, targetNode, id } = ins;
-    selectLigand.replaceByLine(sourceNode, targetNode, id);
+    const { sourceLigand, targetLigand, id } = ins;
+    selectLigand.replaceByEdge(sourceLigand, targetLigand, id);
   },
 };
 
@@ -151,14 +151,14 @@ const representationHandler = {
     for (let ligand of relatedHoverLigand) {
       ligand.onRelatedHover();
     }
-    for (let line of hoverLine) {
-      line.onHover();
+    for (let edge of hoverEdge) {
+      edge.onHover();
     }
-    for (let line of fadeoutLine) {
-      line.fadeout();
+    for (let edge of fadeoutEdge) {
+      edge.fadeout();
     }
-    for (let line of relatedHoverLine) {
-      line.onRelatedHover();
+    for (let edge of relatedHoverEdge) {
+      edge.onRelatedHover();
     }
   },
   onmouseout() {
@@ -171,20 +171,20 @@ const representationHandler = {
     for (let ligand of relatedHoverLigand) {
       ligand.onRelatedHoverEnd();
     }
-    for (let line of hoverLine) {
-      line.onHoverEnd();
+    for (let edge of hoverEdge) {
+      edge.onHoverEnd();
     }
-    for (let line of fadeoutLine) {
-      line.fadein();
+    for (let edge of fadeoutEdge) {
+      edge.fadein();
     }
-    for (let line of relatedHoverLine) {
-      line.onRelatedHoverEnd();
+    for (let edge of relatedHoverEdge) {
+      edge.onRelatedHoverEnd();
     }
     hoverLigand.clear();
     fateoutLigand.clear();
     relatedHoverLigand.clear();
-    hoverLine.clear();
-    fadeoutLine.clear();
-    relatedHoverLine.clear();
+    hoverEdge.clear();
+    fadeoutEdge.clear();
+    relatedHoverEdge.clear();
   },
 };

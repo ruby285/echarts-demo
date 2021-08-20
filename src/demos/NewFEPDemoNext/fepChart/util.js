@@ -38,12 +38,12 @@ function getRandomDis() {
   return Math.random() * 40 - 20;
 }
 
-export function getLinePoint(sNode, tNode, width) {
+export function getEdgePoint(sNode, tNode, width) {
   const sAngle = getAngle(sNode, tNode);
   const tAngle = getAngle(tNode, sNode);
   const sEdge = getEdge(sAngle, sNode, width);
   const tEdge = getEdge(tAngle, tNode, width);
-  // const { start, end } = lineMove(sNode, tNode);
+  // const { start, end } = edgeMove(sNode, tNode);
   // const sPoint = segmentsIntr(start, end, sEdge.start, sEdge.end);
   // const tPoint = segmentsIntr(start, end, tEdge.start, tEdge.end);
   const sPoint = segmentsIntr(sNode, tNode, sEdge.start, sEdge.end);
@@ -66,18 +66,18 @@ function getAngle(start, end) {
   return angle;
 }
 
-function getEdge(angel, node, width) {
+function getEdge(angel, pos, width) {
   const l = width / 2;
   if (angel > 45 && angel <= 135) {
     // 上边
     return {
       start: {
-        x: node.x - l,
-        y: node.y - l,
+        x: pos.x - l,
+        y: pos.y - l,
       },
       end: {
-        x: node.x + l,
-        y: node.y - l,
+        x: pos.x + l,
+        y: pos.y - l,
       },
     };
   }
@@ -86,12 +86,12 @@ function getEdge(angel, node, width) {
     // 左边
     return {
       start: {
-        x: node.x - l,
-        y: node.y - l,
+        x: pos.x - l,
+        y: pos.y - l,
       },
       end: {
-        x: node.x - l,
-        y: node.y + l,
+        x: pos.x - l,
+        y: pos.y + l,
       },
     };
   }
@@ -99,24 +99,24 @@ function getEdge(angel, node, width) {
     // 下边
     return {
       start: {
-        x: node.x - l,
-        y: node.y + l,
+        x: pos.x - l,
+        y: pos.y + l,
       },
       end: {
-        x: node.x + l,
-        y: node.y + l,
+        x: pos.x + l,
+        y: pos.y + l,
       },
     };
   }
   // 右边
   return {
     start: {
-      x: node.x + l,
-      y: node.y - l,
+      x: pos.x + l,
+      y: pos.y - l,
     },
     end: {
-      x: node.x + l,
-      y: node.y + l,
+      x: pos.x + l,
+      y: pos.y + l,
     },
   };
 }
@@ -165,7 +165,7 @@ export function getTextPosition(x1, y1, x2, y2, n) {
   }));
 }
 
-function lineMove(sNode, tNode) {
+function edgeMove(sNode, tNode) {
   const vecX = tNode.x - sNode.x;
   const vecY = tNode.y - sNode.y;
   const dis = vecMove(vecX, vecY, 10);

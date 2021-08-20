@@ -6,7 +6,7 @@ import {
   Text as ZrText,
 } from "zrender";
 import imgData from "./ligand.png";
-import { getTextPosition, getLinePoint } from "./util";
+import { getTextPosition, getEdgePoint } from "./util";
 import { mouseOverHandler, mouseOutHandler, clickHandler } from "./events";
 import { ligandMap } from "./group";
 
@@ -78,65 +78,65 @@ class Element {
   }
 }
 
-export class Line extends Element {
+export class Edge extends Element {
   id = "";
   source = "";
   target = "";
-  sourceNode = null;
-  targetNode = null;
-  type = "line";
+  sourceLigand = null;
+  targetLigand = null;
+  type = "edge";
   el = null;
-  line = null;
+  edge = null;
   textGroup = null;
   info = [];
 
   style = {
     selected: {
-      line: {
+      edge: {
         stroke: "#f00",
       },
     },
     hover: {
-      line: {
+      edge: {
         stroke: "#ff0",
       },
     },
     relatedHover: {
-      line: {
+      edge: {
         stroke: "#000",
       },
     },
     default: {
-      line: {
+      edge: {
         stroke: "#000",
       },
     },
   };
 
   _updateStyle(style) {
-    this.line.animateTo(
+    this.edge.animateTo(
       {
-        style: style.line,
+        style: style.edge,
       },
       animateConfig
     );
   }
 
   toScale1() {
-    this.line.animateTo(
+    this.edge.animateTo(
       {
         style: {
-          lineWidth: 1,
+          edgeWidth: 1,
         },
       },
       animateConfig
     );
   }
   toScaleX() {
-    this.line.animateTo(
+    this.edge.animateTo(
       {
         style: {
-          lineWidth: 10,
+          edgeWidth: 10,
         },
       },
       animateConfig
@@ -144,14 +144,14 @@ export class Line extends Element {
   }
 
   fadeout() {
-    this.line.animateTo({
+    this.edge.animateTo({
       style: {
         opacity: 0.1,
       },
     });
   }
   fadein() {
-    this.line.animateTo({
+    this.edge.animateTo({
       style: {
         opacity: 1,
       },
@@ -159,29 +159,29 @@ export class Line extends Element {
   }
 
   onCreate() {
-    this.sourceNode.addLine(this);
-    this.targetNode.addLine(this);
+    this.sourceLigand.addEdge(this);
+    this.targetLigand.addEdge(this);
   }
 
   onDelete() {}
 
   init() {
     this.textGroup = new Group();
-    this.line = new ZrLine({});
+    this.edge = new ZrLine({});
 
-    this.el.add(this.line);
+    this.el.add(this.edge);
     this.el.add(this.textGroup);
   }
 
   reDraw() {
     const info = this.info;
-    const { x1, y1, x2, y2 } = getLinePoint(
-      this.sourceNode.position,
-      this.targetNode.position,
+    const { x1, y1, x2, y2 } = getEdgePoint(
+      this.sourceLigand.position,
+      this.targetLigand.position,
       100
     );
     this.textGroup.removeAll();
-    this.line.attr({
+    this.edge.attr({
       shape: {
         x1,
         y1,
@@ -202,16 +202,16 @@ export class Line extends Element {
     this.info = info;
     this.source = source;
     this.target = target;
-    this.sourceNode = ligandMap.get(source);
-    this.targetNode = ligandMap.get(target);
+    this.sourceLigand = ligandMap.get(source);
+    this.targetLigand = ligandMap.get(target);
     this.el = new Group();
     this.init();
 
     this.onCreate();
 
-    this.el.on("mouseover", (params) => mouseOverHandler("line", params, this));
-    this.el.on("mouseout", (params) => mouseOutHandler("line", params, this));
-    this.el.on("click", (params) => clickHandler("line", params, this));
+    this.el.on("mouseover", (params) => mouseOverHandler("edge", params, this));
+    this.el.on("mouseout", (params) => mouseOutHandler("edge", params, this));
+    this.el.on("click", (params) => clickHandler("edge", params, this));
   }
 }
 
@@ -220,7 +220,7 @@ export class Ligand extends Element {
   el = null;
   img = null;
   rect = null;
-  lineMap = new Map();
+  edgeMap = new Map();
   type = "ligand";
 
   position = {
@@ -344,8 +344,8 @@ export class Ligand extends Element {
     });
   }
 
-  addLine(line) {
-    this.lineMap.set(line.id, line);
+  addEdge(edge) {
+    this.edgeMap.set(edge.id, edge);
   }
 
   onDelete() {}

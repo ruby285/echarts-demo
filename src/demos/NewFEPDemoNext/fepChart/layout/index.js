@@ -4,14 +4,14 @@ import Graph from "./Graph";
 class Layout {
   ctx = null;
   updateGraphics() {
-    const ligandMap = this.ctx.nodeGroup.map;
-    const lineMap = this.ctx.lineGroup.map;
+    const ligandMap = this.ctx.ligandGroup.map;
+    const edgeMap = this.ctx.edgeGroup.map;
     this.graph.forEachVertex(({ pos, id }) => {
       const ligand = ligandMap.get(id);
       ligand.moveTo(pos);
     });
-    for (let [, line] of lineMap) {
-      line.reDraw();
+    for (let [, edge] of edgeMap) {
+      edge.reDraw();
     }
   }
 
@@ -30,10 +30,10 @@ class Layout {
 
   init() {
     const ctx = this.ctx;
-    const vertices = ctx.nodes;
-    const edges = ctx.lines.map((line) => ({
-      from: line.source,
-      to: line.target,
+    const vertices = ctx.ligands;
+    const edges = ctx.edges.map((item) => ({
+      from: item.source,
+      to: item.target,
     }));
     this.graph = new Graph({ vertices, edges });
     this.layoutAlgorithm = new FRLayout(

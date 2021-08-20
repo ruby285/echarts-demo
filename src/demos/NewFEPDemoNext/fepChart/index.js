@@ -1,22 +1,24 @@
 import { init } from "zrender";
-import { mockNodes, mockLinks } from "./mockData";
-import { NodeGroup, LineGroup } from "./group";
+import { mockLigands, mockEdges } from "./mockData";
+import { ligandGroup, EdgeGroup } from "./group";
 import Layout from "./layout";
 
 class FepChart {
   zr = null;
   layout = null;
-  nodes = [];
-  lines = [];
-  nodeGroup = null;
-  lineGroup = null;
-  initData(nodes, lines) {
-    this.nodes = nodes;
-    this.lines = lines;
+  ligands = [];
+  edges = [];
+  ligandGroup = null;
+  edgeGroup = null;
+
+  initData(ligands, edges) {
+    this.ligands = ligands;
+    this.edges = edges;
   }
-  initGroup(nodes, lines) {
-    this.nodeGroup = new NodeGroup(nodes);
-    this.lineGroup = new LineGroup(lines);
+
+  initGroup(ligands, edges) {
+    this.ligandGroup = new ligandGroup(ligands);
+    this.edgeGroup = new EdgeGroup(edges);
   }
 
   initLayout() {
@@ -24,19 +26,20 @@ class FepChart {
     this.layout.run();
   }
 
-  init(el, nodes = mockNodes, lines = mockLinks) {
+  init(el, ligands = mockLigands, edges = mockEdges) {
     this.zr = init(el);
-    this.initData(nodes, lines);
-    this.initGroup(nodes, lines);
-    this.zr.add(this.nodeGroup.group);
-    this.zr.add(this.lineGroup.group);
+    this.initData(ligands, edges);
+    this.initGroup(ligands, edges);
+    this.zr.add(this.ligandGroup.group);
+    this.zr.add(this.edgeGroup.group);
     this.initLayout();
   }
   addLigand() {}
-  addLine() {}
+  addEdge() {}
   dispose() {
     if (!this.zr) return;
     this.zr.dispose();
   }
 }
+
 export default new FepChart();

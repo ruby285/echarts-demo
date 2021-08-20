@@ -1,35 +1,33 @@
 import { Group } from "zrender";
-import { Ligand, Line } from "./element";
+import { Ligand, Edge } from "./element";
 import imgData from "./ligand.png";
 
 export const ligandMap = new Map();
-export const lineMap = new Map();
+export const edgeMap = new Map();
 
-export class NodeGroup {
+export class ligandGroup {
   group = new Group();
   map = ligandMap;
-  constructor(nodes) {
-    nodes.forEach((node) => {
+  constructor(ligands) {
+    ligands.forEach((item) => {
       const ligand = new Ligand({
         img: imgData,
-        id: node.id,
+        id: item.id,
       });
-      ligandMap.set(node.id, ligand);
+      ligandMap.set(item.id, ligand);
       this.group.add(ligand.el);
     });
   }
 }
 
-export class LineGroup {
+export class EdgeGroup {
   group = new Group();
-  map = lineMap;
-  constructor(lines) {
-    console.log("lines", lines);
-    lines.forEach((node) => {
-      const line = new Line(node);
-      lineMap.set(node.id, line);
-      this.group.add(line.el);
+  map = edgeMap;
+  constructor(edges) {
+    edges.forEach((item) => {
+      const edge = new Edge(item);
+      edgeMap.set(item.id, edge);
+      this.group.add(edge.el);
     });
-    console.log("lines", lineMap);
   }
 }
