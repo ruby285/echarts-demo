@@ -1,4 +1,4 @@
-const mockNum = 30;
+const mockNum = 20;
 export const mockNodes = new Array(mockNum).fill("").map((node, i) => ({
   id: "" + i,
 }));

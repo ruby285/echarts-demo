@@ -7,11 +7,10 @@ export const lineMap = new Map();
 
 export class NodeGroup {
   group = new Group();
+  map = ligandMap;
   constructor(nodes) {
     nodes.forEach((node) => {
       const ligand = new Ligand({
-        x: node.x - 50,
-        y: node.y - 50,
         img: imgData,
         id: node.id,
       });
@@ -23,7 +22,7 @@ export class NodeGroup {
 
 export class LineGroup {
   group = new Group();
-
+  map = lineMap;
   constructor(lines) {
     lines.forEach((node) => {
       const line = new Line(node);

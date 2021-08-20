@@ -1,9 +1,11 @@
 import { init } from "zrender";
 import { mockNodes, mockLinks } from "./mockData";
 import { NodeGroup, LineGroup } from "./group";
+import Layout from "./layout";
 
 class FepChart {
   zr = null;
+  layout = null;
   nodes = [];
   lines = [];
   nodeGroup = null;
@@ -17,7 +19,10 @@ class FepChart {
     this.lineGroup = new LineGroup(lines);
   }
 
-  initLayout() {}
+  initLayout() {
+    this.layout = new Layout(this);
+    this.layout.run();
+  }
 
   init(el, nodes = mockNodes, lines = mockLinks) {
     this.zr = init(el);

@@ -347,28 +347,39 @@ export class Ligand extends Element {
 
   onDelete() {}
 
-  init({ x, y, img = imgData }) {
+  moveTo({ x, y }) {
     this.position = { x: x + 50, y: y + 50 };
-    this.img = new ZrImage({
+    this.img.attr({
       origin: [x + 50, y + 50],
       style: {
-        image: img,
         x,
         y,
+      },
+    });
+    this.rect.attr({
+      origin: [x + 50, y + 50],
+      shape: {
+        x,
+        y,
+      },
+    });
+  }
+
+  init(img = imgData) {
+    this.img = new ZrImage({
+      style: {
+        image: img,
         width: ligandWidth,
         height: ligandWidth,
       },
       z2: 100,
     });
     this.rect = new Rect({
-      origin: [x + 50, y + 50],
       style: {
         fill: "rgba(0,0,0,0)",
         stroke: "#000",
       },
       shape: {
-        x,
-        y,
         width: ligandWidth,
         height: ligandWidth,
       },
@@ -383,6 +394,7 @@ export class Ligand extends Element {
     super();
     this.el = new Group();
     this.id = id;
+    this.init();
 
     this.el.on("mouseover", (params) =>
       mouseOverHandler("ligand", params, this)
