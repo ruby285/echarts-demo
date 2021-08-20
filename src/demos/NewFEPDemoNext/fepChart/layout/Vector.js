@@ -43,12 +43,15 @@ Vector.prototype = {
     return this.divideConst(this.mag());
   },
 
+  set: function (x, y) {
+    this.x = x;
+    this.y = y;
+  },
+
   rand: function (minX, maxX, minY, maxY) {
     const random = (min, max) => Math.random() * max - min;
     this.x = random(minX, maxX);
     this.y = random(minY, maxY);
-    // this.x = 0;
-    // this.y = 0;
   },
 };
 

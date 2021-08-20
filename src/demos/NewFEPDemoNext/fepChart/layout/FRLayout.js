@@ -12,10 +12,6 @@ function FRLayout(settings, graph) {
   this.iterStep = 0.1;
 
   this.reset();
-
-  this.graph.forEachVertex(function (v) {
-    v.pos.rand(0.0, this.width, 0.0, this.height);
-  }, this);
 }
 
 FRLayout.MAX_ITERS = 400;
