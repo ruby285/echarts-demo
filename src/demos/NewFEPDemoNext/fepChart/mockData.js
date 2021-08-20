@@ -1,5 +1,5 @@
-const ligandNum = 20;
-const step = 4;
+const ligandNum = 30;
+const step = 2;
 const edgeNum = Math.floor(ligandNum / step);
 export const mockLigands = new Array(ligandNum).fill("").map((n, i) => ({
   id: "" + i,
@@ -26,3 +26,29 @@ while (_mockEdges.length < edgeNum) {
 }
 
 export const mockEdges = _mockEdges;
+// export const mockEdges = [
+//   {
+//     id: `0=>1`,
+//     source: "0",
+//     target: "1",
+//     info: ["info1", "info2", "info3"],
+//   },
+//   {
+//     id: `1=>0`,
+//     source: "1",
+//     target: "0",
+//     info: ["info1", "info2", "info3"],
+//   },
+//   {
+//     id: `1=>2`,
+//     source: "1",
+//     target: "2",
+//     info: ["info1", "info2", "info3"],
+//   },
+//   {
+//     id: `2=>3`,
+//     source: "2",
+//     target: "3",
+//     info: ["info1", "info2", "info3"],
+//   },
+// ];

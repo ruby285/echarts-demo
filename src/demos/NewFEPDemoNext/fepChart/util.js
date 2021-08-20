@@ -3,13 +3,23 @@ import { vector } from "zrender";
 export function getEdgePoint(sLigand, tLigand, width) {
   const sAngle = getAngle(sLigand, tLigand);
   const tAngle = getAngle(tLigand, sLigand);
-  const sEdge = getEdge(sAngle, sLigand, width);
-  const tEdge = getEdge(tAngle, tLigand, width);
-  // const { start, end } = edgeMove(sLigand, tLigand);
-  // const sPoint = segmentsIntr(start, end, sEdge.start, sEdge.end);
-  // const tPoint = segmentsIntr(start, end, tEdge.start, tEdge.end);
-  const sPoint = segmentsIntr(sLigand, tLigand, sEdge.start, sEdge.end);
-  const tPoint = segmentsIntr(sLigand, tLigand, tEdge.start, tEdge.end);
+  const { edge: sEdge, approachEdge: sApproachEdge } = getEdge(
+    sAngle,
+    sLigand,
+    width
+  );
+  const { edge: tEdge, approachEdge: tApproachEdge } = getEdge(
+    tAngle,
+    tLigand,
+    width
+  );
+  const { start, end } = edgeMove(sLigand, tLigand);
+  const sPoint =
+    segmentsIntr(start, end, sEdge.start, sEdge.end) ||
+    segmentsIntr(start, end, sApproachEdge.start, sApproachEdge.end);
+  const tPoint =
+    segmentsIntr(start, end, tEdge.start, tEdge.end) ||
+    segmentsIntr(start, end, tApproachEdge.start, tApproachEdge.end);
   const { x: x1, y: y1 } = sPoint;
   const { x: x2, y: y2 } = tPoint;
   return { x1, y1, x2, y2 };
@@ -29,58 +39,75 @@ function getAngle(start, end) {
 }
 
 function getEdge(angel, pos, width) {
-  const l = width / 2;
-  if (angel > 45 && angel <= 135) {
-    // 上边
-    return {
-      start: {
-        x: pos.x - l,
-        y: pos.y - l,
-      },
-      end: {
-        x: pos.x + l,
-        y: pos.y - l,
-      },
-    };
-  }
-
-  if (angel > 135 && angel <= 225) {
-    // 左边
-    return {
-      start: {
-        x: pos.x - l,
-        y: pos.y - l,
-      },
-      end: {
-        x: pos.x - l,
-        y: pos.y + l,
-      },
-    };
-  }
-  if (angel > 225 && angel <= 315) {
-    // 下边
-    return {
-      start: {
-        x: pos.x - l,
-        y: pos.y + l,
-      },
-      end: {
-        x: pos.x + l,
-        y: pos.y + l,
-      },
-    };
-  }
-  // 右边
+  const edgeArea = Math.floor(angel / 45);
+  const edgeList = [
+    ["right", "up"],
+    ["up", "right"],
+    ["up", "left"],
+    ["left", "up"],
+    ["left", "down"],
+    ["down", "left"],
+    ["down", "right"],
+    ["right", "down"],
+  ];
+  const resEdge = edgeList[edgeArea];
   return {
-    start: {
-      x: pos.x + l,
-      y: pos.y - l,
-    },
-    end: {
-      x: pos.x + l,
-      y: pos.y + l,
-    },
+    edge: getSpecificEdge(pos, width, resEdge[0]),
+    approachEdge: getSpecificEdge(pos, width, resEdge[1]),
   };
+  // 不做人了，把所有边都给你
+  // const list = ['up', 'left', 'down', 'right']
+  // return list.map((type) => getSpecificEdge(pos, width, resEdge[1]))
+}
+
+function getSpecificEdge(pos, width, type) {
+  const l = width / 2;
+  switch (type) {
+    case "up":
+      return {
+        start: {
+          x: pos.x - l,
+          y: pos.y - l,
+        },
+        end: {
+          x: pos.x + l,
+          y: pos.y - l,
+        },
+      };
+    case "left":
+      return {
+        start: {
+          x: pos.x - l,
+          y: pos.y - l,
+        },
+        end: {
+          x: pos.x - l,
+          y: pos.y + l,
+        },
+      };
+    case "down":
+      return {
+        start: {
+          x: pos.x - l,
+          y: pos.y + l,
+        },
+        end: {
+          x: pos.x + l,
+          y: pos.y + l,
+        },
+      };
+    case "right":
+      return {
+        start: {
+          x: pos.x + l,
+          y: pos.y - l,
+        },
+        end: {
+          x: pos.x + l,
+          y: pos.y + l,
+        },
+      };
+  }
 }
 
 function segmentsIntr(a, b, c, d) {
