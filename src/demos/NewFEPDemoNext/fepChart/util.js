@@ -1,43 +1,5 @@
 import { vector } from "zrender";
 
-export function getLayout(w, h, len) {
-  let boxW = w;
-  let boxH = h;
-  let lenW = 1;
-  let lenH = 1;
-  let volume = 1;
-  const res = [];
-
-  while (volume < len) {
-    if (boxW < boxH) {
-      volume = lenW * ++lenH;
-      boxH = h / lenH;
-    } else {
-      volume = ++lenW * lenH;
-      boxW = w / lenW;
-    }
-  }
-  for (let i = 0; i < lenH; i++) {
-    let lenJ = lenW;
-    let jW = boxW;
-    if (i === lenH - 1) {
-      lenJ = len - (lenH - 1) * lenW;
-      jW = w / lenJ;
-    }
-    for (let j = 0; j < lenJ; j++) {
-      const x = jW * j + jW / 2 + getRandomDis();
-      const y = boxH * i + boxH / 2 + getRandomDis();
-      res.push({ x, y });
-    }
-  }
-
-  return res;
-}
-
-function getRandomDis() {
-  return Math.random() * 40 - 20;
-}
-
 export function getEdgePoint(sLigand, tLigand, width) {
   const sAngle = getAngle(sLigand, tLigand);
   const tAngle = getAngle(tLigand, sLigand);

@@ -9,13 +9,18 @@ import imgData from "./ligand.png";
 import { getTextPosition, getEdgePoint } from "./util";
 import { mouseOverHandler, mouseOutHandler, clickHandler } from "./events";
 import { ligandMap } from "./group";
-
-const ligandWidth = 100;
-const focusScale = 1.5;
-const animateConfig = {
-  duration: 200,
-  easing: "cubicOut",
-};
+import {
+  LIGAND_WIDTH,
+  LIGAND_WIDTH_HALF,
+  SCALE_1,
+  SCALE_X,
+  EDGE_WIDTH,
+  EDGE_SCALE_WIDTH,
+  NORMAL_OPACITY,
+  FADEOUT_OPACITY,
+  ANIMATE_CONFIG,
+  ELEMENT_Z2,
+} from "./constant";
 
 class Element {
   state = {
@@ -118,7 +123,7 @@ export class Edge extends Element {
       {
         style: style.edge,
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
   }
 
@@ -126,34 +131,34 @@ export class Edge extends Element {
     this.edge.animateTo(
       {
         style: {
-          edgeWidth: 1,
+          edgeWidth: EDGE_WIDTH,
         },
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
   }
   toScaleX() {
     this.edge.animateTo(
       {
         style: {
-          edgeWidth: 10,
+          edgeWidth: EDGE_SCALE_WIDTH,
         },
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
   }
 
   fadeout() {
     this.edge.animateTo({
       style: {
-        opacity: 0.1,
+        opacity: FADEOUT_OPACITY,
       },
     });
   }
   fadein() {
     this.edge.animateTo({
       style: {
-        opacity: 1,
+        opacity: NORMAL_OPACITY,
       },
     });
   }
@@ -178,7 +183,7 @@ export class Edge extends Element {
     const { x1, y1, x2, y2 } = getEdgePoint(
       this.sourceLigand.position,
       this.targetLigand.position,
-      100
+      LIGAND_WIDTH
     );
     this.textGroup.removeAll();
     this.edge.attr({
@@ -279,67 +284,67 @@ export class Ligand extends Element {
       {
         style: style.rect,
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
     this.img.animateTo(
       {
         style: style.img,
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
   }
 
   toScale1() {
     this.img.animateTo(
       {
-        scale: [1, 1],
+        scale: SCALE_1,
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
     this.rect.animateTo(
       {
-        scale: [1, 1],
+        scale: SCALE_1,
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
   }
 
   toScaleX() {
     this.rect.animateTo(
       {
-        scale: [focusScale, focusScale],
+        scale: SCALE_X,
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
     this.img.animateTo(
       {
-        scale: [focusScale, focusScale],
+        scale: SCALE_X,
       },
-      animateConfig
+      ANIMATE_CONFIG
     );
   }
 
   fadeout() {
     this.rect.animateTo({
       style: {
-        opacity: 0.1,
+        opacity: FADEOUT_OPACITY,
       },
     });
     this.img.animateTo({
       style: {
-        opacity: 0.1,
+        opacity: FADEOUT_OPACITY,
       },
     });
   }
   fadein() {
     this.rect.animateTo({
       style: {
-        opacity: 1,
+        opacity: NORMAL_OPACITY,
       },
     });
     this.img.animateTo({
       style: {
-        opacity: 1,
+        opacity: NORMAL_OPACITY,
       },
     });
   }
@@ -351,16 +356,18 @@ export class Ligand extends Element {
   onDelete() {}
 
   moveTo({ x, y }) {
-    this.position = { x: x + 50, y: y + 50 };
+    const originX = x + LIGAND_WIDTH_HALF;
+    const originY = y + LIGAND_WIDTH_HALF;
+    this.position = { x: originX, y: originY };
     this.img.attr({
-      origin: [x + 50, y + 50],
+      origin: [originX, originY],
       style: {
         x,
         y,
       },
     });
     this.rect.attr({
-      origin: [x + 50, y + 50],
+      origin: [originX, originY],
       shape: {
         x,
         y,
@@ -372,21 +379,21 @@ export class Ligand extends Element {
     this.img = new ZrImage({
       style: {
         image: img,
-        width: ligandWidth,
-        height: ligandWidth,
+        width: LIGAND_WIDTH,
+        height: LIGAND_WIDTH,
       },
-      z2: 100,
+      z2: ELEMENT_Z2,
     });
     this.rect = new Rect({
       style: {
-        fill: "rgba(0,0,0,0)",
+        fill: "none",
         stroke: "#000",
       },
       shape: {
-        width: ligandWidth,
-        height: ligandWidth,
+        width: LIGAND_WIDTH,
+        height: LIGAND_WIDTH,
       },
-      z2: 100,
+      z2: ELEMENT_Z2,
     });
 
     this.el.add(this.img);
