@@ -166,14 +166,22 @@ export class Line extends Element {
   onDelete() {}
 
   init() {
+    this.textGroup = new Group();
+    this.line = new ZrLine({});
+
+    this.el.add(this.line);
+    this.el.add(this.textGroup);
+  }
+
+  reDraw() {
     const info = this.info;
     const { x1, y1, x2, y2 } = getLinePoint(
       this.sourceNode.position,
       this.targetNode.position,
       100
     );
-    this.textGroup = new Group();
-    this.line = new ZrLine({
+    this.textGroup.removeAll();
+    this.line.attr({
       shape: {
         x1,
         y1,
@@ -181,18 +189,12 @@ export class Line extends Element {
         y2,
       },
     });
-    // console.log(this.line);
-
     const texts = getTextPosition(x1, y1, x2, y2, info.length);
     texts.forEach((item, i) => {
       const text = new Text({ ...item, text: info[i] });
       this.textGroup.add(text.el);
     });
-    this.el.add(this.line);
-    this.el.add(this.textGroup);
   }
-
-  reDraw() {}
 
   constructor({ source, target, info }) {
     super();
@@ -203,6 +205,7 @@ export class Line extends Element {
     this.sourceNode = ligandMap.get(source);
     this.targetNode = ligandMap.get(target);
     this.el = new Group();
+    this.init();
 
     this.onCreate();
 

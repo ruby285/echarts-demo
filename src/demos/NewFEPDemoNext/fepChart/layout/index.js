@@ -5,10 +5,14 @@ class Layout {
   ctx = null;
   updateGraphics() {
     const ligandMap = this.ctx.nodeGroup.map;
+    const lineMap = this.ctx.lineGroup.map;
     this.graph.forEachVertex(({ pos, id }) => {
       const ligand = ligandMap.get(id);
       ligand.moveTo(pos);
     });
+    for (let [, line] of lineMap) {
+      line.reDraw();
+    }
   }
 
   step() {
@@ -34,8 +38,8 @@ class Layout {
     this.graph = new Graph({ vertices, edges });
     this.layoutAlgorithm = new FRLayout(
       {
-        width: document.documentElement.clientWidth,
-        height: document.documentElement.clientHeight,
+        width: document.documentElement.clientWidth - 100,
+        height: document.documentElement.clientHeight - 100,
       },
       this.graph
     );

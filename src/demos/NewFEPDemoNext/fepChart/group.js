@@ -24,10 +24,12 @@ export class LineGroup {
   group = new Group();
   map = lineMap;
   constructor(lines) {
+    console.log("lines", lines);
     lines.forEach((node) => {
       const line = new Line(node);
       lineMap.set(node.id, line);
       this.group.add(line.el);
     });
+    console.log("lines", lineMap);
   }
 }

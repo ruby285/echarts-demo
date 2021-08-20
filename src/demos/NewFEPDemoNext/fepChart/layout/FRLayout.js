@@ -8,7 +8,7 @@ function FRLayout(settings, graph) {
   this.width = settings.width;
   this.height = settings.height;
   this.area = this.width * this.height;
-  this.distConst = 0.4;
+  this.distConst = 1;
   this.iterStep = 0.1;
 
   this.reset();
