@@ -3,6 +3,12 @@ import { mockLigands, mockEdges } from "./mockData";
 import { ligandGroup, EdgeGroup } from "./group";
 import Layout from "./layout";
 
+// TODO: 布局计算的优化
+// TODO: 连线位置的优化
+// TODO: 加入虚拟的连线
+// TODO: 选择元素后新增角标
+// TODO: more
+
 class FepChart {
   zr = null;
   layout = null;

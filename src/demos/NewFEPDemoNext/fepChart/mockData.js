@@ -1,19 +1,27 @@
-const mockNum = 20;
-export const mockLigands = new Array(mockNum).fill("").map((n, i) => ({
+const ligandNum = 20;
+const step = 5;
+const edgeNum = Math.floor(ligandNum / step);
+export const mockLigands = new Array(ligandNum).fill("").map((n, i) => ({
   id: "" + i,
 }));
 
-export const mockEdges = [
-  {
-    id: "0=>1",
-    source: "0",
-    target: "1",
-    info: ["info1", "info2", "info3"],
-  },
-  {
-    id: "2=>0",
-    source: "2",
-    target: "0",
-    info: ["info1", "info2", "info3"],
-  },
-];
+const random = (min, max) => Math.floor(Math.random() * max - min);
+const _mockEdges = [];
+let start = 0;
+let end = step;
+while (mockEdges.length < edgeNum) {
+  const source = random(start, end);
+  let target = random(0, ligandNum);
+  while (target === source) {
+    target = random(0, ligandNum);
+  }
+  start = source + 1;
+  end = end - start + step;
+  mockEdges.push({
+    id: `${source}=>${target}`,
+    source: "" + source,
+    target: "" + target,
+  });
+}
+
+export const mockEdges = _mockEdges;
