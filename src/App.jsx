@@ -1,4 +1,5 @@
 import React from "react";
+import NewFEPDemoNext from "./demos/NewFEPDemoNext";
 import NewFEPDemo from "./demos/NewFEPDemo";
 import FEPDemo from "./demos/FEPDemo";
 import LigandGraph from "./demos/LigandGraph";
@@ -10,7 +11,8 @@ function App() {
       {/* <LigandGraph /> */}
       {/* <CustomLigandGraph /> */}
       {/* <FEPDemo /> */}
-      <NewFEPDemo />
+      {/* <NewFEPDemo /> */}
+      <NewFEPDemoNext />
     </div>
   );
 }
