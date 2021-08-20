@@ -23,6 +23,18 @@ export class ligandGroup {
 export class EdgeGroup {
   group = new Group();
   map = edgeMap;
+  add(edgeParams) {
+    const edge = new Edge(edgeParams);
+    edgeMap.set(edgeParams.id, edge);
+    this.group.add(edge.el);
+    return edge;
+  }
+  delete(edge) {
+    const { id, source, target } = edge;
+    edgeMap.delete(id, edge);
+    this.group.remove(edge.el);
+    return { id, source, target };
+  }
   constructor(edges) {
     edges.forEach((item) => {
       const edge = new Edge(item);

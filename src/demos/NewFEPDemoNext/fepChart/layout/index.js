@@ -53,35 +53,27 @@ class Layout {
       this.run();
     });
   }
+  reRun() {
+    this.layoutAlgorithm.reset();
+    this.run();
+  }
+  addEdge(edge) {
+    this.graph.addEdge(edge.source, edge.target);
+  }
 
   initPos(width, height) {
     const ligandMap = this.ctx.ligandGroup.map;
     for (let [id, ligand] of ligandMap) {
       const v = this.graph.getVertex(id);
-      // if (ligand.edgeMap.size) {
-      //   // 初始位置取中心区域的随机值
-      //   const {x,y} = getInitialPos(width, height, true)
-      //   v.pos.set(x, y);
-      // } else {
-      //   // 初始位置取边缘区域的随机值
-      //   const {x,y} = getInitialPos(width, height, false)
-      //   v.pos.set(x, y);
-      // }
       const { x, y } = getInitialPos(width, height, !!ligand.edgeMap.size);
       v.pos.set(x, y);
     }
-    // this.graph.forEachVertex(function (v) {
-    //   v.pos.rand(0.0, width, 0.0, height);
-    // }, this);
   }
 
   init() {
     const ctx = this.ctx;
     const vertices = ctx.ligands;
-    const edges = ctx.edges.map((item) => ({
-      from: item.source,
-      to: item.target,
-    }));
+    const edges = ctx.edges;
     this.graph = new Graph({ vertices, edges });
     const width = document.documentElement.clientWidth - 100;
     const height = document.documentElement.clientHeight - 100;

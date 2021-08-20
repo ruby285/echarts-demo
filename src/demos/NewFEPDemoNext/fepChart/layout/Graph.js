@@ -15,7 +15,7 @@ function Graph(data) {
   }
 
   for (i = 0, max = data.edges.length; i < max; ++i) {
-    this.addEdge(data.edges[i].from, data.edges[i].to);
+    this.addEdge(data.edges[i].source, data.edges[i].target);
   }
 }
 

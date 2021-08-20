@@ -93,6 +93,7 @@ export class Edge extends Element {
   el = null;
   edge = null;
   textGroup = null;
+  isVirtual = false;
   info = [];
 
   style = {
@@ -172,7 +173,14 @@ export class Edge extends Element {
 
   init() {
     this.textGroup = new Group();
-    this.edge = new ZrLine({});
+    const opts = { style: {} };
+    if (this.isVirtual) {
+      opts.style = {
+        lineDash: [2, 6],
+      };
+    }
+
+    this.edge = new ZrLine(opts);
 
     this.el.add(this.edge);
     this.el.add(this.textGroup);
@@ -201,12 +209,13 @@ export class Edge extends Element {
     });
   }
 
-  constructor({ source, target, info }) {
+  constructor({ source, target, info, isVirtual = false }) {
     super();
     this.id = `${source}=>${target}`;
     this.info = info;
     this.source = source;
     this.target = target;
+    this.isVirtual = isVirtual;
     this.sourceLigand = ligandMap.get(source);
     this.targetLigand = ligandMap.get(target);
     this.el = new Group();

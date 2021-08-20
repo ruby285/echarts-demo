@@ -1,4 +1,5 @@
 import { ligandMap, edgeMap } from "./group";
+import fepChart from "./index";
 
 const hoverLigand = new Set();
 const hoverEdge = new Set();
@@ -50,11 +51,16 @@ const selectLigand = {
   selectAEdge(sourceLigand, targetLigand) {
     const edgeId = `${sourceLigand.id}=>${targetLigand.id}`;
     let edge = edgeMap.get(edgeId);
-    if (edge) {
-      selectEdge = edge;
-    } else {
-      // 创建一个新的虚线
+    if (!edge) {
+      edge = fepChart.addEdge({
+        id: edgeId,
+        source: sourceLigand.id,
+        target: targetLigand.id,
+        info: ["lalala"],
+        isVirtual: true,
+      });
     }
+    selectEdge = edge;
   },
   update() {
     this.deleteList.forEach((item) => {
@@ -63,6 +69,10 @@ const selectLigand = {
     this.list.forEach((item, idx) => {
       item.onSelected(idx);
     });
+    // if (this.list.length < 2 && selectEdge && selectEdge.isVirtual) {
+    //   fepChart.deleteEdge(selectEdge);
+    //   selectEdge = null;
+    // }
     selectEdge && selectEdge.onSelected();
     this.deleteList = [];
   },
