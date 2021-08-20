@@ -38,16 +38,16 @@ function getRandomDis() {
   return Math.random() * 40 - 20;
 }
 
-export function getEdgePoint(sNode, tNode, width) {
-  const sAngle = getAngle(sNode, tNode);
-  const tAngle = getAngle(tNode, sNode);
-  const sEdge = getEdge(sAngle, sNode, width);
-  const tEdge = getEdge(tAngle, tNode, width);
-  // const { start, end } = edgeMove(sNode, tNode);
+export function getEdgePoint(sLigand, tLigand, width) {
+  const sAngle = getAngle(sLigand, tLigand);
+  const tAngle = getAngle(tLigand, sLigand);
+  const sEdge = getEdge(sAngle, sLigand, width);
+  const tEdge = getEdge(tAngle, tLigand, width);
+  // const { start, end } = edgeMove(sLigand, tLigand);
   // const sPoint = segmentsIntr(start, end, sEdge.start, sEdge.end);
   // const tPoint = segmentsIntr(start, end, tEdge.start, tEdge.end);
-  const sPoint = segmentsIntr(sNode, tNode, sEdge.start, sEdge.end);
-  const tPoint = segmentsIntr(sNode, tNode, tEdge.start, tEdge.end);
+  const sPoint = segmentsIntr(sLigand, tLigand, sEdge.start, sEdge.end);
+  const tPoint = segmentsIntr(sLigand, tLigand, tEdge.start, tEdge.end);
   const { x: x1, y: y1 } = sPoint;
   const { x: x2, y: y2 } = tPoint;
   return { x1, y1, x2, y2 };
@@ -165,18 +165,18 @@ export function getTextPosition(x1, y1, x2, y2, n) {
   }));
 }
 
-function edgeMove(sNode, tNode) {
-  const vecX = tNode.x - sNode.x;
-  const vecY = tNode.y - sNode.y;
+function edgeMove(sLigand, tLigand) {
+  const vecX = tLigand.x - sLigand.x;
+  const vecY = tLigand.y - sLigand.y;
   const dis = vecMove(vecX, vecY, 10);
   return {
     start: {
-      x: sNode.x + dis.x,
-      y: sNode.y - dis.y,
+      x: sLigand.x + dis.x,
+      y: sLigand.y - dis.y,
     },
     end: {
-      x: tNode.x + dis.x,
-      y: tNode.y - dis.y,
+      x: tLigand.x + dis.x,
+      y: tLigand.y - dis.y,
     },
   };
 }
