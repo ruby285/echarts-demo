@@ -44,10 +44,11 @@ Vector.prototype = {
   },
 
   rand: function (minX, maxX, minY, maxY) {
-    // this.x = random.rand(minX, maxX);
-    // this.y = random.rand(minY, maxY);
-    this.x = 0;
-    this.y = 0;
+    const random = (min, max) => Math.random() * max - min;
+    this.x = random(minX, maxX);
+    this.y = random(minY, maxY);
+    // this.x = 0;
+    // this.y = 0;
   },
 };
 

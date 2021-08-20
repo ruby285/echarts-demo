@@ -22,6 +22,10 @@ const vertices = [
 const edges = [
   { from: 0, to: 1 },
   { from: 1, to: 0 },
+  { from: 1, to: 2 },
+  { from: 2, to: 3 },
+  { from: 4, to: 5 },
+  { from: 5, to: 3 },
 ];
 
 const graph = new Graph({ vertices, edges });

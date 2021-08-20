@@ -27,7 +27,6 @@ class Layout {
   }
 
   updateGraphics() {
-    // 更新节点的位置信息，并执行绘制
     this.graph.forEachVertex(({ pos }, i) => {
       const { x, y } = pos;
       this.points[i].attr({
@@ -42,17 +41,14 @@ class Layout {
   step() {
     this.layoutAlgorithm.updatePhysics();
     this.updateGraphics();
-
-    // console.log(this.graph.vertices);
   }
 
   run() {
-    this.step();
-    // window.requestAnimationFrame(() => {
-    //   this.step();
-    //   if (this.layoutAlgorithm.isDone()) return;
-    //   this.run();
-    // });
+    window.requestAnimationFrame(() => {
+      this.step();
+      if (this.layoutAlgorithm.isDone()) return;
+      this.run();
+    });
   }
 
   init(el) {
