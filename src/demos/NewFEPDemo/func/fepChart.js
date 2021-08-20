@@ -60,7 +60,7 @@ class FEPGraphChart {
     });
 
     // 6、遍历布局与node列表，赋予node坐标值
-    console.log(this.lineGroup.list);
+    // console.log(this.lineGroup.list);
 
     // 初始化逻辑
     // 1、创建node列表 √

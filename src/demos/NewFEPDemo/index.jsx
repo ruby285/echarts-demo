@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import graphChart from "./func/fepChart";
+import { layout } from "./func/layout/main";
 import "./style.css";
 
 export default function LigandGraph() {

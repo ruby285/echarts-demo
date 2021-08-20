@@ -185,7 +185,7 @@ export class Line extends Element {
         y2,
       },
     });
-    console.log(this.line);
+    // console.log(this.line);
 
     const texts = getTextPosition(x1, y1, x2, y2, info.length);
     texts.forEach((item, i) => {
