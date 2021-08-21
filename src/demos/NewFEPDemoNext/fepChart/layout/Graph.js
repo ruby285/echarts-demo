@@ -34,6 +34,17 @@ Graph.prototype = {
     this.adj[v] = this.adj[v] || [];
     this.adj[v].push(u);
   },
+  deleteEdge: function (u, v) {
+    this.removeAdj(u, v)
+    this.removeAdj(v, u)
+  },
+
+  removeAdj: function (a, b) {
+    if (!this.adj[a]) return
+    const idx = this.adj[a].indexOf(b);
+    if (idx < 0) return
+    this.adj[a].splice(idx, 1);
+  },
 
   getVertex: function (id) {
     return this.vertices[id];

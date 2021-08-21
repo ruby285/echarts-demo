@@ -60,6 +60,9 @@ class Layout {
   addEdge(edge) {
     this.graph.addEdge(edge.source, edge.target);
   }
+  deleteEdge(edge) {
+    this.graph.deleteEdge(edge.source, edge.target);
+  }
 
   initPos(width, height) {
     const ligandMap = this.ctx.ligandGroup.map;
