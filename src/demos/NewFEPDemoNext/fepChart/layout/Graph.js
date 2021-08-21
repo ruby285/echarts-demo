@@ -31,8 +31,10 @@ Graph.prototype = {
   addEdge: function (u, v) {
     this.adj[u] = this.adj[u] || [];
     this.adj[u].push(v);
+    this.vertices[u].edgeNum++
     this.adj[v] = this.adj[v] || [];
     this.adj[v].push(u);
+    this.vertices[v].edgeNum++
   },
   deleteEdge: function (u, v) {
     this.removeAdj(u, v)
@@ -44,6 +46,7 @@ Graph.prototype = {
     const idx = this.adj[a].indexOf(b);
     if (idx < 0) return
     this.adj[a].splice(idx, 1);
+    this.vertices[a].edgeNum--
   },
 
   getVertex: function (id) {

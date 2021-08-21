@@ -15,6 +15,10 @@ Vector.prototype = {
     this.y = y;
   },
 
+  copy: function (x, y) {
+    return new Vector(this.x, this.y);
+  },
+
   add: function (v) {
     return new Vector(this.x + v.x, this.y + v.y);
   },
@@ -41,11 +45,6 @@ Vector.prototype = {
 
   normalize: function () {
     return this.divideConst(this.mag());
-  },
-
-  set: function (x, y) {
-    this.x = x;
-    this.y = y;
   },
 
   rand: function (minX, maxX, minY, maxY) {

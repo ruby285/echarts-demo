@@ -69,7 +69,7 @@ class Layout {
     for (let [id, ligand] of ligandMap) {
       const v = this.graph.getVertex(id);
       const { x, y } = getInitialPos(width, height, !!ligand.edgeMap.size);
-      v.pos.set(x, y);
+      v.pos.setValues(x, y);
     }
   }
 
@@ -89,6 +89,7 @@ class Layout {
       this.graph
     );
   }
+
   constructor(ctx) {
     this.ctx = ctx;
     this.init();

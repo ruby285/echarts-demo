@@ -4,6 +4,7 @@ function Vertex(id, data, posX, posY) {
     return new Vertex(id, data, posX, posY);
   }
 
+  this.edgeNum = 0
   this.id = id; // Unique identifier assigned to the vertex.
   this.data = data;
   this.pos =

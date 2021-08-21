@@ -27,6 +27,10 @@ FRLayout.prototype = {
     return Math.pow(this.optDist, 2) / d;
   },
 
+  centerAttraction: function (d, scale = 1) {
+    return Math.pow(d, 2) / this.optDist * scale;
+  },
+
   calcAttraction: function () {
     this.graph.forEachEdge(function (u, v) {
       var delta = u.pos.sub(v.pos),
@@ -35,6 +39,19 @@ FRLayout.prototype = {
       u.disp = u.disp.sub(distVec);
       v.disp = v.disp.add(distVec);
     }, this);
+
+    const center = {
+      x: this.width / 2,
+      y: this.height / 2
+    }
+    this.graph.forEachVertex(function (u) {
+      const cp = u.pos.copy()
+      const scale = u.edgeNum ? cp.sub(center).mag() / 200 : 1
+      var delta = u.pos.sub(center),
+        distVec = delta.normalize().multiplyConst(this.centerAttraction(delta.mag(), scale));
+
+      u.disp = u.disp.sub(distVec);
+    }, this)
   },
 
   calcRepulsion: function () {
@@ -81,7 +98,7 @@ FRLayout.prototype = {
   },
 
   isDone: function () {
-    return this.temp < 0.5 || this.currIter > FRLayout.MAX_ITERS;
+    return this.temp < 0.1 || this.currIter > FRLayout.MAX_ITERS;
   },
 
   reset: function () {

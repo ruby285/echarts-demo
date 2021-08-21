@@ -11,12 +11,12 @@ let start = 0;
 let end = step;
 while (_mockEdges.length < edgeNum) {
   const source = random(start, end);
-  let target = random(0, ligandNum);
+  let target = random(1, ligandNum);
   while (target === source) {
-    target = random(0, ligandNum);
+    target = random(1, ligandNum);
   }
   start = source + 1;
-  end = end - start + step;
+  end = end - start + step * 2;
   _mockEdges.push({
     id: `${source}=>${target}`,
     source: "" + source,

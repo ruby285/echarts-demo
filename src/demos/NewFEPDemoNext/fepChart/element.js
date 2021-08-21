@@ -169,7 +169,7 @@ export class Edge extends Element {
     this.targetLigand.addEdge(this);
   }
 
-  onDelete() {}
+  onDelete() { }
 
   init() {
     this.textGroup = new Group();
@@ -362,7 +362,7 @@ export class Ligand extends Element {
     this.edgeMap.set(edge.id, edge);
   }
 
-  onDelete() {}
+  onDelete() { }
 
   moveTo({ x, y }) {
     const originX = x + LIGAND_WIDTH_HALF;
