@@ -1,4 +1,4 @@
-const ligandNum = 30;
+const ligandNum = 20;
 const step = 2;
 const edgeNum = Math.floor(ligandNum / step);
 export const mockLigands = new Array(ligandNum).fill("").map((n, i) => ({

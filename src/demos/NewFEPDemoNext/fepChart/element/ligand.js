@@ -30,6 +30,7 @@ export class Ligand extends Element {
   rect = null;
   edgeMap = new Map();
   type = "ligand";
+  order = null;
 
   position = {
     x: 0,
@@ -97,6 +98,31 @@ export class Ligand extends Element {
     );
   }
 
+  onSelected(i) {
+    const { x, y } = this.position;
+    const idx = i + 1;
+
+    if (this.order) {
+      this.order.updateIdx(idx);
+    } else {
+      this.order = new Order({
+        idx,
+        x: x - LIGAND_WIDTH_HALF,
+        y: y - LIGAND_WIDTH_HALF,
+      });
+      this.el.add(this.order.el);
+      this.order.toScaleX();
+    }
+    super.onSelected();
+  }
+  onSelectedEnd() {
+    if (this.order) {
+      this.el.remove(this.order.el);
+      this.order = null;
+    }
+    super.onSelectedEnd();
+  }
+
   toScale1() {
     this.img.animateTo(
       {
@@ -110,6 +136,7 @@ export class Ligand extends Element {
       },
       ANIMATE_CONFIG
     );
+    this.order && this.order.toScale1();
   }
 
   toScaleX() {
@@ -125,6 +152,7 @@ export class Ligand extends Element {
       },
       ANIMATE_CONFIG
     );
+    this.order && this.order.toScaleX();
   }
 
   fadeout() {
@@ -138,6 +166,7 @@ export class Ligand extends Element {
         opacity: FADEOUT_OPACITY,
       },
     });
+    this.order && this.order.fadeout();
   }
   fadein() {
     this.rect.animateTo({
@@ -150,6 +179,7 @@ export class Ligand extends Element {
         opacity: NORMAL_OPACITY,
       },
     });
+    this.order && this.order.fadein();
   }
 
   addEdge(edge) {
@@ -176,20 +206,7 @@ export class Ligand extends Element {
         y,
       },
     });
-    this.order.attr({
-      origin: [originX, originY],
-      style: {
-        text: "1",
-        fontSize: 12,
-        textFill: "#000",
-        textStroke: "#f00",
-      },
-      shape: {
-        r: [7, 7, 7, 7],
-        x: x + 5,
-        y: y + 5,
-      },
-    });
+    this.order && this.order.moveTo({ x, y });
   }
 
   init(img = imgData) {
@@ -212,20 +229,9 @@ export class Ligand extends Element {
       },
       z2: ELEMENT_Z2,
     });
-    this.order = new Rect({
-      style: {
-        fill: "#f0f",
-      },
-      shape: {
-        width: 14,
-        height: 14,
-      },
-      z2: ELEMENT_Z2,
-    });
 
     this.el.add(this.img);
     this.el.add(this.rect);
-    this.el.add(this.order);
   }
 
   constructor({ id }) {
@@ -239,5 +245,90 @@ export class Ligand extends Element {
     );
     this.el.on("mouseout", (params) => mouseOutHandler("ligand", params, this));
     this.el.on("click", (params) => clickHandler("ligand", params, this));
+  }
+}
+
+const ORDER_DEFAULT_WIDTH = 14;
+const ORDER_WIDTH_HALF = ORDER_DEFAULT_WIDTH / 2;
+const ORDER_RADIUS = [
+  ORDER_WIDTH_HALF,
+  ORDER_WIDTH_HALF,
+  ORDER_WIDTH_HALF,
+  ORDER_WIDTH_HALF,
+];
+const ORDER_FONT_SIZE = 12;
+const ORDER_FONT_SIZE_HALF = ORDER_FONT_SIZE / 2;
+
+class Order {
+  el = null;
+  fadeout() {
+    this.el.animateTo(
+      {
+        opacity: FADEOUT_OPACITY,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  fadein() {
+    this.el.animateTo(
+      {
+        opacity: NORMAL_OPACITY,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  toScale1() {
+    this.el.animateTo(
+      {
+        scale: SCALE_1,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  toScaleX() {
+    this.el.animateTo(
+      {
+        scale: SCALE_X,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+
+  moveTo({ x, y }) {
+    this.el.attr({
+      origin: [45, 45],
+      x: x + 5,
+      y: y + 5,
+    });
+  }
+  updateIdx(idx) {
+    this.el.attr({
+      style: {
+        text: `{a|${idx}}`,
+      },
+    });
+  }
+  constructor({ idx, x, y }) {
+    this.el = new ZrText({
+      style: {
+        text: `{a|${idx}}`,
+        rich: {
+          a: {
+            fill: "#fff",
+            lineHeight: 12,
+            fontSize: 12,
+            fontWeight: 600,
+            align: "center",
+            backgroundColor: "blue",
+            width: 14,
+            height: 14,
+            borderRadius: 7,
+          },
+        },
+      },
+      z2: ELEMENT_Z2,
+    });
+
+    this.moveTo({ x, y });
   }
 }

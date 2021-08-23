@@ -24,7 +24,6 @@ export default class Element {
     this.updateStyle();
   }
   onSelected(idx) {
-    this.selectIdx = idx;
     this.state.selected = true;
     this.updateStyle();
   }
