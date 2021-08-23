@@ -66,11 +66,16 @@ export const selectLigand = {
     }
     selectEdge = edge;
   },
-  // clear() {
-  //   this.deleteList = this.list;
-  //   this.list = [];
-  //   this.update();
-  // },
+  clear() {
+    this.checkVirtualEdge();
+    this.deleteList = this.list.slice();
+    if (selectEdge) {
+      this.deleteList.push(selectEdge);
+      selectEdge = null;
+    }
+    this.list = [];
+    this.update();
+  },
   checkVirtualEdge() {
     if (!selectEdge || !selectEdge.isVirtual) return;
     fepChart.deleteEdge(selectEdge);

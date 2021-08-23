@@ -7,7 +7,6 @@ import Layout from "./layout";
 // TODO: 布局计算的优化
 // TODO: 全局缩放
 
-// TODO: 双击空白处: 取消所有选择
 // TODO: text相关事件的加入
 // TODO: more
 
@@ -41,6 +40,11 @@ class FepChart {
     this.zr.add(this.ligandGroup.group);
     this.zr.add(this.edgeGroup.group);
     this.initLayout();
+
+    this.zr.on("dblclick", (ev) => {
+      if (ev.target) return;
+      selectLigand.clear();
+    });
   }
   addLigand() {
     const id = this.ligands.length;
@@ -69,6 +73,9 @@ class FepChart {
     this.layout.reRun();
   }
   deleteEdge(edge) {
+    if (!edge.isVirtual) {
+      selectLigand.clear();
+    }
     const edgeParams = this.edgeGroup.delete(edge);
     this.layout.deleteEdge(edgeParams);
     mouseOutHandler();
