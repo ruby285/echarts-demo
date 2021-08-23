@@ -185,20 +185,3 @@ export class Edge extends Element {
     this.el.on("click", (params) => clickHandler("edge", params, this));
   }
 }
-
-class Text {
-  el = null;
-  constructor({ x, y, rotation = 0, text }) {
-    this.el = new ZrText({
-      rotation: rotation,
-      x,
-      y,
-      style: {
-        text,
-        textAlign: "center",
-        textPosition: "inside",
-        textVerticalAlign: "middle",
-      },
-    });
-  }
-}

@@ -28,13 +28,16 @@ FRLayout.prototype = {
   },
 
   centerAttraction: function (d, scale = 1) {
-    return Math.pow(d, 2) / this.optDist * scale;
+    return (Math.pow(d, 2) / this.optDist) * scale;
   },
 
   calcAttraction: function () {
     this.graph.forEachEdge(function (u, v) {
-      var delta = u.pos.sub(v.pos),
-        distVec = delta.normalize().multiplyConst(this.attraction(delta.mag()));
+      var delta = u.pos.sub(v.pos);
+      var len = delta.mag();
+      // var minLen = 300;
+      // if (len < minLen) return;
+      var distVec = delta.normalize().multiplyConst(this.attraction(len));
 
       u.disp = u.disp.sub(distVec);
       v.disp = v.disp.add(distVec);
@@ -42,16 +45,18 @@ FRLayout.prototype = {
 
     const center = {
       x: this.width / 2,
-      y: this.height / 2
-    }
+      y: this.height / 2,
+    };
     this.graph.forEachVertex(function (u) {
-      const cp = u.pos.copy()
-      const scale = u.edgeNum ? cp.sub(center).mag() / 200 : 1
+      const cp = u.pos.copy();
+      const scale = u.edgeNum ? cp.sub(center).mag() / 200 : 1;
       var delta = u.pos.sub(center),
-        distVec = delta.normalize().multiplyConst(this.centerAttraction(delta.mag(), scale));
+        distVec = delta
+          .normalize()
+          .multiplyConst(this.centerAttraction(delta.mag(), scale));
 
       u.disp = u.disp.sub(distVec);
-    }, this)
+    }, this);
   },
 
   calcRepulsion: function () {
@@ -68,6 +73,12 @@ FRLayout.prototype = {
           );
         }
       }, this);
+    }, this);
+    this.graph.forEachEdge(function (u, v) {
+      var delta = u.pos.sub(v.pos);
+      u.disp = u.disp.add(
+        delta.normalize().multiplyConst(this.repulsion(delta.mag()))
+      );
     }, this);
   },
 

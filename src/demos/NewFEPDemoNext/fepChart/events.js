@@ -13,7 +13,7 @@ const selectLigand = {
   list: [],
   deleteList: [],
   add(n) {
-    this.checkVirtualEdge()
+    this.checkVirtualEdge();
     if (this.list.length > 1) {
       this.deleteList.push(this.list.shift());
       if (selectEdge) {
@@ -28,8 +28,9 @@ const selectLigand = {
     this.update();
   },
   delete(n) {
-    this.checkVirtualEdge()
-    if (n.selectIdx) {
+    this.checkVirtualEdge();
+    const idx = this.list.indexOf(n);
+    if (idx) {
       this.deleteList.push(this.list.pop());
     } else {
       this.deleteList.push(this.list.shift());
@@ -41,7 +42,7 @@ const selectLigand = {
     this.update();
   },
   replaceByEdge(sourceLigand, targetLigand, id) {
-    this.checkVirtualEdge()
+    this.checkVirtualEdge();
     this.deleteList = this.list;
     this.list = [sourceLigand, targetLigand];
     if (selectEdge && selectEdge.id !== id) {
@@ -66,7 +67,7 @@ const selectLigand = {
     selectEdge = edge;
   },
   checkVirtualEdge() {
-    if (!selectEdge || !selectEdge.isVirtual) return
+    if (!selectEdge || !selectEdge.isVirtual) return;
     fepChart.deleteEdge(selectEdge);
     selectEdge = null;
   },
