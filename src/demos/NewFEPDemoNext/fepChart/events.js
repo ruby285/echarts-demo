@@ -9,7 +9,7 @@ const fateoutLigand = new Set();
 const fadeoutEdge = new Set();
 
 let selectEdge = null;
-const selectLigand = {
+export const selectLigand = {
   list: [],
   deleteList: [],
   add(n) {
@@ -66,6 +66,11 @@ const selectLigand = {
     }
     selectEdge = edge;
   },
+  // clear() {
+  //   this.deleteList = this.list;
+  //   this.list = [];
+  //   this.update();
+  // },
   checkVirtualEdge() {
     if (!selectEdge || !selectEdge.isVirtual) return;
     fepChart.deleteEdge(selectEdge);

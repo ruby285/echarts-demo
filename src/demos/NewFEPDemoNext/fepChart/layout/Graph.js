@@ -27,26 +27,32 @@ Graph.prototype = {
     ++this.nVerts;
     return id;
   },
+  deleteVertex: function (id) {
+    delete this.vertices[id];
+    --this.nVerts;
+    return id;
+  },
 
   addEdge: function (u, v) {
     this.adj[u] = this.adj[u] || [];
     this.adj[u].push(v);
-    this.vertices[u].edgeNum++
+    this.vertices[u].edgeNum++;
     this.adj[v] = this.adj[v] || [];
     this.adj[v].push(u);
-    this.vertices[v].edgeNum++
+    this.vertices[v].edgeNum++;
   },
+
   deleteEdge: function (u, v) {
-    this.removeAdj(u, v)
-    this.removeAdj(v, u)
+    this.removeAdj(u, v);
+    this.removeAdj(v, u);
   },
 
   removeAdj: function (a, b) {
-    if (!this.adj[a]) return
+    if (!this.adj[a]) return;
     const idx = this.adj[a].indexOf(b);
-    if (idx < 0) return
+    if (idx < 0) return;
     this.adj[a].splice(idx, 1);
-    this.vertices[a].edgeNum--
+    this.vertices[a].edgeNum--;
   },
 
   getVertex: function (id) {

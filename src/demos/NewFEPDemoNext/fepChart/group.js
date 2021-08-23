@@ -8,6 +8,18 @@ export const edgeMap = new Map();
 export class ligandGroup {
   group = new Group();
   map = ligandMap;
+  add(ligandParams) {
+    // const ligand = new Ligand(ligandParams);
+    // ligandMap.set(ligandParams.id, ligand);
+    // this.group.add(ligand.el);
+    // return ligand;
+  }
+  delete(ligand) {
+    const { id } = ligand;
+    ligandMap.delete(id);
+    this.group.remove(ligand.el);
+    return { id };
+  }
   constructor(ligands) {
     ligands.forEach((item) => {
       const ligand = new Ligand({

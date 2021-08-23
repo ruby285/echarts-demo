@@ -14,6 +14,7 @@ import {
   ELEMENT_Z2,
 } from "../constant";
 import Element from "./element";
+import fepChart from "../index";
 
 export class Ligand extends Element {
   id = "";
@@ -105,6 +106,7 @@ export class Ligand extends Element {
       this.el.add(this.order.el);
       this.order.toScaleX();
     }
+    this.deleteBtn.show();
     super.onSelected();
   }
   onSelectedEnd() {
@@ -112,6 +114,7 @@ export class Ligand extends Element {
       this.el.remove(this.order.el);
       this.order = null;
     }
+    this.deleteBtn.hide();
     super.onSelectedEnd();
   }
 
@@ -199,6 +202,7 @@ export class Ligand extends Element {
       },
     });
     this.order && this.order.moveTo({ x, y });
+    this.deleteBtn && this.deleteBtn.moveTo({ x: x + 110, y });
   }
 
   init(img = imgData) {
@@ -221,9 +225,15 @@ export class Ligand extends Element {
       },
       z2: ELEMENT_Z2,
     });
+    this.deleteBtn = new LigandButton({
+      text: "delete ligand",
+      ligand: this,
+    });
+    this.deleteBtn.hide();
 
     this.el.add(this.img);
     this.el.add(this.rect);
+    this.el.add(this.deleteBtn.el);
   }
 
   constructor({ id }) {
@@ -322,5 +332,62 @@ class Order {
     });
 
     this.moveTo({ x, y });
+  }
+}
+
+class LigandButton {
+  el = null;
+  ligand = null;
+  fadeout() {
+    this.el.animateTo(
+      {
+        opacity: FADEOUT_OPACITY,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  fadein() {
+    this.el.animateTo(
+      {
+        opacity: NORMAL_OPACITY,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  toScale1() {}
+  toScaleX() {}
+
+  show() {
+    this.el.show();
+  }
+  hide() {
+    this.el.hide();
+  }
+  moveTo({ x, y, rotation }) {
+    this.el.attr({
+      // rotation,
+      x,
+      y,
+    });
+  }
+
+  constructor({ text, ligand }) {
+    this.ligand = ligand;
+    this.el = new ZrText({
+      style: {
+        // text: [`{a|${text}}`, `{b|样式b}`].join(" "),
+        text: `{a|${text}}`,
+        align: "left",
+        rich: {
+          a: {
+            fill: "#000",
+          },
+        },
+      },
+    });
+    this.el.on("click", (ev) => {
+      ev.cancelBubble = true;
+      fepChart.deleteLigand(this.ligand);
+    });
   }
 }

@@ -1,11 +1,12 @@
 import { init } from "zrender";
 import { mockLigands, mockEdges } from "./mockData";
 import { ligandGroup, EdgeGroup } from "./group";
+import { selectLigand, mouseOutHandler } from "./events";
 import Layout from "./layout";
 
-// TODO: 布局计算的优化 告一段落
+// TODO: 布局计算的优化
+// TODO: 全局缩放
 
-// TODO: select a ligand => delete button => delete this ligand & edge
 // TODO: add a ligand
 // TODO: 双击空白处: 取消所有选择
 // TODO: text相关事件的加入
@@ -49,10 +50,21 @@ class FepChart {
     this.layout.reRun();
     return edge;
   }
-  deleteLigand() {}
+  deleteLigand(ligand) {
+    selectLigand.delete(ligand);
+    for (let [, edge] of ligand.edgeMap) {
+      const edgeParams = this.edgeGroup.delete(edge);
+      this.layout.deleteEdge(edgeParams);
+    }
+    const ligandParams = this.ligandGroup.delete(ligand);
+    this.layout.deleteLigand(ligandParams);
+    mouseOutHandler();
+    this.layout.reRun();
+  }
   deleteEdge(edge) {
     const edgeParams = this.edgeGroup.delete(edge);
     this.layout.deleteEdge(edgeParams);
+    mouseOutHandler();
     this.layout.reRun();
   }
   dispose() {
