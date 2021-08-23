@@ -63,7 +63,12 @@ class Layout {
   deleteEdge(edge) {
     this.graph.deleteEdge(edge.source, edge.target);
   }
-  addLigand(ligand) {}
+  addLigand(ligand) {
+    const width = document.documentElement.clientWidth - 100;
+    const height = document.documentElement.clientHeight - 100;
+    const { x: posX, y: posY } = getInitialPos(width, height, false);
+    this.graph.addVertex(ligand.id, posX, posY);
+  }
   deleteLigand(ligand) {
     this.graph.deleteVertex(ligand.id);
   }

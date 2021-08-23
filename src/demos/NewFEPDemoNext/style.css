@@ -4,3 +4,9 @@
   width: 100vw;
   height: 100vh;
 }
+
+.fep-add {
+  position: fixed;
+  top: 10px;
+  left: 10px;
+}

@@ -9,10 +9,10 @@ export class ligandGroup {
   group = new Group();
   map = ligandMap;
   add(ligandParams) {
-    // const ligand = new Ligand(ligandParams);
-    // ligandMap.set(ligandParams.id, ligand);
-    // this.group.add(ligand.el);
-    // return ligand;
+    const ligand = new Ligand(ligandParams);
+    ligandMap.set(ligandParams.id, ligand);
+    this.group.add(ligand.el);
+    return ligand;
   }
   delete(ligand) {
     const { id } = ligand;

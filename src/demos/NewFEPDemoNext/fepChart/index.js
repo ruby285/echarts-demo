@@ -7,7 +7,6 @@ import Layout from "./layout";
 // TODO: 布局计算的优化
 // TODO: 全局缩放
 
-// TODO: add a ligand
 // TODO: 双击空白处: 取消所有选择
 // TODO: text相关事件的加入
 // TODO: more
@@ -43,7 +42,15 @@ class FepChart {
     this.zr.add(this.edgeGroup.group);
     this.initLayout();
   }
-  addLigand() {}
+  addLigand() {
+    const id = this.ligands.length;
+    const ligandParams = { id };
+    this.ligands.push(ligandParams);
+    const ligand = this.ligandGroup.add(ligandParams);
+    this.layout.addLigand(ligandParams);
+    this.layout.reRun();
+    return ligand;
+  }
   addEdge(edgeParams) {
     const edge = this.edgeGroup.add(edgeParams);
     this.layout.addEdge(edgeParams);
