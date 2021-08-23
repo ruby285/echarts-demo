@@ -169,7 +169,7 @@ export class Edge extends Element {
     this.targetLigand.addEdge(this);
   }
 
-  onDelete() { }
+  onDelete() {}
 
   init() {
     this.textGroup = new Group();
@@ -362,7 +362,7 @@ export class Ligand extends Element {
     this.edgeMap.set(edge.id, edge);
   }
 
-  onDelete() { }
+  onDelete() {}
 
   moveTo({ x, y }) {
     const originX = x + LIGAND_WIDTH_HALF;
@@ -380,6 +380,20 @@ export class Ligand extends Element {
       shape: {
         x,
         y,
+      },
+    });
+    this.order.attr({
+      origin: [originX, originY],
+      style: {
+        text: "1",
+        fontSize: 12,
+        textFill: "#000",
+        textStroke: "#f00",
+      },
+      shape: {
+        r: [7, 7, 7, 7],
+        x: x + 5,
+        y: y + 5,
       },
     });
   }
@@ -404,9 +418,20 @@ export class Ligand extends Element {
       },
       z2: ELEMENT_Z2,
     });
+    this.order = new Rect({
+      style: {
+        fill: "#f0f",
+      },
+      shape: {
+        width: 14,
+        height: 14,
+      },
+      z2: ELEMENT_Z2,
+    });
 
     this.el.add(this.img);
     this.el.add(this.rect);
+    this.el.add(this.order);
   }
 
   constructor({ id }) {
@@ -423,7 +448,7 @@ export class Ligand extends Element {
   }
 }
 
-export class Text {
+class Text {
   el = null;
   constructor({ x, y, rotation = 0, text }) {
     this.el = new ZrText({
