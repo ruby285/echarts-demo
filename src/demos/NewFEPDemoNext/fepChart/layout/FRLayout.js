@@ -34,7 +34,7 @@ FRLayout.prototype = {
   calcAttraction: function () {
     this.graph.forEachEdge(function (u, v) {
       var delta = u.pos.sub(v.pos);
-      var len = delta.mag();
+      var len = delta.mag() / 3;
       // var minLen = 300;
       // if (len < minLen) return;
       var distVec = delta.normalize().multiplyConst(this.attraction(len));
@@ -74,12 +74,13 @@ FRLayout.prototype = {
         }
       }, this);
     }, this);
-    this.graph.forEachEdge(function (u, v) {
-      var delta = u.pos.sub(v.pos);
-      u.disp = u.disp.add(
-        delta.normalize().multiplyConst(this.repulsion(delta.mag()))
-      );
-    }, this);
+    // this.graph.forEachEdge(function (u, v) {
+    //   var delta = u.pos.sub(v.pos);
+    //   const len = delta.mag();
+    //   u.disp = u.disp.add(
+    //     delta.normalize().multiplyConst(this.repulsion(delta.mag()))
+    //   );
+    // }, this);
   },
 
   calcDisplacement: function () {

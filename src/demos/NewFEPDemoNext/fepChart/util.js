@@ -146,12 +146,11 @@ export function getTextPosition(x1, y1, x2, y2, n) {
   const x = (x2 - x1) / 2 + x1;
   const y = (y2 - y1) / 2 + y1;
   const rotation = getRotation({ x: x1, y: y1 }, { x: x2, y: y2 });
-
-  return new Array(n).fill("").map((a, i) => ({
-    x: x + dis.x * (i + 1),
-    y: y - dis.y * (i + 1),
+  return {
+    x: x + dis.x * n,
+    y: y - dis.y * n,
     rotation,
-  }));
+  };
 }
 
 function edgeMove(sLigand, tLigand) {

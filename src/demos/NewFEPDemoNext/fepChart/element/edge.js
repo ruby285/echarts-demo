@@ -22,6 +22,7 @@ import {
   ELEMENT_Z2,
 } from "../constant";
 import Element from "./element";
+import fepChart from "../index";
 
 export class Edge extends Element {
   id = "";
@@ -30,9 +31,10 @@ export class Edge extends Element {
   sourceLigand = null;
   targetLigand = null;
   type = "edge";
-  el = null;
-  edge = null;
-  text = null;
+  el = new Group();
+  edge = new ZrLine();
+  text = new ZrText();
+  virtualBtn = null;
   isVirtual = false;
   info = [];
 
@@ -96,6 +98,7 @@ export class Edge extends Element {
       },
     });
   }
+
   fadein() {
     this.edge.animateTo({
       style: {
@@ -104,26 +107,65 @@ export class Edge extends Element {
     });
   }
 
-  onCreate() {
-    this.sourceLigand.addEdge(this);
-    this.targetLigand.addEdge(this);
+  onSelected() {
+    if (!this.isVirtual) {
+      this.deleteBtn.show();
+      this.calculationBtn.show();
+    }
+    super.onSelected();
   }
 
-  onDelete() {}
-
-  init() {
-    this.text = new ZrText();
-    const opts = { style: {} };
-    if (this.isVirtual) {
-      opts.style = {
-        lineDash: [2, 6],
-      };
+  onSelectedEnd() {
+    if (!this.isVirtual) {
+      this.deleteBtn.hide();
+      this.calculationBtn.hide();
     }
+    super.onSelectedEnd();
+  }
 
-    this.edge = new ZrLine(opts);
+  initVirtualBtn() {
+    this.virtualBtn = new EdgeButton({
+      text: "add edge",
+      edge: this,
+      type: "add",
+    });
+    this.edge.attr({
+      style: {
+        lineDash: [2, 6],
+      },
+    });
+    this.el.add(this.virtualBtn.el);
+  }
 
-    this.el.add(this.edge);
-    this.el.add(this.text);
+  initRealisticBtn() {
+    this.deleteBtn = new EdgeButton({
+      text: "delete edge",
+      type: "delete",
+      edge: this,
+    });
+    this.calculationBtn = new EdgeButton({
+      text: "add to calculation queue",
+      type: "calculation",
+      edge: this,
+    });
+    this.el.add(this.deleteBtn.el);
+    this.el.add(this.calculationBtn.el);
+    if (!this.state.selected) {
+      this.deleteBtn.hide();
+      this.calculationBtn.hide();
+    }
+  }
+
+  toRealistic() {
+    this.isVirtual = false;
+    this.edge.attr({
+      style: {
+        lineDash: null,
+      },
+    });
+    this.el.remove(this.virtualBtn.el);
+    this.virtualBtn = null;
+    this.initRealisticBtn();
   }
 
   reDraw() {
@@ -141,8 +183,8 @@ export class Edge extends Element {
         y2,
       },
     });
-    const texts = getTextPosition(x1, y1, x2, y2, info.length);
-    const { x, y, rotation } = texts[0];
+    const { x, y, rotation } = getTextPosition(x1, y1, x2, y2, info.length);
+    // const { x, y, rotation } = texts[0];
     // const { x, y, rotation } = texts[2];
     this.text.attr({
       x,
@@ -164,6 +206,16 @@ export class Edge extends Element {
         },
       },
     });
+
+    if (this.virtualBtn) {
+      const { x, y, rotation } = getTextPosition(x1, y1, x2, y2, 8);
+      this.virtualBtn.moveTo({ x, y, rotation });
+    }
+    if (this.deleteBtn) {
+      const { x, y, rotation } = getTextPosition(x1, y1, x2, y2, 8);
+      this.deleteBtn.moveTo({ x, y, rotation });
+      this.calculationBtn.moveTo({ x, y: y + 16, rotation });
+    }
   }
 
   constructor({ source, target, info, isVirtual = false }) {
@@ -175,13 +227,88 @@ export class Edge extends Element {
     this.isVirtual = isVirtual;
     this.sourceLigand = ligandMap.get(source);
     this.targetLigand = ligandMap.get(target);
-    this.el = new Group();
-    this.init();
-
-    this.onCreate();
+    this.sourceLigand.addEdge(this);
+    this.targetLigand.addEdge(this);
+    this.el.add(this.edge);
+    this.el.add(this.text);
+    if (isVirtual) {
+      this.initVirtualBtn();
+    } else {
+      this.initRealisticBtn();
+    }
 
     this.el.on("mouseover", (params) => mouseOverHandler("edge", params, this));
     this.el.on("mouseout", (params) => mouseOutHandler("edge", params, this));
     this.el.on("click", (params) => clickHandler("edge", params, this));
+  }
+}
+
+class EdgeButton {
+  el = null;
+  edge = null;
+  fadeout() {
+    this.el.animateTo(
+      {
+        opacity: FADEOUT_OPACITY,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  fadein() {
+    this.el.animateTo(
+      {
+        opacity: NORMAL_OPACITY,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  toScale1() {}
+  toScaleX() {}
+
+  show() {
+    this.el.show();
+  }
+  hide() {
+    this.el.hide();
+  }
+  moveTo({ x, y, rotation }) {
+    this.el.attr({
+      // rotation,
+      x,
+      y,
+    });
+  }
+
+  constructor({ text, edge, type }) {
+    this.edge = edge;
+    this.type = type;
+    this.el = new ZrText({
+      style: {
+        // text: [`{a|${text}}`, `{b|样式b}`].join(" "),
+        text: `{a|${text}}`,
+        align: "center",
+        rich: {
+          a: {
+            fill: "#000",
+          },
+          b: {
+            fill: "#00f",
+          },
+        },
+      },
+    });
+    this.el.on("click", (ev) => {
+      ev.cancelBubble = true;
+      if (this.type === "add") {
+        return this.edge.toRealistic();
+      }
+      if (this.type === "delete") {
+        return fepChart.deleteEdge(this.edge);
+      }
+      console.log(this.type);
+      // if (this.type === 'add') {
+      //   return this.edge.toRealistic();
+      // }
+    });
   }
 }

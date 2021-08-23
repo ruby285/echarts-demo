@@ -1,14 +1,6 @@
-import {
-  Group,
-  Image as ZrImage,
-  Rect,
-  Line as ZrLine,
-  Text as ZrText,
-} from "zrender";
+import { Group, Image as ZrImage, Rect, Text as ZrText } from "zrender";
 import imgData from "../ligand.png";
-import { getTextPosition, getEdgePoint } from "../util";
 import { mouseOverHandler, mouseOutHandler, clickHandler } from "../events";
-import { ligandMap } from "../group";
 import {
   LIGAND_WIDTH,
   LIGAND_WIDTH_HALF,
