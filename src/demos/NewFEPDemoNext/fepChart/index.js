@@ -8,6 +8,10 @@ import Layout from "./layout";
 // TODO: 全局缩放
 
 // TODO: text相关事件的加入
+// TODO: 层级规划
+// TODO: 代码优化
+// TODO-BUG:  selector order / delete edge button position
+// TODO: 样式优化
 // TODO: more
 
 class FepChart {
@@ -43,7 +47,10 @@ class FepChart {
 
     this.zr.on("dblclick", (ev) => {
       if (ev.target) return;
-      selectLigand.clear();
+      // selectLigand.clear();
+      this.zr.animateTo({
+        scale: [0.9, 0.9],
+      });
     });
   }
   addLigand() {
