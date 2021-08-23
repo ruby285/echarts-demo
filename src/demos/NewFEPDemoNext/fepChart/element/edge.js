@@ -32,7 +32,7 @@ export class Edge extends Element {
   type = "edge";
   el = null;
   edge = null;
-  textGroup = null;
+  text = null;
   isVirtual = false;
   info = [];
 
@@ -112,7 +112,7 @@ export class Edge extends Element {
   onDelete() {}
 
   init() {
-    this.textGroup = new Group();
+    this.text = new ZrText();
     const opts = { style: {} };
     if (this.isVirtual) {
       opts.style = {
@@ -123,7 +123,7 @@ export class Edge extends Element {
     this.edge = new ZrLine(opts);
 
     this.el.add(this.edge);
-    this.el.add(this.textGroup);
+    this.el.add(this.text);
   }
 
   reDraw() {
@@ -133,7 +133,6 @@ export class Edge extends Element {
       this.targetLigand.position,
       LIGAND_WIDTH
     );
-    this.textGroup.removeAll();
     this.edge.attr({
       shape: {
         x1,
@@ -143,9 +142,27 @@ export class Edge extends Element {
       },
     });
     const texts = getTextPosition(x1, y1, x2, y2, info.length);
-    texts.forEach((item, i) => {
-      const text = new Text({ ...item, text: info[i] });
-      this.textGroup.add(text.el);
+    const { x, y, rotation } = texts[0];
+    // const { x, y, rotation } = texts[2];
+    this.text.attr({
+      x,
+      y,
+      rotation,
+      style: {
+        text: info.map((item, i) => `{a${i + 1}|${item}}`).join("\n"),
+        align: "center",
+        rich: {
+          a1: {
+            fill: "red",
+          },
+          a2: {
+            fill: "green",
+          },
+          a3: {
+            fill: "blue",
+          },
+        },
+      },
     });
   }
 
