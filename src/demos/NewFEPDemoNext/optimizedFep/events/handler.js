@@ -18,6 +18,25 @@ class EventsHandler {
     this.selector.clear();
   }
 
+  onMouseDown(ev) {
+    if (ev.target) return;
+    console.log("onMouseDown");
+  }
+  onMouseWheel(ev) {
+    const { event, wheelDelta } = ev;
+    const room = this.ctx.room;
+    event.preventDefault();
+
+    if (wheelDelta > 0) {
+      room.zoomIn(wheelDelta);
+    } else {
+      room.zoomOut(wheelDelta);
+    }
+    // if (ev.target) return;
+    console.log("onMouseWheel", wheelDelta);
+    // console.log("onMouseWheel", wheelDelta, ev);
+  }
+
   onMouseOver(el) {
     this.hoverEl = el;
     forEachSet(hoverLigand, (ligand) => ligand.onHover());

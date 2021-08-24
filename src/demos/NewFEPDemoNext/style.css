@@ -1,19 +1,26 @@
 .fep-parent {
-  /* position: relative; */
+  position: relative;
   margin-left: 10vw;
   margin-top: 10vh;
   width: 80vw;
   height: 80vh;
+  overflow: hidden;
   /* transform: scale(0.9); */
-  /* transform-origin: 50% 50%; */
+  transform-origin: 50% 50%;
 }
 
 .fep-demo2 {
-  /* position: absolute; */
-  /* width: 60%;
-  height: 60%; */
-  /* transform-origin: 50% 50%; */
-  /* transform: translate(100px, 100px); */
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  /* transform: translate(-50vw, -50vh) scale(0.9);
+  background-color: #fff;
+  width: 100vw;
+  height: 100vh; */
+  /* transform-origin: -10vw -10vh; */
+  /* transform-origin: center center; */
+  /* transform: translate(-10vw, -10vh); */
+  /* transform: scale(0.9); */
 }
 
 .fep-add {

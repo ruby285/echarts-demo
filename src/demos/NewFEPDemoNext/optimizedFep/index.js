@@ -22,6 +22,7 @@ class FepChart {
   edgeGroup = null;
   layout = null;
   events = null;
+  emitter = null;
 
   initRoom(parent, dom, len) {
     this.room = new Room(parent, dom);

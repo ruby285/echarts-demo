@@ -44,10 +44,18 @@ class Events {
   onDblclick(ev) {
     this.handler.onDblclick(ev);
   }
+  onMouseDown(ev) {
+    this.handler.onMouseDown(ev);
+  }
+  onMouseWheel(ev) {
+    this.handler.onMouseWheel(ev);
+  }
   constructor(ctx) {
     this.ctx = ctx;
     this.handler = new EventsHandler(ctx);
     ctx.renderer.on("dblclick", (...args) => this.onDblclick(...args));
+    ctx.renderer.on("mousedown", (...args) => this.onMouseDown(...args));
+    ctx.renderer.on("mousewheel", (...args) => this.onMouseWheel(...args));
     emitter.on("click", (...args) => this.onClick(...args));
     emitter.on("mouseover", (...args) => this.onMouseover(...args));
     emitter.on("mouseout", (...args) => this.onMouseout(...args));
