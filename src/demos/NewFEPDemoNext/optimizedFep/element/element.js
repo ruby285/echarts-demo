@@ -23,11 +23,21 @@ export default class Element {
     this.state.relatedHover = false;
     this.updateStyle();
   }
-  onSelected(idx) {
+  onSelected() {
+    this.el.children().forEach((item) => {
+      item.attr({
+        z: 100,
+      });
+    });
     this.state.selected = true;
     this.updateStyle();
   }
   onSelectedEnd() {
+    this.el.children().forEach((item) => {
+      item.attr({
+        z: 0,
+      });
+    });
     this.state.selected = false;
     this.updateStyle();
   }

@@ -9,7 +9,6 @@ import emitter from "./events/emitter";
 // TODO: 布局计算的优化
 // TODO: 全局缩放
 
-// TODO: 层级规划
 // TODO: 代码优化 70%
 // TODO-BUG:  selector order / delete edge button position
 // TODO: 按钮的交互样式
