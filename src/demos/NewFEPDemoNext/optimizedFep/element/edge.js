@@ -128,7 +128,7 @@ export class Edge extends Element {
     this.virtualBtn = new EdgeButton({
       text: "add edge",
       edge: this,
-      type: "add",
+      type: "addEdge",
     });
     this.edge.attr({
       style: {
@@ -141,7 +141,7 @@ export class Edge extends Element {
   initRealisticBtn() {
     this.deleteBtn = new EdgeButton({
       text: "delete edge",
-      type: "delete",
+      type: "deleteEdge",
       edge: this,
     });
     this.calculationBtn = new EdgeButton({

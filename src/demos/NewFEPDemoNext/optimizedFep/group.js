@@ -39,6 +39,7 @@ export class EdgeGroup {
     const edge = new Edge(props);
     edgeMap.set(props.id, edge);
     this.group.add(edge.el);
+    return edge;
   }
   delete(edge) {
     const { id, source, target } = edge;

@@ -2,9 +2,19 @@ import { init } from "zrender";
 import { mockLigands, mockEdges } from "./mockData";
 import { ligandGroup, EdgeGroup } from "./group";
 import Room from "./room";
-// import { selectLigand, mouseOutHandler } from "./events";
 import Layout from "./layout";
 import Events from "./events";
+import emitter from "./events/emitter";
+
+// TODO: 布局计算的优化
+// TODO: 全局缩放
+
+// TODO: text相关事件的加入
+// TODO: 层级规划
+// TODO: 代码优化
+// TODO-BUG:  selector order / delete edge button position
+// TODO: 样式优化
+// TODO: more
 
 class FepChart {
   renderer = null;
@@ -14,16 +24,16 @@ class FepChart {
   layout = null;
   events = null;
 
+  initRoom(parent, dom, len) {
+    this.room = new Room(parent, dom);
+    this.room.init(len);
+  }
+
   initGroup(ligands, edges) {
     this.ligandGroup = new ligandGroup(ligands);
     this.edgeGroup = new EdgeGroup(edges);
     this.renderer.add(this.ligandGroup.group);
     this.renderer.add(this.edgeGroup.group);
-  }
-
-  initRoom(parent, dom, len) {
-    this.room = new Room(parent, dom);
-    this.room.init(len);
   }
 
   initLayout(ligands, edges) {
@@ -33,7 +43,8 @@ class FepChart {
   }
 
   initEvents() {
-    this.events = new Events(this.renderer);
+    this.events = new Events(this);
+    this.emitter = emitter;
   }
 
   init(parent, dom, ligands = mockLigands, edges = mockEdges) {
@@ -48,34 +59,6 @@ class FepChart {
     const id = this.ligandGroup.acSize + 1;
     this.ligandGroup.add({ id });
     this.layout.addLigand({ id });
-    this.layout.reRun();
-  }
-
-  addEdge(edgeProps) {
-    this.edgeGroup.add(edgeProps);
-    this.layout.addEdge(edgeProps);
-    this.layout.reRun();
-  }
-
-  deleteLigand(ligand) {
-    selectLigand.delete(ligand);
-    for (let [, edge] of ligand.edgeMap) {
-      const edgeProps = this.edgeGroup.delete(edge);
-      this.layout.deleteEdge(edgeProps);
-    }
-    const ligandProps = this.ligandGroup.delete(ligand);
-    this.layout.deleteLigand(ligandProps);
-    mouseOutHandler();
-    this.layout.reRun();
-  }
-
-  deleteEdge(edge) {
-    if (!edge.isVirtual) {
-      selectLigand.clear();
-    }
-    const edgeProps = this.edgeGroup.delete(edge);
-    this.layout.deleteEdge(edgeProps);
-    mouseOutHandler();
     this.layout.reRun();
   }
 

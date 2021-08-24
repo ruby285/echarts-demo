@@ -8,7 +8,7 @@ class EventEmitter {
   emit(name, ...args) {
     const fn = this.events.get(name);
     if (!fn) return;
-    fn(...args);
+    return fn(...args);
   }
 }
 

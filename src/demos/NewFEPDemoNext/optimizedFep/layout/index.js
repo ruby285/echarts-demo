@@ -28,7 +28,6 @@ const getInitialPos = (width, height, isCenter) => {
 };
 
 class Layout {
-  ctx = null;
   updateGraphics() {
     const ligandMap = this.ligandGroup.map;
     this.graph.forEachVertex(({ pos, id }) => {

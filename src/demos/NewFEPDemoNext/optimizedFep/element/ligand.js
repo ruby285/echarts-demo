@@ -228,6 +228,7 @@ export class Ligand extends Element {
     });
     this.deleteBtn = new LigandButton({
       text: "delete ligand",
+      type: "deleteLigand",
       ligand: this,
     });
     this.deleteBtn.hide();
@@ -370,8 +371,9 @@ class LigandButton {
     });
   }
 
-  constructor({ text, ligand }) {
+  constructor({ text, ligand, type }) {
     this.ligand = ligand;
+    this.type = type;
     this.el = new ZrText({
       style: {
         // text: [`{a|${text}}`, `{b|样式b}`].join(" "),

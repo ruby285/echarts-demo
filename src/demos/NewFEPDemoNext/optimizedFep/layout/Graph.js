@@ -14,11 +14,13 @@ class Graph {
       this.addEdge(edges[i].source, edges[i].target);
     }
   }
+
   addVertex(id) {
     this.vertices[id] = new Vertex(id);
     ++this.nVerts;
     return id;
   }
+
   deleteVertex(id) {
     delete this.vertices[id];
     --this.nVerts;
@@ -26,11 +28,11 @@ class Graph {
   }
 
   addEdge(u, v) {
-    this.adj[u] = this.adj[u] || [];
-    this.adj[u].push(v);
+    this.adj[u] = this.adj[u] || new Set();
+    this.adj[u].add(v);
     this.vertices[u].edgeNum++;
-    this.adj[v] = this.adj[v] || [];
-    this.adj[v].push(u);
+    this.adj[v] = this.adj[v] || new Set();
+    this.adj[v].add(u);
     this.vertices[v].edgeNum++;
   }
 
@@ -41,9 +43,8 @@ class Graph {
 
   removeAdj(a, b) {
     if (!this.adj[a]) return;
-    const idx = this.adj[a].indexOf(b);
-    if (idx < 0) return;
-    this.adj[a].splice(idx, 1);
+    this.adj[a].delete(b);
+    if (!this.vertices[a]) return;
     this.vertices[a].edgeNum--;
   }
 
@@ -70,11 +71,12 @@ class Graph {
   forEachEdge(callback) {
     this.forEachVertex((v, i) => {
       if (!this.adj[i]) return;
-      let j = this.adj[i].length;
+      Array.from(this.adj[i]).forEach((n) => callback(v, this.vertices[n]));
+      // let j = this.adj[i].size;
 
-      while (j--) {
-        callback(v, this.vertices[this.adj[i][j]]);
-      }
+      // while (j--) {
+      //   callback(v, this.vertices[this.adj[i][j]]);
+      // }
     }, this);
   }
 }
