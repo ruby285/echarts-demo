@@ -10,8 +10,10 @@ import emitter from "./events/emitter";
 // TODO: 全局缩放
 
 // TODO: text相关事件的加入
+// TODO: ligand add 样式
+// TODO: arrow
 // TODO: 层级规划
-// TODO: 代码优化
+// TODO: 代码优化 70%
 // TODO-BUG:  selector order / delete edge button position
 // TODO: 样式优化
 // TODO: more

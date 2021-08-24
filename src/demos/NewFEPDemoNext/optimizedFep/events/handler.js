@@ -14,7 +14,8 @@ class EventsHandler {
   hoverEl = null;
 
   onDblclick(ev) {
-    console.log("onDblclick", ev.target);
+    if (ev.target) return;
+    this.selector.clear();
   }
 
   onMouseOver(el) {

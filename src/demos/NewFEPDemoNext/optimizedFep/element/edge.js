@@ -22,7 +22,6 @@ import {
   ELEMENT_Z2,
 } from "../constant";
 import Element from "./element";
-import fepChart from "../index";
 import emitter from "../events/emitter";
 
 export class Edge extends Element {
@@ -44,20 +43,32 @@ export class Edge extends Element {
       edge: {
         stroke: "#f00",
       },
+      text: {
+        backgroundColor: "#f00",
+      },
     },
     hover: {
       edge: {
         stroke: "#ff0",
+      },
+      text: {
+        backgroundColor: "#ff0",
       },
     },
     relatedHover: {
       edge: {
         stroke: "#000",
       },
+      text: {
+        backgroundColor: "#fff",
+      },
     },
     default: {
       edge: {
         stroke: "#000",
+      },
+      text: {
+        backgroundColor: "#fff",
       },
     },
   };
@@ -66,6 +77,12 @@ export class Edge extends Element {
     this.edge.animateTo(
       {
         style: style.edge,
+      },
+      ANIMATE_CONFIG
+    );
+    this.text.animateTo(
+      {
+        style: style.text,
       },
       ANIMATE_CONFIG
     );
@@ -80,12 +97,39 @@ export class Edge extends Element {
       },
       ANIMATE_CONFIG
     );
+    this.text.animateTo(
+      {
+        style: {
+          textShadowBlur: 0,
+        },
+      },
+      ANIMATE_CONFIG
+    );
   }
   toScaleX() {
     this.edge.animateTo(
       {
         style: {
           edgeWidth: EDGE_SCALE_WIDTH,
+          shadowColor: "#ff0",
+          shadowBlur: 20,
+        },
+      },
+      ANIMATE_CONFIG
+    );
+    this.text.animateTo(
+      {
+        style: {
+          // backgroundColor: "#ff0",
+          padding: [0, 10],
+          // borderWidth: 2,
+          // borderColor: "#f00",
+          // borderRadius: 2,
+          // shadowColor: "#f0f",
+          // shadowBlur: 20,
+          textShadowColor: "#0ff",
+          textShadowBlur: 20,
+          // },
         },
       },
       ANIMATE_CONFIG
@@ -93,19 +137,41 @@ export class Edge extends Element {
   }
 
   fadeout() {
-    this.edge.animateTo({
-      style: {
-        opacity: FADEOUT_OPACITY,
+    this.edge.animateTo(
+      {
+        style: {
+          opacity: FADEOUT_OPACITY,
+        },
       },
-    });
+      ANIMATE_CONFIG
+    );
+    this.text.animateTo(
+      {
+        style: {
+          opacity: FADEOUT_OPACITY,
+        },
+      },
+      ANIMATE_CONFIG
+    );
   }
 
   fadein() {
-    this.edge.animateTo({
-      style: {
-        opacity: NORMAL_OPACITY,
+    this.edge.animateTo(
+      {
+        style: {
+          opacity: NORMAL_OPACITY,
+        },
       },
-    });
+      ANIMATE_CONFIG
+    );
+    this.text.animateTo(
+      {
+        style: {
+          opacity: NORMAL_OPACITY,
+        },
+      },
+      ANIMATE_CONFIG
+    );
   }
 
   onSelected() {
@@ -185,8 +251,6 @@ export class Edge extends Element {
       },
     });
     const { x, y, rotation } = getTextPosition(x1, y1, x2, y2, info.length);
-    // const { x, y, rotation } = texts[0];
-    // const { x, y, rotation } = texts[2];
     this.text.attr({
       x,
       y,
@@ -300,18 +364,5 @@ class EdgeButton {
     });
 
     this.el.on("click", (ev) => emitter.emit("click", this, ev));
-    // this.el.on("click", (ev) => {
-    //   ev.cancelBubble = true;
-    //   if (this.type === "add") {
-    //     return this.edge.toRealistic();
-    //   }
-    //   if (this.type === "delete") {
-    //     return fepChart.deleteEdge(this.edge);
-    //   }
-    //   console.log(this.type);
-    //   // if (this.type === 'add') {
-    //   //   return this.edge.toRealistic();
-    //   // }
-    // });
   }
 }
