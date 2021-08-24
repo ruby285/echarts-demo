@@ -2,6 +2,7 @@ import {
   Group,
   Image as ZrImage,
   Rect,
+  Path,
   Line as ZrLine,
   Text as ZrText,
 } from "zrender";
@@ -34,6 +35,7 @@ export class Edge extends Element {
   el = new Group();
   edge = new ZrLine();
   text = new ZrText();
+  arrow = new Arrow();
   virtualBtn = null;
   isVirtual = false;
   info = [];
@@ -46,6 +48,9 @@ export class Edge extends Element {
       text: {
         backgroundColor: "#f00",
       },
+      arrow: {
+        fill: "#f00",
+      },
     },
     hover: {
       edge: {
@@ -53,6 +58,9 @@ export class Edge extends Element {
       },
       text: {
         backgroundColor: "#ff0",
+      },
+      arrow: {
+        fill: "#ff0",
       },
     },
     relatedHover: {
@@ -62,6 +70,9 @@ export class Edge extends Element {
       text: {
         backgroundColor: "#fff",
       },
+      arrow: {
+        fill: "#000",
+      },
     },
     default: {
       edge: {
@@ -69,6 +80,9 @@ export class Edge extends Element {
       },
       text: {
         backgroundColor: "#fff",
+      },
+      arrow: {
+        fill: "#000",
       },
     },
   };
@@ -83,6 +97,12 @@ export class Edge extends Element {
     this.text.animateTo(
       {
         style: style.text,
+      },
+      ANIMATE_CONFIG
+    );
+    this.arrow.animateTo(
+      {
+        style: style.arrow,
       },
       ANIMATE_CONFIG
     );
@@ -153,6 +173,15 @@ export class Edge extends Element {
       },
       ANIMATE_CONFIG
     );
+
+    this.arrow.animateTo(
+      {
+        style: {
+          opacity: FADEOUT_OPACITY,
+        },
+      },
+      ANIMATE_CONFIG
+    );
   }
 
   fadein() {
@@ -165,6 +194,14 @@ export class Edge extends Element {
       ANIMATE_CONFIG
     );
     this.text.animateTo(
+      {
+        style: {
+          opacity: NORMAL_OPACITY,
+        },
+      },
+      ANIMATE_CONFIG
+    );
+    this.arrow.animateTo(
       {
         style: {
           opacity: NORMAL_OPACITY,
@@ -251,6 +288,16 @@ export class Edge extends Element {
       },
     });
     const { x, y, rotation } = getTextPosition(x1, y1, x2, y2, info.length);
+    this.arrow.attr({
+      rotation: rotation - Math.PI * 1.5,
+      origin: [x1, y1],
+      shape: {
+        x: x1,
+        y: y1,
+        width: 10,
+        height: 10,
+      },
+    });
     this.text.attr({
       x,
       y,
@@ -296,6 +343,7 @@ export class Edge extends Element {
     this.targetLigand.addEdge(this);
     this.el.add(this.edge);
     this.el.add(this.text);
+    this.el.add(this.arrow);
     if (isVirtual) {
       this.initVirtualBtn();
     } else {
@@ -366,3 +414,28 @@ class EdgeButton {
     this.el.on("click", (ev) => emitter.emit("click", this, ev));
   }
 }
+
+const Arrow = Path.extend({
+  type: "arrow",
+
+  shape: {
+    x: 0,
+    y: 0,
+    width: 0,
+    height: 0,
+  },
+
+  buildPath: function (ctx, shape) {
+    const height = shape.height;
+    const width = shape.width;
+    const x = shape.x;
+    const y = shape.y;
+    const dx = (width / 3) * 2;
+    ctx.moveTo(x, y);
+    ctx.lineTo(x + dx, y + height);
+    ctx.lineTo(x, y + (height / 4) * 3);
+    ctx.lineTo(x - dx, y + height);
+    ctx.lineTo(x, y);
+    ctx.closePath();
+  },
+});

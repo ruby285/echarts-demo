@@ -8,7 +8,6 @@ class Events {
         this.handler.onLigandClick(el);
         break;
       case "edge":
-        console.log(el);
         this.handler.onEdgeClick(el);
         break;
       case "deleteLigand":
