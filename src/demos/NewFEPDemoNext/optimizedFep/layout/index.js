@@ -31,14 +31,11 @@ class Layout {
   ctx = null;
   updateGraphics() {
     const ligandMap = this.ligandGroup.map;
-    const edgeMap = this.edgeGroup.map;
     this.graph.forEachVertex(({ pos, id }) => {
       const ligand = ligandMap.get(id);
       ligand.moveTo(pos);
     });
-    for (let [, edge] of edgeMap) {
-      edge.reDraw();
-    }
+    this.edgeGroup.reDraw();
   }
 
   step() {
@@ -74,30 +71,12 @@ class Layout {
   }
 
   initPos(width, height) {
-    const ligandMap = this.ligandGroup.map;
-    for (let [id, ligand] of ligandMap) {
+    this.ligandGroup.forEach((ligand, id) => {
       const v = this.graph.getVertex(id);
       const { x, y } = getInitialPos(width, height, !!ligand.edgeMap.size);
       v.pos.setValues(x, y);
-    }
+    });
   }
-
-  // init() {
-  //   const ctx = this.ctx;
-  //   const vertices = ctx.ligands;
-  //   const edges = ctx.edges;
-  //   this.graph = new Graph({ vertices, edges });
-  //   const width = document.documentElement.clientWidth - 100;
-  //   const height = document.documentElement.clientHeight - 100;
-  //   this.initPos(width, height);
-  //   this.layoutAlgorithm = new FRLayout(
-  //     {
-  //       width,
-  //       height,
-  //     },
-  //     this.graph
-  //   );
-  // }
 
   initViewerRoom() {
     const { width, height } = this.room;
@@ -111,7 +90,7 @@ class Layout {
 
   init(ligands, edges) {
     this.initViewerRoom();
-    this.initGraph(ligands, edges);
+    this.graph = new Graph(ligands, edges);
     this.initPos(this.width, this.height);
     this.layoutAlgorithm = new FRLayout(this.width, this.height, this.graph);
   }

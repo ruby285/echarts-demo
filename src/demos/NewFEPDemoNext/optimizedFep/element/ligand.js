@@ -15,6 +15,7 @@ import {
 } from "../constant";
 import Element from "./element";
 import fepChart from "../index";
+import emitter from "../events/emitter";
 
 export class Ligand extends Element {
   id = "";
@@ -242,11 +243,9 @@ export class Ligand extends Element {
     this.id = id;
     this.init();
 
-    // this.el.on("mouseover", (params) =>
-    //   mouseOverHandler("ligand", params, this)
-    // );
-    // this.el.on("mouseout", (params) => mouseOutHandler("ligand", params, this));
-    // this.el.on("click", (params) => clickHandler("ligand", params, this));
+    this.el.on("click", (ev) => emitter.emit("click", this, ev));
+    this.el.on("mouseover", (ev) => emitter.emit("mouseover", this, ev));
+    this.el.on("mouseout", (ev) => emitter.emit("mouseout", this, ev));
   }
 }
 
@@ -385,9 +384,11 @@ class LigandButton {
         },
       },
     });
-    this.el.on("click", (ev) => {
-      ev.cancelBubble = true;
-      fepChart.deleteLigand(this.ligand);
-    });
+
+    this.el.on("click", (ev) => emitter.emit("click", this, ev));
+    // this.el.on("click", (ev) => {
+    //   ev.cancelBubble = true;
+    //   fepChart.deleteLigand(this.ligand);
+    // });
   }
 }

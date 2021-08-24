@@ -23,6 +23,7 @@ import {
 } from "../constant";
 import Element from "./element";
 import fepChart from "../index";
+import emitter from "../events/emitter";
 
 export class Edge extends Element {
   id = "";
@@ -237,9 +238,9 @@ export class Edge extends Element {
       this.initRealisticBtn();
     }
 
-    // this.el.on("mouseover", (params) => mouseOverHandler("edge", params, this));
-    // this.el.on("mouseout", (params) => mouseOutHandler("edge", params, this));
-    // this.el.on("click", (params) => clickHandler("edge", params, this));
+    this.el.on("click", (ev) => emitter.emit("click", this, ev));
+    this.el.on("mouseover", (ev) => emitter.emit("mouseover", this, ev));
+    this.el.on("mouseout", (ev) => emitter.emit("mouseout", this, ev));
   }
 }
 
@@ -297,18 +298,20 @@ class EdgeButton {
         },
       },
     });
-    this.el.on("click", (ev) => {
-      ev.cancelBubble = true;
-      if (this.type === "add") {
-        return this.edge.toRealistic();
-      }
-      if (this.type === "delete") {
-        return fepChart.deleteEdge(this.edge);
-      }
-      console.log(this.type);
-      // if (this.type === 'add') {
-      //   return this.edge.toRealistic();
-      // }
-    });
+
+    this.el.on("click", (ev) => emitter.emit("click", this, ev));
+    // this.el.on("click", (ev) => {
+    //   ev.cancelBubble = true;
+    //   if (this.type === "add") {
+    //     return this.edge.toRealistic();
+    //   }
+    //   if (this.type === "delete") {
+    //     return fepChart.deleteEdge(this.edge);
+    //   }
+    //   console.log(this.type);
+    //   // if (this.type === 'add') {
+    //   //   return this.edge.toRealistic();
+    //   // }
+    // });
   }
 }

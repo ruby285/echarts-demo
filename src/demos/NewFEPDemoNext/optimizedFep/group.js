@@ -8,11 +8,12 @@ export const edgeMap = new Map();
 export class ligandGroup {
   group = new Group();
   map = ligandMap;
+  acSize = 0;
   add(props) {
     const ligand = new Ligand({ ...props, img: imgData });
     ligandMap.set(props.id, ligand);
     this.group.add(ligand.el);
-    return ligand;
+    this.acSize++;
   }
   delete(ligand) {
     const { id } = ligand;
@@ -38,7 +39,6 @@ export class EdgeGroup {
     const edge = new Edge(props);
     edgeMap.set(props.id, edge);
     this.group.add(edge.el);
-    return edge;
   }
   delete(edge) {
     const { id, source, target } = edge;
@@ -51,6 +51,9 @@ export class EdgeGroup {
     for (let [id, edge] of this.map) {
       cb(edge, id);
     }
+  }
+  reDraw() {
+    this.forEach((edge) => edge.reDraw());
   }
   constructor(edges) {
     edges.forEach((props) => this.add(props));

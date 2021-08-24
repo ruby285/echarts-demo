@@ -1,13 +1,13 @@
 import Vertex from "./Vertex";
 
 class Graph {
-  constructor(ligands = [], edges = []) {
+  constructor(vertices = [], edges = []) {
     this.nVerts = 0;
     this.vertices = {};
     this.adj = {};
 
-    for (let i = 0; i < ligands.length; ++i) {
-      this.addVertex(ligands[i].id);
+    for (let i = 0; i < vertices.length; ++i) {
+      this.addVertex(vertices[i].id);
     }
 
     for (let i = 0; i < edges.length; ++i) {
