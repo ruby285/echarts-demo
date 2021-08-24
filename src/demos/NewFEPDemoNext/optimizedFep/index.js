@@ -1,14 +1,16 @@
 import { init } from "zrender";
 import { mockLigands, mockEdges } from "./mockData";
 import { ligandGroup, EdgeGroup } from "./group";
+import Room from "./room";
 // import { selectLigand, mouseOutHandler } from "./events";
-// import Layout from "./layout";
+import Layout from "./layout";
 
 class FepChart {
   zr = null;
   ligandGroup = null;
   edgeGroup = null;
   layout = null;
+  room = null;
   width = 0;
   height = 0;
   zoom = 1;
@@ -20,48 +22,24 @@ class FepChart {
     this.zr.add(this.edgeGroup.group);
   }
 
-  initSize(parent, dom, len) {
-    // 基础面积 => 1000px * 1000px 的尺寸下容纳 20 个分子
-    const baseMolNum = 20;
-    const baseArea = (1000 * 1000) / baseMolNum;
-    const parentW = parent.offsetWidth;
-    const parentH = parent.offsetHeight;
-    const parentArea = parentW * parentH;
-    const molNum = Math.floor(parentArea / baseArea);
-    const scale = len / molNum;
-    this.pScale = 1;
-
-    if (scale < 1) {
-      this.width = parentW;
-      this.height = parentH;
-    } else {
-      const edgeScale = Math.sqrt(scale);
-      this.pScale = 1 / edgeScale;
-      this.width = parentW * edgeScale;
-      this.height = parentH * edgeScale;
-    }
-
-    const tsx = (parentW - this.width) / 2;
-    const tsy = (parentH - this.height) / 2;
-    dom.style.width = this.width + "px";
-    dom.style.height = this.height + "px";
-    dom.style.transform = `translate(${tsx}px, ${tsy}px)`;
-    parent.style.transform = `scale(${this.pScale})`;
-    console.log(parentW, this.width);
+  initRoom(parent, dom, len) {
+    this.room = new Room(parent, dom);
+    this.room.init(len);
   }
 
-  initLayout() {
-    // this.layout = new Layout();
-    // this.layout.run();
+  initLayout(ligands, edges) {
+    this.layout = new Layout(this.room, this.ligandGroup, this.edgeGroup);
+    this.layout.init(ligands, edges);
+    this.layout.run();
   }
 
   initEvents() {}
 
   init(parent, dom, ligands = mockLigands, edges = mockEdges) {
-    this.initSize(parent, dom, ligands.length);
+    this.initRoom(parent, dom, ligands.length);
     this.zr = init(dom);
     this.initGroup(ligands, edges);
-    this.initLayout();
+    this.initLayout(ligands, edges);
     this.initEvents();
 
     console.log(this.zr);
