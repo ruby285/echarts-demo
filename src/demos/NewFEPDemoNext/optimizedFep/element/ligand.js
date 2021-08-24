@@ -236,12 +236,14 @@ export class Ligand extends Element {
     this.el.add(this.img);
     this.el.add(this.rect);
     this.el.add(this.deleteBtn.el);
+    this.updateStyle();
   }
 
-  constructor({ id }) {
+  constructor({ id, firstAdd = false }) {
     super();
     this.el = new Group();
     this.id = id;
+    this.state.firstAdd = firstAdd;
     this.init();
 
     this.el.on("click", (ev) => emitter.emit("click", this, ev));
@@ -388,9 +390,5 @@ class LigandButton {
     });
 
     this.el.on("click", (ev) => emitter.emit("click", this, ev));
-    // this.el.on("click", (ev) => {
-    //   ev.cancelBubble = true;
-    //   fepChart.deleteLigand(this.ligand);
-    // });
   }
 }

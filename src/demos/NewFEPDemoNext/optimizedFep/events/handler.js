@@ -46,7 +46,9 @@ class EventsHandler {
 
   onLigandMouseOver(ligand) {
     if (this.hoverEl === ligand) return;
-    if (ligand.selected) return;
+    if (ligand.state.firstAdd) {
+      ligand.state.firstAdd = false;
+    }
     hoverLigand.add(ligand);
     this.ligandGroup.forEach((item) => {
       if (ligand === item) return;
