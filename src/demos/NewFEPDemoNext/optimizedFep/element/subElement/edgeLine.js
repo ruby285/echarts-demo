@@ -1,5 +1,5 @@
 import { Line as ZrLine } from "zrender";
-import SubElement from "./subElement";
+import { EdgeSubElement } from "./subElement";
 import {
   LIGAND_WIDTH,
   ELEMENT_Z2,
@@ -8,7 +8,7 @@ import {
   ANIMATE_CONFIG,
 } from "../../constant";
 
-class EdgeLineElement extends SubElement {
+class EdgeLineElement extends EdgeSubElement {
   type = "edgeLine";
   el = new ZrLine();
 
@@ -27,33 +27,6 @@ class EdgeLineElement extends SubElement {
       stroke: "#000",
     },
   };
-
-  updateStyle(state) {
-    const style = this.style[state];
-    this.el.animateTo(
-      {
-        style,
-      },
-      ANIMATE_CONFIG
-    );
-  }
-
-  toScale1() {
-    // this.el.animateTo(
-    //   {
-    //     scale: SCALE_1,
-    //   },
-    //   ANIMATE_CONFIG
-    // );
-  }
-  toScaleX() {
-    // this.el.animateTo(
-    //   {
-    //     scale: SCALE_X,
-    //   },
-    //   ANIMATE_CONFIG
-    // );
-  }
 
   draw({ x1, y1, x2, y2, isVirtual }) {
     const style = isVirtual

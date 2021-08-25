@@ -1,5 +1,5 @@
 import { Path } from "zrender";
-import SubElement from "./subElement";
+import { EdgeSubElement } from "./subElement";
 import {
   LIGAND_WIDTH,
   ELEMENT_Z2,
@@ -33,7 +33,7 @@ const Arrow = Path.extend({
   },
 });
 
-class EdgeArrowElement extends SubElement {
+class EdgeArrowElement extends EdgeSubElement {
   type = "edgeArrow";
   el = new Arrow();
 
@@ -51,16 +51,6 @@ class EdgeArrowElement extends SubElement {
       backgroundColor: "#fff",
     },
   };
-
-  updateStyle(state) {
-    const style = this.style[state];
-    this.el.animateTo(
-      {
-        style,
-      },
-      ANIMATE_CONFIG
-    );
-  }
 
   toScale1() {
     this.el.animateTo(

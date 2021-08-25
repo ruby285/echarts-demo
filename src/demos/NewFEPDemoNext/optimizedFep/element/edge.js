@@ -14,9 +14,12 @@ import {
 } from "../constant";
 import Element from "./element";
 import emitter from "../events/emitter";
-import EdgeLineElement from "./subElement/edgeLine";
-import EdgeTextElement from "./subElement/edgeText";
-import EdgeArrowElement from "./subElement/edgeArrow";
+
+import {
+  EdgeLineElement,
+  EdgeTextElement,
+  EdgeArrowElement,
+} from "./subElement";
 
 export class Edge extends Element {
   id = "";

@@ -53,6 +53,11 @@ export class LigandSubElement extends SubElement {
       ANIMATE_CONFIG
     );
   }
+  moveTo() {}
 }
 
-export default SubElement;
+export class EdgeSubElement extends SubElement {
+  toScale1() {}
+  toScaleX() {}
+  draw() {}
+}

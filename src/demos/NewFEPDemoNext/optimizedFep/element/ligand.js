@@ -13,9 +13,12 @@ import {
 } from "../constant";
 import Element from "./element";
 import emitter from "../events/emitter";
-import LigandRectElement from "./subElement/ligandRect";
-import LigandImageElement from "./subElement/ligandImage";
-import LigandOrderElement from "./subElement/ligandOrder";
+
+import {
+  LigandRectElement,
+  LigandImageElement,
+  LigandOrderElement,
+} from "./subElement";
 
 export class Ligand extends Element {
   id = "";

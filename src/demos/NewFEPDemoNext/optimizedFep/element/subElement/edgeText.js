@@ -1,5 +1,5 @@
 import { Text as ZrText } from "zrender";
-import SubElement from "./subElement";
+import { EdgeSubElement } from "./subElement";
 import {
   LIGAND_WIDTH,
   ELEMENT_Z2,
@@ -8,7 +8,7 @@ import {
   ANIMATE_CONFIG,
 } from "../../constant";
 
-class EdgeTextElement extends SubElement {
+class EdgeTextElement extends EdgeSubElement {
   type = "edgeLine";
   el = new ZrText();
 
@@ -26,33 +26,6 @@ class EdgeTextElement extends SubElement {
       backgroundColor: "#fff",
     },
   };
-
-  updateStyle(state) {
-    const style = this.style[state];
-    this.el.animateTo(
-      {
-        style,
-      },
-      ANIMATE_CONFIG
-    );
-  }
-
-  toScale1() {
-    // this.el.animateTo(
-    //   {
-    //     scale: SCALE_1,
-    //   },
-    //   ANIMATE_CONFIG
-    // );
-  }
-  toScaleX() {
-    // this.el.animateTo(
-    //   {
-    //     scale: SCALE_X,
-    //   },
-    //   ANIMATE_CONFIG
-    // );
-  }
 
   draw({ x, y, rotation, info }) {
     this.el.attr({
