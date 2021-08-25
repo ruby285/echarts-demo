@@ -1,10 +1,3 @@
-import {
-  Group,
-  Image as ZrImage,
-  Path,
-  Line as ZrLine,
-  Text as ZrText,
-} from "zrender";
 import { getTextPosition, getEdgePoint } from "../util";
 import { ligandMap } from "../group";
 import {
@@ -30,8 +23,6 @@ export class Edge extends Element {
   sourceLigand = null;
   targetLigand = null;
   type = "edge";
-  el = new Group();
-  virtualBtn = null;
   isVirtual = false;
   info = [];
 
@@ -71,7 +62,7 @@ export class Edge extends Element {
     );
     const { x, y, rotation } = getTextPosition(x1, y1, x2, y2, info.length);
 
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       element.draw({ x1, y1, x2, y2, x, y, rotation, info, isVirtual });
     });
   }
@@ -89,10 +80,8 @@ export class Edge extends Element {
     const line = new EdgeLineElement();
     const text = new EdgeTextElement();
     const arrow = new EdgeArrowElement();
-    this.subElements.add(line);
-    this.subElements.add(text);
-    this.subElements.add(arrow);
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.add(line, text, arrow);
+    this.subElements.forEach((element) => {
       this.el.add(element.el);
     });
 

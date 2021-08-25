@@ -1,5 +1,23 @@
+import { Group } from "zrender";
+
+class SubElements {
+  elments = new Set();
+
+  add(...args) {
+    args.forEach((element) => this.elments.add(element));
+  }
+  delete(...args) {
+    args.forEach((element) => this.elments.delete(element));
+  }
+
+  forEach(callback) {
+    Array.from(this.elments).forEach(callback);
+  }
+}
+
 export default class Element {
-  subElements = new Set();
+  el = new Group();
+  subElements = new SubElements();
   state = {
     selected: false,
     hover: false,
@@ -61,31 +79,31 @@ export default class Element {
       }
       return false;
     });
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       element.updateStyle(state);
     });
   }
 
   toScale1() {
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       element.toScale1();
     });
   }
 
   toScaleX() {
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       element.toScaleX();
     });
   }
 
   fadeout() {
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       element.fadeout();
     });
   }
 
   fadein() {
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       element.fadein();
     });
   }

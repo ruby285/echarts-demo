@@ -1,5 +1,5 @@
 import { Image as ZrImage } from "zrender";
-import SubElement from "./subElement";
+import { LigandSubElement } from "./subElement";
 import {
   LIGAND_WIDTH,
   ELEMENT_Z2,
@@ -8,7 +8,7 @@ import {
   ANIMATE_CONFIG,
 } from "../../constant";
 
-class LigandImageElement extends SubElement {
+class LigandImageElement extends LigandSubElement {
   type = "ligandImage";
 
   style = {
@@ -32,22 +32,6 @@ class LigandImageElement extends SubElement {
     },
   };
 
-  toScale1() {
-    this.el.animateTo(
-      {
-        scale: SCALE_1,
-      },
-      ANIMATE_CONFIG
-    );
-  }
-  toScaleX() {
-    this.el.animateTo(
-      {
-        scale: SCALE_X,
-      },
-      ANIMATE_CONFIG
-    );
-  }
   moveTo({ x, y, originX, originY }) {
     this.el.attr({
       origin: [originX, originY],

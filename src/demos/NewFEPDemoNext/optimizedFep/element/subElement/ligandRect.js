@@ -1,5 +1,5 @@
 import { Rect } from "zrender";
-import SubElement from "./subElement";
+import { LigandSubElement } from "./subElement";
 import {
   LIGAND_WIDTH,
   ELEMENT_Z2,
@@ -8,7 +8,7 @@ import {
   ANIMATE_CONFIG,
 } from "../../constant";
 
-class LigandRectElement extends SubElement {
+class LigandRectElement extends LigandSubElement {
   type = "ligandRect";
   el = new Rect({
     shape: {
@@ -37,22 +37,6 @@ class LigandRectElement extends SubElement {
     },
   };
 
-  toScale1() {
-    this.el.animateTo(
-      {
-        scale: SCALE_1,
-      },
-      ANIMATE_CONFIG
-    );
-  }
-  toScaleX() {
-    this.el.animateTo(
-      {
-        scale: SCALE_X,
-      },
-      ANIMATE_CONFIG
-    );
-  }
   moveTo({ x, y, originX, originY }) {
     this.el.attr({
       origin: [originX, originY],

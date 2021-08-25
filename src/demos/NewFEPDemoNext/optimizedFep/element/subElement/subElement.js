@@ -2,6 +2,8 @@ import {
   FADEOUT_OPACITY,
   NORMAL_OPACITY,
   ANIMATE_CONFIG,
+  SCALE_X,
+  SCALE_1,
 } from "../../constant";
 
 class SubElement {
@@ -23,14 +25,30 @@ class SubElement {
       ANIMATE_CONFIG
     );
   }
-  toScale1() {}
-  toScaleX() {}
-  moveTo() {}
   updateStyle(state = "default") {
     const style = this.style[state];
     this.el.animateTo(
       {
         style,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+}
+
+export class LigandSubElement extends SubElement {
+  toScale1() {
+    this.el.animateTo(
+      {
+        scale: SCALE_1,
+      },
+      ANIMATE_CONFIG
+    );
+  }
+  toScaleX() {
+    this.el.animateTo(
+      {
+        scale: SCALE_X,
       },
       ANIMATE_CONFIG
     );

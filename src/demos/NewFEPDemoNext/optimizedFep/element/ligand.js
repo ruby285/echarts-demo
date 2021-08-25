@@ -1,4 +1,3 @@
-import { Group, Image as ZrImage, Rect, Text as ZrText } from "zrender";
 import imgData from "../ligand.png";
 import {
   LIGAND_WIDTH,
@@ -20,7 +19,6 @@ import LigandOrderElement from "./subElement/ligandOrder";
 
 export class Ligand extends Element {
   id = "";
-  el = null;
   edgeMap = new Map();
   type = "ligand";
   order = null;
@@ -61,7 +59,7 @@ export class Ligand extends Element {
     const originY = y + LIGAND_WIDTH_HALF;
     this.position = { x, y, originX, originY };
 
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       element.moveTo({ x, y, originX, originY });
     });
   }
@@ -69,10 +67,9 @@ export class Ligand extends Element {
   init(img = imgData) {
     const image = new LigandImageElement(img);
     const rect = new LigandRectElement();
-    this.subElements.add(image);
-    this.subElements.add(rect);
+    this.subElements.add(image, rect);
 
-    Array.from(this.subElements).forEach((element) => {
+    this.subElements.forEach((element) => {
       this.el.add(element.el);
     });
 
@@ -81,7 +78,6 @@ export class Ligand extends Element {
 
   constructor({ id, firstAdd = false }) {
     super();
-    this.el = new Group();
     this.id = id;
     this.state.firstAdd = firstAdd;
     this.init();
