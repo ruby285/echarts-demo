@@ -1,4 +1,5 @@
 import emitter from "./emitter";
+import { ArrSet } from "../helper";
 
 export class Selector {
   edge = null;
@@ -98,9 +99,9 @@ export class Selector {
   }
 }
 
-export const hoverLigand = new Set();
-export const hoverEdge = new Set();
-export const relatedHoverLigand = new Set();
-export const relatedHoverEdge = new Set();
-export const fateoutLigand = new Set();
-export const fadeoutEdge = new Set();
+export const hoverLigand = new ArrSet();
+export const hoverEdge = new ArrSet();
+export const relatedHoverLigand = new ArrSet();
+export const relatedHoverEdge = new ArrSet();
+export const fateoutLigand = new ArrSet();
+export const fadeoutEdge = new ArrSet();

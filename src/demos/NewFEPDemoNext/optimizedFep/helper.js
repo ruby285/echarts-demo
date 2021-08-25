@@ -1,5 +1,24 @@
 import { vector } from "zrender";
 
+export class ArrSet {
+  elments = new Set();
+
+  add(...args) {
+    args.forEach((element) => this.elments.add(element));
+  }
+  delete(...args) {
+    args.forEach((element) => this.elments.delete(element));
+  }
+
+  clear() {
+    this.elments.clear();
+  }
+
+  forEach(callback) {
+    Array.from(this.elments).forEach(callback);
+  }
+}
+
 export function getEdgePoint(sLigand, tLigand, width) {
   const sAngle = getAngle(sLigand, tLigand);
   const tAngle = getAngle(tLigand, sLigand);
@@ -25,7 +44,47 @@ export function getEdgePoint(sLigand, tLigand, width) {
   return { x1, y1, x2, y2 };
 }
 
-export function getRotation(start, end) {
+export function getTextPosition(x1, y1, x2, y2, n) {
+  const vecX = x2 - x1;
+  const vecY = y2 - y1;
+  const move = 14;
+  const dis = vecMove(vecX, vecY, move);
+  const x = (x2 - x1) / 2 + x1;
+  const y = (y2 - y1) / 2 + y1;
+  const rotation = getRotation({ x: x1, y: y1 }, { x: x2, y: y2 });
+  return {
+    x: x + dis.x * n,
+    y: y - dis.y * n,
+    rotation,
+  };
+}
+
+export function getInitialPos(width, height, isCenter) {
+  const startX = width / 4;
+  const midX = startX * 2;
+  const endX = startX * 3;
+  const startY = height / 4;
+  const midY = startY * 2;
+  const endY = startY * 3;
+  if (isCenter) {
+    return {
+      x: random(startX, endX),
+      y: random(startY, endY),
+    };
+  }
+  let x = random(0, width);
+  let y = random(0, height);
+  if (x > startX && x < midX) x -= startX;
+  if (x > midX && x < endX) x += startX;
+  if (y > startY && y < midY) y -= startY;
+  if (y > midY && y < endY) y += startY;
+  return {
+    x,
+    y,
+  };
+}
+
+function getRotation(start, end) {
   const radian = Math.atan2(start.y - end.y, start.x - end.x);
   const rotation = Math.PI - radian;
   return rotation;
@@ -138,21 +197,6 @@ function segmentsIntr(a, b, c, d) {
   return { x: a.x + dx, y: a.y + dy };
 }
 
-export function getTextPosition(x1, y1, x2, y2, n) {
-  const vecX = x2 - x1;
-  const vecY = y2 - y1;
-  const move = 14;
-  const dis = vecMove(vecX, vecY, move);
-  const x = (x2 - x1) / 2 + x1;
-  const y = (y2 - y1) / 2 + y1;
-  const rotation = getRotation({ x: x1, y: y1 }, { x: x2, y: y2 });
-  return {
-    x: x + dis.x * n,
-    y: y - dis.y * n,
-    rotation,
-  };
-}
-
 function edgeMove(sLigand, tLigand) {
   const vecX = tLigand.x - sLigand.x;
   const vecY = tLigand.y - sLigand.y;
@@ -175,4 +219,7 @@ function vecMove(vecX, vecY, move) {
   const vecResY = (vecX / vecLen) * move;
 
   return { x: vecResX, y: vecResY };
+}
+function random(min, max) {
+  return Math.floor(Math.random() * (max - min)) + min;
 }

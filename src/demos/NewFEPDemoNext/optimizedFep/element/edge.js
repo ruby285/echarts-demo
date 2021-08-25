@@ -1,4 +1,4 @@
-import { getTextPosition, getEdgePoint } from "../util";
+import { getTextPosition, getEdgePoint } from "../helper";
 import { LIGAND_WIDTH } from "../constant";
 import Element from "./element";
 import emitter from "../events/emitter";

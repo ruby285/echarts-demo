@@ -39,7 +39,6 @@ class LigandImageElement extends LigandSubElement {
   constructor(img) {
     super();
     this.el = new ZrImage({
-      opacity: 1,
       style: {
         image: img,
         width: LIGAND_WIDTH,

@@ -8,8 +8,6 @@ import {
   fadeoutEdge,
 } from "./collection";
 
-const forEachSet = (set, callback) => Array.from(set).forEach(callback);
-
 class EventsHandler {
   hoverEl = null;
 
@@ -52,22 +50,22 @@ class EventsHandler {
 
   onMouseOver(el) {
     this.hoverEl = el;
-    forEachSet(hoverLigand, (ligand) => ligand.onHover());
-    forEachSet(fateoutLigand, (ligand) => ligand.fadeout());
-    forEachSet(relatedHoverLigand, (ligand) => ligand.onRelatedHover());
-    forEachSet(hoverEdge, (edge) => edge.onHover());
-    forEachSet(fadeoutEdge, (edge) => edge.fadeout());
-    forEachSet(relatedHoverEdge, (edge) => edge.onRelatedHover());
+    hoverLigand.forEach((ligand) => ligand.onHover());
+    fateoutLigand.forEach((ligand) => ligand.fadeout());
+    relatedHoverLigand.forEach((ligand) => ligand.onRelatedHover());
+    hoverEdge.forEach((edge) => edge.onHover());
+    fadeoutEdge.forEach((edge) => edge.fadeout());
+    relatedHoverEdge.forEach((edge) => edge.onRelatedHover());
   }
 
   onMouseOut() {
     this.hoverEl = null;
-    forEachSet(hoverLigand, (ligand) => ligand.onHoverEnd());
-    forEachSet(fateoutLigand, (ligand) => ligand.fadein());
-    forEachSet(relatedHoverLigand, (ligand) => ligand.onRelatedHoverEnd());
-    forEachSet(hoverEdge, (edge) => edge.onHoverEnd());
-    forEachSet(fadeoutEdge, (edge) => edge.fadein());
-    forEachSet(relatedHoverEdge, (edge) => edge.onRelatedHoverEnd());
+    hoverLigand.forEach((ligand) => ligand.onHoverEnd());
+    fateoutLigand.forEach((ligand) => ligand.fadein());
+    relatedHoverLigand.forEach((ligand) => ligand.onRelatedHoverEnd());
+    hoverEdge.forEach((edge) => edge.onHoverEnd());
+    fadeoutEdge.forEach((edge) => edge.fadein());
+    relatedHoverEdge.forEach((edge) => edge.onRelatedHoverEnd());
     hoverLigand.clear();
     fateoutLigand.clear();
     relatedHoverLigand.clear();

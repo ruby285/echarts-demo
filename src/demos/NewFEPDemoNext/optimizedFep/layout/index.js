@@ -1,31 +1,6 @@
 import FRLayout from "./FRLayout";
 import Graph from "./graph";
-
-const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
-const getInitialPos = (width, height, isCenter) => {
-  const startX = width / 4;
-  const midX = startX * 2;
-  const endX = startX * 3;
-  const startY = height / 4;
-  const midY = startY * 2;
-  const endY = startY * 3;
-  if (isCenter) {
-    return {
-      x: random(startX, endX),
-      y: random(startY, endY),
-    };
-  }
-  let x = random(0, width);
-  let y = random(0, height);
-  if (x > startX && x < midX) x -= startX;
-  if (x > midX && x < endX) x += startX;
-  if (y > startY && y < midY) y -= startY;
-  if (y > midY && y < endY) y += startY;
-  return {
-    x,
-    y,
-  };
-};
+import { getInitialPos } from "../helper";
 
 class Layout {
   updateGraphics() {

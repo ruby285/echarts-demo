@@ -12,7 +12,9 @@ class SubElement {
   fadeout() {
     this.el.animateTo(
       {
-        opacity: FADEOUT_OPACITY,
+        style: {
+          opacity: FADEOUT_OPACITY,
+        },
       },
       ANIMATE_CONFIG
     );
@@ -20,7 +22,9 @@ class SubElement {
   fadein() {
     this.el.animateTo(
       {
-        opacity: NORMAL_OPACITY,
+        style: {
+          opacity: NORMAL_OPACITY,
+        },
       },
       ANIMATE_CONFIG
     );
