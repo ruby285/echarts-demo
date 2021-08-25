@@ -37,6 +37,7 @@ class EventsHandler {
     document.addEventListener("mousemove", mousemove);
     document.addEventListener("mouseup", mouseup);
   }
+
   onMouseWheel(ev) {
     const { event, wheelDelta } = ev;
     const room = this.ctx.room;

@@ -219,8 +219,12 @@ export class Ligand extends Element {
       style: {
         fill: "none",
         stroke: "#000",
+        // lineWidth: 2,
+        // lineDash: [1, 2],
+        // strokeNoScale: true,
       },
       shape: {
+        // r: 10,
         width: LIGAND_WIDTH,
         height: LIGAND_WIDTH,
       },

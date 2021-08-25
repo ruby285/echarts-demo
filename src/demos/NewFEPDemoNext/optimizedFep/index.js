@@ -49,7 +49,10 @@ class FepChart {
 
   init(parent, dom, ligands = mockLigands, edges = mockEdges) {
     this.initRoom(parent, dom, ligands.length);
+    // this.renderer = init(dom, { devicePixelRatio: 2 });
+    // this.renderer = init(dom, { renderer: "vml" });
     this.renderer = init(dom);
+
     this.initGroup(ligands, edges);
     this.initLayout(ligands, edges);
     this.initEvents();
