@@ -1,5 +1,5 @@
 import FRLayout from "./FRLayout";
-import Graph from "./Graph";
+import Graph from "./graph";
 
 const random = (min, max) => Math.floor(Math.random() * (max - min)) + min;
 const getInitialPos = (width, height, isCenter) => {

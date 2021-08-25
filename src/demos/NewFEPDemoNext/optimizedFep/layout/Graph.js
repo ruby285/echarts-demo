@@ -1,4 +1,4 @@
-import Vertex from "./Vertex";
+import Vertex from "./vertex";
 
 class Graph {
   constructor(vertices = [], edges = []) {

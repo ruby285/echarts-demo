@@ -1,4 +1,5 @@
 export default class Element {
+  subElements = new Set();
   state = {
     selected: false,
     hover: false,
@@ -51,19 +52,41 @@ export default class Element {
   }
 
   updateStyle() {
-    const { selected, hover, relatedHover, firstAdd } = this.state;
-    if (selected) {
-      return this._updateStyle(this.style.selected);
-    }
-    if (hover) {
-      return this._updateStyle(this.style.hover);
-    }
-    if (relatedHover) {
-      return this._updateStyle(this.style.relatedHover);
-    }
-    if (firstAdd) {
-      return this._updateStyle(this.style.firstAdd);
-    }
-    return this._updateStyle(this.style.default);
+    const stateList = ["selected", "hover", "relatedHover", "firstAdd"];
+    let state = "default";
+    stateList.some((s) => {
+      if (this.state[s]) {
+        state = s;
+        return true;
+      }
+      return false;
+    });
+    Array.from(this.subElements).forEach((element) => {
+      element.updateStyle(state);
+    });
+  }
+
+  toScale1() {
+    Array.from(this.subElements).forEach((element) => {
+      element.toScale1();
+    });
+  }
+
+  toScaleX() {
+    Array.from(this.subElements).forEach((element) => {
+      element.toScaleX();
+    });
+  }
+
+  fadeout() {
+    Array.from(this.subElements).forEach((element) => {
+      element.fadeout();
+    });
+  }
+
+  fadein() {
+    Array.from(this.subElements).forEach((element) => {
+      element.fadein();
+    });
   }
 }
