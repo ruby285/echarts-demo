@@ -65,8 +65,15 @@ class FRLayout {
           .normalize()
           .multiplyConst(Math.min(v.disp.mag() / 100, this.temp * 0.1))
       );
-      v.pos.x = Math.min(this.width, Math.max(0.0, v.pos.x));
-      v.pos.y = Math.min(this.height, Math.max(0.0, v.pos.y));
+      const spare = 0.04;
+      const minW = this.width * spare;
+      const maxW = this.width * (1 - spare);
+      const minH = this.height * spare;
+      const maxH = this.height * (1 - spare);
+      v.pos.x = Math.min(maxW, Math.max(minW, v.pos.x));
+      v.pos.y = Math.min(maxH, Math.max(minH, v.pos.y));
+      // v.pos.x = Math.min(this.width, Math.max(0.0, v.pos.x));
+      // v.pos.y = Math.min(this.height, Math.max(0.0, v.pos.y));
     });
   }
 
