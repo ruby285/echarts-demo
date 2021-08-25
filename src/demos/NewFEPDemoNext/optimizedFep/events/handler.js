@@ -20,7 +20,22 @@ class EventsHandler {
 
   onMouseDown(ev) {
     if (ev.target) return;
-    console.log("onMouseDown");
+    const room = this.ctx.room;
+    let { pageX: startX, pageY: startY } = ev.event;
+    const mousemove = (ev) => {
+      const { pageX: endX, pageY: endY } = ev;
+      const disX = startX - endX;
+      const disY = startY - endY;
+      room.move(disX, disY);
+      startX = endX;
+      startY = endY;
+    };
+    const mouseup = (ev) => {
+      document.removeEventListener("mousemove", mousemove);
+      document.removeEventListener("mouseup", mouseup);
+    };
+    document.addEventListener("mousemove", mousemove);
+    document.addEventListener("mouseup", mouseup);
   }
   onMouseWheel(ev) {
     const { event, wheelDelta } = ev;
@@ -33,7 +48,7 @@ class EventsHandler {
       room.zoomOut(wheelDelta);
     }
     // if (ev.target) return;
-    console.log("onMouseWheel", wheelDelta);
+    // console.log("onMouseWheel", wheelDelta);
     // console.log("onMouseWheel", wheelDelta, ev);
   }
 

@@ -52,6 +52,22 @@ class Room {
     this.dom.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
   }
 
+  move(x, y) {
+    if (this.scale <= this.minScale) return;
+    const width = this.width / this.scale;
+    const height = this.height / this.scale;
+    const parentW = this.parent.offsetWidth;
+    const parentH = this.parent.offsetHeight;
+    const disW = (parentW - width) * this.scale;
+    const minX = (disW - width) / 2;
+    const maxX = -(disW + width) / 2;
+    this.translateX -= x;
+    this.translateY -= y;
+    if (this.translateX < minX) this.translateX = minX;
+    if (this.translateX > maxX) this.translateX = maxX;
+    this.dom.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+  }
+
   constructor(parent, dom) {
     this.parent = parent;
     this.dom = dom;
