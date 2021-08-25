@@ -3,37 +3,41 @@ const baseMolNum = 20;
 const baseArea = (1000 * 1000) / baseMolNum;
 
 class Room {
+  parentWidth = 0;
+  parentHeight = 0;
   width = 0;
   height = 0;
   scale = 1;
   maxScale = 2;
   minScale = 1;
+  otx = 0;
+  oty = 0;
   translateX = 0;
   translateY = 0;
 
   init(len) {
-    const parentW = this.parent.offsetWidth;
-    const parentH = this.parent.offsetHeight;
-    const parentArea = parentW * parentH;
+    this.parentWidth = this.parent.offsetWidth;
+    this.parentHeight = this.parent.offsetHeight;
+    const parentArea = this.parentWidth * this.parentHeight;
     const molNum = Math.floor(parentArea / baseArea);
     const molScale = len / molNum;
 
     if (molScale < 1) {
-      this.width = parentW;
-      this.height = parentH;
+      this.width = this.parentWidth;
+      this.height = this.parentHeight;
     } else {
       const edgeScale = Math.sqrt(molScale);
       this.scale = 1 / edgeScale;
       this.minScale = 1 / edgeScale;
-      this.width = parentW * edgeScale;
-      this.height = parentH * edgeScale;
+      this.width = this.parentWidth * edgeScale;
+      this.height = this.parentHeight * edgeScale;
     }
 
-    this.translateX = -this.width / 2;
-    this.translateY = -this.height / 2;
+    this.otx = -this.width / 2;
+    this.oty = -this.height / 2;
     this.dom.style.width = this.width + "px";
     this.dom.style.height = this.height + "px";
-    this.dom.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+    this.transform({ translateX: this.otx, translateY: this.oty });
   }
 
   // 放大
@@ -41,7 +45,7 @@ class Room {
     if (this.scale === this.maxScale) return;
     this.scale += delta / 100;
     if (this.scale > this.maxScale) this.scale = this.maxScale;
-    this.dom.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+    this.transform();
   }
 
   // 缩小
@@ -49,22 +53,42 @@ class Room {
     if (this.scale <= this.minScale) return;
     this.scale += delta / 100;
     if (this.scale < this.minScale) this.scale = this.minScale;
-    this.dom.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
+    this.checkTransPosition();
+    this.transform();
   }
 
   move(x, y) {
     if (this.scale <= this.minScale) return;
-    const width = this.width / this.scale;
-    const height = this.height / this.scale;
-    const parentW = this.parent.offsetWidth;
-    const parentH = this.parent.offsetHeight;
-    const disW = (parentW - width) * this.scale;
-    const minX = (disW - width) / 2;
-    const maxX = -(disW + width) / 2;
     this.translateX -= x;
     this.translateY -= y;
+    this.checkTransPosition();
+    this.transform();
+  }
+
+  checkTransPosition() {
+    const width = this.width * this.scale;
+    const height = this.height * this.scale;
+    const disX = (width - this.parentWidth) / 2;
+    const disY = (height - this.parentHeight) / 2;
+    const maxX = this.otx + disX;
+    const minX = this.otx - disX;
+    const maxY = this.oty + disY;
+    const minY = this.oty - disY;
     if (this.translateX < minX) this.translateX = minX;
     if (this.translateX > maxX) this.translateX = maxX;
+    if (this.translateY < minY) this.translateY = minY;
+    if (this.translateY > maxY) this.translateY = maxY;
+  }
+
+  transform(params = {}) {
+    const {
+      translateX = this.translateX,
+      translateY = this.translateY,
+      scale = this.scale,
+    } = params;
+    this.translateX = translateX;
+    this.translateY = translateY;
+    this.scale = scale;
     this.dom.style.transform = `translate(${this.translateX}px, ${this.translateY}px) scale(${this.scale})`;
   }
 
