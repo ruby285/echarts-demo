@@ -1,16 +1,5 @@
 import imgData from "../ligand.png";
-import {
-  LIGAND_WIDTH,
-  LIGAND_WIDTH_HALF,
-  SCALE_1,
-  SCALE_X,
-  EDGE_WIDTH,
-  EDGE_SCALE_WIDTH,
-  NORMAL_OPACITY,
-  FADEOUT_OPACITY,
-  ANIMATE_CONFIG,
-  ELEMENT_Z2,
-} from "../constant";
+import { LIGAND_WIDTH_HALF } from "../constant";
 import Element from "./element";
 import emitter from "../events/emitter";
 
@@ -20,7 +9,7 @@ import {
   LigandOrderElement,
 } from "./subElement";
 
-export class Ligand extends Element {
+class LigandElement extends Element {
   id = "";
   edgeMap = new Map();
   type = "ligand";
@@ -90,3 +79,5 @@ export class Ligand extends Element {
     this.el.on("mouseout", (ev) => emitter.emit("mouseout", this, ev));
   }
 }
+
+export default LigandElement;

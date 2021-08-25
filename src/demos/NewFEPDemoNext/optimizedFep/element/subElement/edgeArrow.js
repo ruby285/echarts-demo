@@ -10,14 +10,12 @@ import {
 
 const Arrow = Path.extend({
   type: "arrow",
-
   shape: {
     x: 0,
     y: 0,
     width: 0,
     height: 0,
   },
-
   buildPath: function (ctx, shape) {
     const height = shape.height;
     const width = shape.width;

@@ -1,17 +1,5 @@
 import { getTextPosition, getEdgePoint } from "../util";
-import { ligandMap } from "../group";
-import {
-  LIGAND_WIDTH,
-  LIGAND_WIDTH_HALF,
-  SCALE_1,
-  SCALE_X,
-  EDGE_WIDTH,
-  EDGE_SCALE_WIDTH,
-  NORMAL_OPACITY,
-  FADEOUT_OPACITY,
-  ANIMATE_CONFIG,
-  ELEMENT_Z2,
-} from "../constant";
+import { LIGAND_WIDTH } from "../constant";
 import Element from "./element";
 import emitter from "../events/emitter";
 
@@ -21,32 +9,13 @@ import {
   EdgeArrowElement,
 } from "./subElement";
 
-export class Edge extends Element {
+class EdgeElement extends Element {
   id = "";
   sourceLigand = null;
   targetLigand = null;
   type = "edge";
   isVirtual = false;
   info = [];
-
-  initRealisticBtn() {
-    this.deleteBtn = new EdgeButton({
-      text: "delete edge",
-      type: "deleteEdge",
-      edge: this,
-    });
-    this.calculationBtn = new EdgeButton({
-      text: "add to calculation queue",
-      type: "calculation",
-      edge: this,
-    });
-    this.el.add(this.deleteBtn.el);
-    this.el.add(this.calculationBtn.el);
-    if (!this.state.selected) {
-      this.deleteBtn.hide();
-      this.calculationBtn.hide();
-    }
-  }
 
   toRealistic() {
     this.isVirtual = false;
@@ -70,7 +39,7 @@ export class Edge extends Element {
     });
   }
 
-  constructor({ id, source, target, info, isVirtual = false }) {
+  constructor({ id, source, target, info, isVirtual = false, ligandMap }) {
     super();
     this.id = id;
     this.info = info;
@@ -93,3 +62,5 @@ export class Edge extends Element {
     this.el.on("mouseout", (ev) => emitter.emit("mouseout", this, ev));
   }
 }
+
+export default EdgeElement;

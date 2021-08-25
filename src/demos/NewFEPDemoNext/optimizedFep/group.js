@@ -1,16 +1,16 @@
 import { Group } from "zrender";
-import { Ligand, Edge } from "./element";
+import { LigandElement, EdgeElement } from "./element";
 import imgData from "./ligand.png";
 
-export const ligandMap = new Map();
-export const edgeMap = new Map();
+const ligandMap = new Map();
+const edgeMap = new Map();
 
 export class ligandGroup {
   group = new Group();
   map = ligandMap;
   acSize = 0;
   add(props) {
-    const ligand = new Ligand({ ...props, img: imgData });
+    const ligand = new LigandElement({ ...props, img: imgData });
     ligandMap.set(props.id, ligand);
     this.group.add(ligand.el);
     this.acSize++;
@@ -36,7 +36,7 @@ export class EdgeGroup {
   group = new Group();
   map = edgeMap;
   add(props) {
-    const edge = new Edge(props);
+    const edge = new EdgeElement({ ...props, ligandMap });
     edgeMap.set(props.id, edge);
     this.group.add(edge.el);
     return edge;

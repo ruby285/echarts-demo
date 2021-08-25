@@ -1,2 +1,2 @@
-export { Ligand } from "./ligand";
-export { Edge } from "./edge";
+export { default as LigandElement } from "./ligand";
+export { default as EdgeElement } from "./edge";

@@ -1,17 +1,9 @@
 import { Text as ZrText } from "zrender";
 import { LigandSubElement } from "./subElement";
-import {
-  LIGAND_WIDTH,
-  ELEMENT_Z2,
-  SCALE_X,
-  SCALE_1,
-  ANIMATE_CONFIG,
-} from "../../constant";
+import { ELEMENT_Z2 } from "../../constant";
 
 class LigandOrderElement extends LigandSubElement {
   type = "ligandRect";
-
-  style = {};
 
   updateStyle() {}
 

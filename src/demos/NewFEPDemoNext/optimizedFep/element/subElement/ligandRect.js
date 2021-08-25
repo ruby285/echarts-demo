@@ -1,12 +1,6 @@
 import { Rect } from "zrender";
 import { LigandSubElement } from "./subElement";
-import {
-  LIGAND_WIDTH,
-  ELEMENT_Z2,
-  SCALE_X,
-  SCALE_1,
-  ANIMATE_CONFIG,
-} from "../../constant";
+import { LIGAND_WIDTH, ELEMENT_Z2 } from "../../constant";
 
 class LigandRectElement extends LigandSubElement {
   type = "ligandRect";

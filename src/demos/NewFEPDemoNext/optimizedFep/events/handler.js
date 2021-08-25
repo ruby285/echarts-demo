@@ -48,9 +48,6 @@ class EventsHandler {
     } else {
       room.zoomOut(wheelDelta);
     }
-    // if (ev.target) return;
-    // console.log("onMouseWheel", wheelDelta);
-    // console.log("onMouseWheel", wheelDelta, ev);
   }
 
   onMouseOver(el) {

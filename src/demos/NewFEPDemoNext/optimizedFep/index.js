@@ -8,9 +8,8 @@ import emitter from "./events/emitter";
 
 // TODO: 布局计算的优化
 
-// TODO: 代码优化 70%
-// TODO-BUG:  selector order / delete edge button position
-// TODO: 按钮的交互样式
+// TODO: 代码优化 90%
+// TODO-BUG:  selector order
 // TODO: 样式优化
 // TODO: more
 
@@ -50,6 +49,7 @@ class FepChart {
     this.initRoom(parent, dom, ligands.length);
     // this.renderer = init(dom, { devicePixelRatio: 2 });
     // this.renderer = init(dom, { renderer: "vml" });
+    // this.renderer = init(dom, { renderer: "svg" });
     this.renderer = init(dom);
 
     this.initGroup(ligands, edges);
