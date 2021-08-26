@@ -1,33 +1,34 @@
 import { Rect } from "zrender";
 import { LigandSubElement } from "./subElement";
-import { LIGAND_WIDTH, ELEMENT_Z2 } from "../../constant";
+import { LIGAND_RECT_STYLE } from "../../constant";
 
 class LigandRectElement extends LigandSubElement {
   type = "ligandRect";
   el = new Rect({
     shape: {
-      width: LIGAND_WIDTH,
-      height: LIGAND_WIDTH,
+      r: LIGAND_RECT_STYLE.INITIAL.RADIUS,
+      width: LIGAND_RECT_STYLE.INITIAL.WIDTH,
+      height: LIGAND_RECT_STYLE.INITIAL.HEIGHT,
     },
-    z2: ELEMENT_Z2,
+    z2: LIGAND_RECT_STYLE.INITIAL.ZLEVEL_THIRD,
   });
 
   style = {
     selected: {
-      stroke: "#f00",
+      stroke: LIGAND_RECT_STYLE.SELECTED.STROKE,
     },
     hover: {
-      stroke: "#ff0",
+      stroke: LIGAND_RECT_STYLE.HOVER.STROKE,
     },
     relatedHover: {
-      stroke: "#000",
+      stroke: LIGAND_RECT_STYLE.RELATEDHOVER.STROKE,
     },
     firstAdd: {
-      stroke: "#f0f",
+      stroke: LIGAND_RECT_STYLE.FIRSTADD.STROKE,
     },
     default: {
-      fill: "rgba(0,0,0,0)",
-      stroke: "#000",
+      fill: LIGAND_RECT_STYLE.DEFAULT.FILL,
+      stroke: LIGAND_RECT_STYLE.DEFAULT.STROKE,
     },
   };
 

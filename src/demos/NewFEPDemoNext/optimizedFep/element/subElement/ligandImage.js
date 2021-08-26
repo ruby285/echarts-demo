@@ -1,28 +1,28 @@
 import { Image as ZrImage } from "zrender";
 import { LigandSubElement } from "./subElement";
-import { LIGAND_WIDTH, ELEMENT_Z2 } from "../../constant";
+import { LIGAND_WIDTH, ELEMENT_Z2, LIGAND_IMAGE_STYLE } from "../../constant";
 
 class LigandImageElement extends LigandSubElement {
   type = "ligandImage";
 
   style = {
     selected: {
-      shadowColor: "#f00",
-      shadowBlur: 20,
+      shadowColor: LIGAND_IMAGE_STYLE.SELECTED.SHADOWCOLOR,
+      shadowBlur: LIGAND_IMAGE_STYLE.SELECTED.SHADOWBLUR,
     },
     hover: {
-      shadowColor: "#ff0",
-      shadowBlur: 20,
+      shadowColor: LIGAND_IMAGE_STYLE.HOVER.SHADOWCOLOR,
+      shadowBlur: LIGAND_IMAGE_STYLE.HOVER.SHADOWBLUR,
     },
     relatedHover: {
-      shadowBlur: 0,
+      shadowBlur: LIGAND_IMAGE_STYLE.RELATEDHOVER.SHADOWBLUR,
     },
     firstAdd: {
-      shadowColor: "#f0f",
-      shadowBlur: 20,
+      shadowColor: LIGAND_IMAGE_STYLE.FIRSTADD.SHADOWCOLOR,
+      shadowBlur: LIGAND_IMAGE_STYLE.FIRSTADD.SHADOWBLUR,
     },
     default: {
-      shadowBlur: 0,
+      shadowBlur: LIGAND_IMAGE_STYLE.DEFAULT.SHADOWBLUR,
     },
   };
 
@@ -41,10 +41,10 @@ class LigandImageElement extends LigandSubElement {
     this.el = new ZrImage({
       style: {
         image: img,
-        width: LIGAND_WIDTH,
-        height: LIGAND_WIDTH,
+        width: LIGAND_IMAGE_STYLE.INITIAL.WIDTH,
+        height: LIGAND_IMAGE_STYLE.INITIAL.HEIGHT,
       },
-      z2: ELEMENT_Z2,
+      z2: LIGAND_IMAGE_STYLE.INITIAL.ZLEVEL_THIRD,
     });
   }
 }

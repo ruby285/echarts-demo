@@ -14,8 +14,8 @@
   position: absolute;
   top: 50%;
   left: 50%;
+  background-color: #f8f8fc;
   /* transform: translate(-50vw, -50vh) scale(0.9);
-  background-color: #fff;
   width: 100vw;
   height: 100vh; */
 }
