@@ -26,10 +26,10 @@ class LigandElement extends Element {
     if (this.order) {
       this.order.updateIdx(idx);
     } else {
-      this.order = new LigandOrderElement({ idx, x, y });
+      const hover = this.state.hover;
+      this.order = new LigandOrderElement({ idx, x, y, hover });
       this.subElements.add(this.order);
       this.el.add(this.order.el);
-      this.order.toScaleX();
     }
     super.onSelected();
   }
