@@ -1,5 +1,5 @@
-const ligandNum = 3;
-const step = 2;
+const ligandNum = 60;
+const step = 4;
 const edgeNum = Math.floor(ligandNum / step);
 export const mockLigands = new Array(ligandNum).fill("").map((n, i) => ({
   id: "" + i,
