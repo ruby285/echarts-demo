@@ -9,6 +9,7 @@ import {
 class SubElement {
   el = null;
   style = {};
+  state = "default";
   fadeout() {
     this.el.animateTo(
       {
@@ -30,6 +31,7 @@ class SubElement {
     );
   }
   updateStyle(state = "default") {
+    this.state = state;
     const style = this.style[state];
     this.el.animateTo(
       {

@@ -6,32 +6,19 @@ class LigandImageElement extends LigandSubElement {
   type = "ligandImage";
 
   style = {
-    selected: {
-      shadowColor: LIGAND_IMAGE_STYLE.SELECTED.SHADOWCOLOR,
-      shadowBlur: LIGAND_IMAGE_STYLE.SELECTED.SHADOWBLUR,
-    },
-    hover: {
-      shadowColor: LIGAND_IMAGE_STYLE.HOVER.SHADOWCOLOR,
-      shadowBlur: LIGAND_IMAGE_STYLE.HOVER.SHADOWBLUR,
-    },
-    relatedHover: {
-      shadowBlur: LIGAND_IMAGE_STYLE.RELATEDHOVER.SHADOWBLUR,
-    },
-    firstAdd: {
-      shadowColor: LIGAND_IMAGE_STYLE.FIRSTADD.SHADOWCOLOR,
-      shadowBlur: LIGAND_IMAGE_STYLE.FIRSTADD.SHADOWBLUR,
-    },
-    default: {
-      shadowBlur: LIGAND_IMAGE_STYLE.DEFAULT.SHADOWBLUR,
-    },
+    selected: {},
+    hover: {},
+    relatedHover: {},
+    firstAdd: {},
+    default: {},
   };
 
   moveTo({ x, y, originX, originY }) {
     this.el.attr({
       origin: [originX, originY],
       style: {
-        x,
-        y,
+        x: x + LIGAND_IMAGE_STYLE.POSITION.OFFSET,
+        y: y + LIGAND_IMAGE_STYLE.POSITION.OFFSET,
       },
     });
   }

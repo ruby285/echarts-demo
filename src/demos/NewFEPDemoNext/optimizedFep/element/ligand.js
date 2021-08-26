@@ -7,6 +7,7 @@ import {
   LigandRectElement,
   LigandImageElement,
   LigandOrderElement,
+  LigandBgRectElement,
 } from "./subElement";
 
 class LigandElement extends Element {
@@ -61,9 +62,10 @@ class LigandElement extends Element {
     this.id = id;
     this.state.firstAdd = firstAdd;
 
+    const bgRect = new LigandBgRectElement();
     const image = new LigandImageElement(img);
     const rect = new LigandRectElement();
-    this.subElements.add(image, rect);
+    this.subElements.add(bgRect, image, rect);
 
     this.subElements.forEach((element) => {
       this.el.add(element.el);
