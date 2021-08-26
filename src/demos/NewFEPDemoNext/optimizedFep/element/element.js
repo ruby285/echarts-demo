@@ -5,6 +5,7 @@ export default class Element {
   el = new Group();
   subElements = new ArrSet();
   state = {
+    virtual: false,
     selected: false,
     hover: false,
     relatedHover: false,
@@ -56,7 +57,13 @@ export default class Element {
   }
 
   updateStyle() {
-    const stateList = ["selected", "hover", "relatedHover", "firstAdd"];
+    const stateList = [
+      "virtual",
+      "selected",
+      "hover",
+      "relatedHover",
+      "firstAdd",
+    ];
     let state = "default";
     stateList.some((s) => {
       if (this.state[s]) {

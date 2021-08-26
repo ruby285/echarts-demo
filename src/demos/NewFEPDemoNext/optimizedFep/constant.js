@@ -2,17 +2,32 @@ export const LIGAND_WIDTH = 100;
 export const LIGAND_WIDTH_HALF = LIGAND_WIDTH / 2;
 export const SCALE_1 = [1, 1];
 export const SCALE_X = [1.5, 1.5];
-export const EDGE_WIDTH = 1;
-export const EDGE_SCALE_WIDTH = 10;
 export const NORMAL_OPACITY = 1;
 export const FADEOUT_OPACITY = 0.1;
 export const ELEMENT_Z2 = 100;
+
 const LIGAND_RADIUS = 4;
 const LIGAND_SELECTED_COLOR = "#3E4BD5";
 const LIGAND_HOVER_COLOR = "#93e8ed";
-const LIGAND_FIRSTADD_COLOR = "#f0f";
+const LIGAND_FIRSTADD_COLOR = "#C6A3FF";
 const LIGAND_DEFAULT_SHADOWBLUR = 0;
 const LIGAND_HIGHLIGHT_SHADOWBLUR = 14;
+const LIGAND_STROKE_WIDTH = 2;
+const LIGAND_INITIAL_FILL = "rgba(0,0,0,0)";
+
+const EDGE_DEFAULT_COLOR = "#373B3E";
+const EDGE_HOVER_COLOR = "#061D75";
+const EDGE_VIRTUAL_COLOR = "#E07575";
+const EDGE_STROKE_WIDTH = 1.5;
+const EDGE_VISUAL_LINEDASH = [2, 6];
+const EDGE_TEXT_FILL1 = "#A291F8";
+const EDGE_TEXT_FILL2 = "#75E0BC";
+const EDGE_TEXT_FILL3 = "#64A1F9";
+const EDGE_TEXT_ALIGIN = "center";
+const EDGE_ARROW_WIDTH = 10;
+
+const ANIMATE_DURATION = 200;
+const ANIMATE_EASING = "cubicOut";
 
 export const LIGAND_RECT_STYLE = {
   SELECTED: {
@@ -28,14 +43,15 @@ export const LIGAND_RECT_STYLE = {
     STROKE: LIGAND_FIRSTADD_COLOR,
   },
   DEFAULT: {
-    FILL: "rgba(0,0,0,0)",
     STROKE: null,
   },
   INITIAL: {
+    FILL: LIGAND_INITIAL_FILL,
     RADIUS: LIGAND_RADIUS,
     WIDTH: LIGAND_WIDTH,
     HEIGHT: LIGAND_WIDTH,
     ZLEVEL_THIRD: ELEMENT_Z2,
+    LINEWIDTH: LIGAND_STROKE_WIDTH,
   },
 };
 
@@ -65,7 +81,74 @@ export const LIGAND_IMAGE_STYLE = {
   },
 };
 
+export const EDGE_LINE_STYLE = {
+  VIRTUAL: {
+    STROKE: EDGE_VIRTUAL_COLOR,
+  },
+  SELECTED: {
+    STROKE: LIGAND_SELECTED_COLOR,
+  },
+  HOVER: {
+    STROKE: EDGE_HOVER_COLOR,
+  },
+  RELATEDHOVER: {
+    STROKE: EDGE_DEFAULT_COLOR,
+  },
+  DEFAULT: {
+    STROKE: EDGE_DEFAULT_COLOR,
+  },
+  INITIAL: {
+    LINEWIDTH: EDGE_STROKE_WIDTH,
+    LINEDASH: EDGE_VISUAL_LINEDASH,
+  },
+};
+export const EDGE_TEXT_STYLE = {
+  VIRTUAL: {
+    Fill: EDGE_VIRTUAL_COLOR,
+  },
+  SELECTED: {
+    Fill: LIGAND_SELECTED_COLOR,
+  },
+  HOVER: {
+    Fill: EDGE_HOVER_COLOR,
+  },
+  RELATEDHOVER: {
+    Fill1: EDGE_TEXT_FILL1,
+    Fill2: EDGE_TEXT_FILL2,
+    Fill3: EDGE_TEXT_FILL3,
+  },
+  DEFAULT: {
+    Fill1: EDGE_TEXT_FILL1,
+    Fill2: EDGE_TEXT_FILL2,
+    Fill3: EDGE_TEXT_FILL3,
+  },
+  INITIAL: {
+    ALIGN: EDGE_TEXT_ALIGIN,
+  },
+};
+export const EDGE_ARROW_STYLE = {
+  VIRTUAL: {
+    FILL: EDGE_VIRTUAL_COLOR,
+  },
+  SELECTED: {
+    FILL: LIGAND_SELECTED_COLOR,
+  },
+  HOVER: {
+    FILL: EDGE_HOVER_COLOR,
+  },
+  RELATEDHOVER: {
+    FILL: EDGE_DEFAULT_COLOR,
+  },
+  DEFAULT: {
+    FILL: EDGE_DEFAULT_COLOR,
+  },
+  INITIAL: {
+    WIDTH: EDGE_ARROW_WIDTH,
+    HEIGHT: EDGE_ARROW_WIDTH,
+  },
+};
+
 export const ANIMATE_CONFIG = {
-  duration: 200,
-  easing: "cubicOut",
+  duration: ANIMATE_DURATION,
+  easing: ANIMATE_EASING,
 };

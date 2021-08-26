@@ -56,7 +56,11 @@ class LigandElement extends Element {
     });
   }
 
-  init(img = imgData) {
+  constructor({ id, img = imgData, firstAdd = false }) {
+    super();
+    this.id = id;
+    this.state.firstAdd = firstAdd;
+
     const image = new LigandImageElement(img);
     const rect = new LigandRectElement();
     this.subElements.add(image, rect);
@@ -66,13 +70,6 @@ class LigandElement extends Element {
     });
 
     this.updateStyle();
-  }
-
-  constructor({ id, firstAdd = false }) {
-    super();
-    this.id = id;
-    this.state.firstAdd = firstAdd;
-    this.init();
 
     this.el.on("click", (ev) => emitter.emit("click", this, ev));
     this.el.on("mouseover", (ev) => emitter.emit("mouseover", this, ev));

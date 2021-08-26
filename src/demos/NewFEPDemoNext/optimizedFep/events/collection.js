@@ -59,14 +59,14 @@ export class Selector {
         source: sourceLigand.id,
         target: targetLigand.id,
         info: ["lalala"],
-        isVirtual: true,
+        virtual: true,
       });
     }
     this.edge = edge;
   }
 
   checkVirtualEdge() {
-    if (!this.edge || !this.edge.isVirtual) return;
+    if (!this.edge || !this.edge.state.virtual) return;
     emitter.emit("deleteEdge", this.edge);
     this.edge = null;
   }

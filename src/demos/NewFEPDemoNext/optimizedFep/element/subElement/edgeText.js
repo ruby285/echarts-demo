@@ -1,23 +1,76 @@
 import { Text as ZrText } from "zrender";
 import { EdgeSubElement } from "./subElement";
-import { LIGAND_WIDTH } from "../../constant";
+import { EDGE_TEXT_STYLE } from "../../constant";
 
 class EdgeTextElement extends EdgeSubElement {
   type = "edgeText";
   el = new ZrText();
 
   style = {
+    virtual: {
+      rich: {
+        line1: {
+          fill: EDGE_TEXT_STYLE.VIRTUAL.Fill,
+        },
+        line2: {
+          fill: EDGE_TEXT_STYLE.VIRTUAL.Fill,
+        },
+        line3: {
+          fill: EDGE_TEXT_STYLE.VIRTUAL.Fill,
+        },
+      },
+    },
     selected: {
-      backgroundColor: "#f00",
+      rich: {
+        line1: {
+          fill: EDGE_TEXT_STYLE.SELECTED.Fill,
+        },
+        line2: {
+          fill: EDGE_TEXT_STYLE.SELECTED.Fill,
+        },
+        line3: {
+          fill: EDGE_TEXT_STYLE.SELECTED.Fill,
+        },
+      },
     },
     hover: {
-      backgroundColor: "#ff0",
+      rich: {
+        line1: {
+          fill: EDGE_TEXT_STYLE.HOVER.Fill,
+        },
+        line2: {
+          fill: EDGE_TEXT_STYLE.HOVER.Fill,
+        },
+        line3: {
+          fill: EDGE_TEXT_STYLE.HOVER.Fill,
+        },
+      },
     },
     relatedHover: {
-      backgroundColor: "#fff",
+      rich: {
+        line1: {
+          fill: EDGE_TEXT_STYLE.RELATEDHOVER.Fill1,
+        },
+        line2: {
+          fill: EDGE_TEXT_STYLE.RELATEDHOVER.Fill2,
+        },
+        line3: {
+          fill: EDGE_TEXT_STYLE.RELATEDHOVER.Fill3,
+        },
+      },
     },
     default: {
-      backgroundColor: "#fff",
+      rich: {
+        line1: {
+          fill: EDGE_TEXT_STYLE.DEFAULT.Fill1,
+        },
+        line2: {
+          fill: EDGE_TEXT_STYLE.DEFAULT.Fill2,
+        },
+        line3: {
+          fill: EDGE_TEXT_STYLE.DEFAULT.Fill3,
+        },
+      },
     },
   };
 
@@ -27,19 +80,8 @@ class EdgeTextElement extends EdgeSubElement {
       y,
       rotation,
       style: {
-        text: info.map((item, i) => `{a${i + 1}|${item}}`).join("\n"),
-        align: "center",
-        rich: {
-          a1: {
-            fill: "red",
-          },
-          a2: {
-            fill: "green",
-          },
-          a3: {
-            fill: "blue",
-          },
-        },
+        text: info.map((item, i) => `{line${i + 1}|${item}}`).join("\n"),
+        align: EDGE_TEXT_STYLE.INITIAL.ALIGN,
       },
     });
   }

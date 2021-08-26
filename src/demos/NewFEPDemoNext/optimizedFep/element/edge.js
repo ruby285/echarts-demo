@@ -14,17 +14,16 @@ class EdgeElement extends Element {
   sourceLigand = null;
   targetLigand = null;
   type = "edge";
-  isVirtual = false;
   info = [];
 
   toRealistic() {
-    this.isVirtual = false;
+    this.state.virtual = false;
     this.updateStyle();
   }
 
   reDraw() {
     const info = this.info;
-    const isVirtual = this.isVirtual;
+    const virtual = this.state.virtual;
     const { originX: sX, originY: sy } = this.sourceLigand.position;
     const { originX: tX, originY: ty } = this.targetLigand.position;
     const { x1, y1, x2, y2 } = getEdgePoint(
@@ -35,15 +34,15 @@ class EdgeElement extends Element {
     const { x, y, rotation } = getTextPosition(x1, y1, x2, y2, info.length);
 
     this.subElements.forEach((element) => {
-      element.draw({ x1, y1, x2, y2, x, y, rotation, info, isVirtual });
+      element.draw({ x1, y1, x2, y2, x, y, rotation, info, virtual });
     });
   }
 
-  constructor({ id, source, target, info, isVirtual = false, ligandMap }) {
+  constructor({ id, source, target, info, virtual = false, ligandMap }) {
     super();
     this.id = id;
     this.info = info;
-    this.isVirtual = isVirtual;
+    this.state.virtual = virtual;
     this.sourceLigand = ligandMap.get(source);
     this.targetLigand = ligandMap.get(target);
     this.sourceLigand.addEdge(this);
@@ -56,6 +55,7 @@ class EdgeElement extends Element {
     this.subElements.forEach((element) => {
       this.el.add(element.el);
     });
+    this.updateStyle();
 
     this.el.on("click", (ev) => emitter.emit("click", this, ev));
     this.el.on("mouseover", (ev) => emitter.emit("mouseover", this, ev));

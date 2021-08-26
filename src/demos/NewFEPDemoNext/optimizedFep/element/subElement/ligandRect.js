@@ -5,6 +5,10 @@ import { LIGAND_RECT_STYLE } from "../../constant";
 class LigandRectElement extends LigandSubElement {
   type = "ligandRect";
   el = new Rect({
+    style: {
+      fill: LIGAND_RECT_STYLE.INITIAL.FILL,
+      lineWidth: LIGAND_RECT_STYLE.INITIAL.LINEWIDTH,
+    },
     shape: {
       r: LIGAND_RECT_STYLE.INITIAL.RADIUS,
       width: LIGAND_RECT_STYLE.INITIAL.WIDTH,
@@ -27,7 +31,6 @@ class LigandRectElement extends LigandSubElement {
       stroke: LIGAND_RECT_STYLE.FIRSTADD.STROKE,
     },
     default: {
-      fill: LIGAND_RECT_STYLE.DEFAULT.FILL,
       stroke: LIGAND_RECT_STYLE.DEFAULT.STROKE,
     },
   };

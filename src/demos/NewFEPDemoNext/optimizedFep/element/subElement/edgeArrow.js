@@ -1,12 +1,6 @@
 import { Path } from "zrender";
 import { EdgeSubElement } from "./subElement";
-import {
-  LIGAND_WIDTH,
-  ELEMENT_Z2,
-  SCALE_X,
-  SCALE_1,
-  ANIMATE_CONFIG,
-} from "../../constant";
+import { EDGE_ARROW_STYLE } from "../../constant";
 
 const Arrow = Path.extend({
   type: "arrow",
@@ -33,39 +27,30 @@ const Arrow = Path.extend({
 
 class EdgeArrowElement extends EdgeSubElement {
   type = "edgeArrow";
-  el = new Arrow();
+  el = new Arrow({
+    shape: {
+      width: EDGE_ARROW_STYLE.INITIAL.WIDTH,
+      height: EDGE_ARROW_STYLE.INITIAL.HEIGHT,
+    },
+  });
 
   style = {
+    virtual: {
+      fill: EDGE_ARROW_STYLE.VIRTUAL.FILL,
+    },
     selected: {
-      backgroundColor: "#f00",
+      fill: EDGE_ARROW_STYLE.SELECTED.FILL,
     },
     hover: {
-      backgroundColor: "#ff0",
+      fill: EDGE_ARROW_STYLE.HOVER.FILL,
     },
     relatedHover: {
-      backgroundColor: "#fff",
+      fill: EDGE_ARROW_STYLE.RELATEDHOVER.FILL,
     },
     default: {
-      backgroundColor: "#fff",
+      fill: EDGE_ARROW_STYLE.DEFAULT.FILL,
     },
   };
-
-  toScale1() {
-    this.el.animateTo(
-      {
-        scale: SCALE_1,
-      },
-      ANIMATE_CONFIG
-    );
-  }
-  toScaleX() {
-    this.el.animateTo(
-      {
-        scale: SCALE_X,
-      },
-      ANIMATE_CONFIG
-    );
-  }
 
   draw({ x1, y1, rotation }) {
     this.el.attr({
@@ -74,8 +59,6 @@ class EdgeArrowElement extends EdgeSubElement {
       shape: {
         x: x1,
         y: y1,
-        width: 10,
-        height: 10,
       },
     });
   }

@@ -155,7 +155,7 @@ class EventsHandler {
 
   onDeleteEdgeClick(edge) {
     const ctx = this.ctx;
-    if (!edge.isVirtual) {
+    if (!edge.state.virtual) {
       this.selector.clear();
     }
     const edgeProps = ctx.edgeGroup.delete(edge);

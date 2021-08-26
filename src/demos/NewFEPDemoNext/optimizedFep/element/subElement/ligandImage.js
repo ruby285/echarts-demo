@@ -1,6 +1,6 @@
 import { Image as ZrImage } from "zrender";
 import { LigandSubElement } from "./subElement";
-import { LIGAND_WIDTH, ELEMENT_Z2, LIGAND_IMAGE_STYLE } from "../../constant";
+import { LIGAND_IMAGE_STYLE } from "../../constant";
 
 class LigandImageElement extends LigandSubElement {
   type = "ligandImage";
